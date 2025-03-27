@@ -1,0 +1,9 @@
+# ignorar pastas ocultas
+/**/.*/ 
+# ignorar arquivos ocultos
+/**/.*  
+# exceto .gitignore
+!/.gitignore  
+
+# ignorar pasta venv do python
+/venv
