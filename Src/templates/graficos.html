@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aba Lateral com Filtros</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        /* Estilo da aba lateral */
+        #abaLateral {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        #abaLateral a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #abaLateral a:hover {
+            color: #f1f1f1;
+        }
+
+        #abaLateral .botaoFechar {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        /* Botão para abrir a aba lateral */
+        #botaoAbrir {
+            font-size: 30px;
+            background-color: #111;
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .item-imagem {
+            display: inline-block;
+            margin: 10px;
+            width: 150px;
+        }
+
+        .item-imagem img {
+            width: 100%;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botão para abrir a aba lateral -->
+    <button id="botaoAbrir" onclick="abrirAba()">☰</button>
+
+    <!-- A aba lateral -->
+    <div id="abaLateral">
+        <a href="javascript:void(0)" class="botaoFechar" onclick="fecharAba()">×</a>
+        <h3 style="color: #fff; padding-left: 32px;">Filtros</h3>
+        <div style="padding-left: 32px;">
+            <label for="filtroCategoria">Categoria:</label>
+            <select id="filtroCategoria" onchange="filtrarImagens()">
+                <option value="todos">Todas</option>
+                <option value="01">Gráfico 01</option>
+                <option value="02">Gráfico 02</option>
+                <option value="03">Gráfico 03</option>
+            </select>
+        </div>
+    </div>
+    <center>
+        <!-- Conteúdo das imagens -->
+        <div class="container-imagens">
+            <div class="item-imagem 01">
+                <img src="#" alt="img01">
+            </div>
+            <div class="item-imagem 02">
+                <img src="#" alt="img02">
+            </div>
+            <div class="item-imagem 03">
+                <img src="#" alt="img03">
+            </div>
+        </div>
+    </center>
+    <script>
+        // Função para abrir a aba lateral
+        function abrirAba() {
+            document.getElementById("abaLateral").style.width = "250px";
+        }
+
+        // Função para fechar a aba lateral
+        function fecharAba() {
+            document.getElementById("abaLateral").style.width = "0";
+        }
+
+        // Função para filtrar as imagens
+        function filtrarImagens() {
+            var categoria = document.getElementById("filtroCategoria").value;
+            var imagens = document.querySelectorAll('.item-imagem');
+
+            imagens.forEach(function(imagem) {
+                if (categoria === "todos") {
+                    imagem.style.display = "inline-block";
+                } else if (imagem.classList.contains(categoria)) {
+                    imagem.style.display = "inline-block";
+                } else {
+                    imagem.style.display = "none";
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
