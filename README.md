@@ -28,7 +28,7 @@ Liste aqui as sprints planejadas para o desenvolvimento do projeto, seus objetiv
 | João Vitor Silva Correa Siqueira | Product Owner  | [GitHub](https://github.com/kakashinho) | [Linkedin](https://www.linkedin.com/in/joao-vitor-siqueira-a2a2a3227/)
 |Decio Teixeira de Souza Júnior | Scrum Master | [GitHub](https://github.com/Deciosouza) | [Linkedin](https://www.linkedin.com/in/dcojunior/) |
 | Gabriel Kodato Faria | Desenvolvedor | [GitHub](https://github.com/Kodatoo) | [Linkedin](https://www.linkedin.com/in/gabriel-kodato-faria-b745742b8/) |
-| Arthur Oliver Rossi Alves | Desenvolvedor | [GitHub](https://github.com/arthur-oliver) | [Linkedin](https://www.linkedin.com/in/arthur-%C3%B3liver-728123350/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app) |
+| Arthur Óliver Rossi Alves | Desenvolvedor | [GitHub](https://github.com/arthur-oliver) | [Linkedin](https://www.linkedin.com/in/arthur-%C3%B3liver-728123350/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app) |
 | Ana Elize Graciano | Desenvolvedor | [GitHub](https://github.com/Ane-Graciano) | [Linkedin](https://www.linkedin.com/in/ana-elize-graciano-107448359/) |
 | Gustavo ribeiro da rosa | Desenvolvedor | [GitHub](https://github.com/gustasvos) | [Linkedin](https://www.linkedin.com/in/gustavo-rosa-46a251180/) |
 | Lais Zanardi Inocencio | Desenvolvedor | [GitHub](https://github.com/lais-zanardi) | [Linkedin](https://www.linkedin.com/in/lais-zanardi-inocencio/) |
