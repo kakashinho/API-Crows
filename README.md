@@ -30,7 +30,7 @@ Liste aqui as sprints planejadas para o desenvolvimento do projeto, seus objetiv
 | Gabriel Kodato Faria | Desenvolvedor | [GitHub](https://github.com/Kodatoo) | [Linkedin](https://www.linkedin.com/in/gabriel-kodato-faria-b745742b8/) |
 | Arthur Óliver Rossi Alves | Desenvolvedor | [GitHub](https://github.com/arthur-oliver) | [Linkedin](https://www.linkedin.com/in/arthur-%C3%B3liver-728123350/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app) |
 | Ana Elize Graciano | Desenvolvedor | [GitHub](https://github.com/Ane-Graciano) | [Linkedin](https://www.linkedin.com/in/ana-elize-graciano-107448359/) |
-| Gustavo ribeiro da rosa | Desenvolvedor | [GitHub](https://github.com/gustasvos) | [Linkedin](https://www.linkedin.com/in/gustavo-rosa-46a251180/) |
+| Gustavo Ribeiro da rosa | Desenvolvedor | [GitHub](https://github.com/gustasvos) | [Linkedin](https://www.linkedin.com/in/gustavo-rosa-46a251180/) |
 | Lais Zanardi Inocencio | Desenvolvedor | [GitHub](https://github.com/lais-zanardi) | [Linkedin](https://www.linkedin.com/in/lais-zanardi-inocencio/) |
 |Hiroshi Yamashita dos Santos | Desenvolvedor | [GitHub](https://github.com/Hiroshi-Yamashita-Santos) | [Linkedin](https://www.linkedin.com/in/hiroshi-yamashita-dos-santos-a29440359/) |
 
