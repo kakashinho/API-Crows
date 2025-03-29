@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="stylesheet" href="../static/css/normalize.css">
-    <link rel="stylesheet" href="../static/css/style.css"> <!-- css externo-->
+    <!-- Incluindo o CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&display=swap" rel="stylesheet"> <!-- fonte da página-->
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
@@ -14,8 +16,8 @@
     <header id="navbar">
             <p>CROWS</p>
             <nav>
-                <a href="#">Sobre </a>
-                <a href="#">Gráficos </a>
+                <a href="{{ url_for('home') }}">Sobre </a>
+                <a href="{{ url_for('graficos') }}">Gráficos </a>
                 <a href="#">Municípios </a>
                 <a href="#">Contato </a>
             </nav>
@@ -30,7 +32,7 @@
             </article>
             <section >
                 <figure>
-                    <img src="../static/imagens/imagem1.png" alt="grafico" id="img1">
+                    <img src="{{ url_for('static', filename='imagens/imagem1.png') }}" alt="Imagem 1" alt="grafico" id="img1">
                 </figure>
             </section>
         </section>
@@ -47,7 +49,7 @@
             </article>
             <section id="sect2-terceira_parte">
                 <figure>
-                    <img src="../static/imagens/imagem2.jpeg" alt="img2" id="img2">
+                    <img src="{{ url_for('static', filename='imagens/imagem2.jpeg') }}" alt="Imagem 2" alt="img2" id="img2">
                 </figure>
             </section>
         </section>
@@ -55,10 +57,10 @@
 
     <footer>
         <nav id="link-footer">
-            <a href="#">Sobre</a>
-            <a href="#">Gráficos</a>
-            <a href="#">Municípios</a>
-            <a href="#">Contato</a>
+            <a href="{{ url_for('home') }}">Sobre </a>
+            <a href="{{ url_for('graficos') }}">Gráficos </a>
+            <a href="#">Municípios </a>
+            <a href="#">Contato </a>
         </nav>
         <h6>©2025 Crows</h6>
     </footer>
