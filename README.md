@@ -3,11 +3,16 @@
 ## 👨🏻‍💻 Tecnologias Utilizadas
 
 <img src="https://img.shields.io/badge/Python-blue.svg?style=for-the-badge&logo=Python&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/Figma-red.svg?style=for-the-badge&logo=Figma&logoColor=white"></imag>&nbsp;
+<img src="https://img.shields.io/badge/Flask-green.svg?style=for-the-badge&logo=flask&logoColor=white"></imag>&nbsp;
+<img src="https://img.shields.io/badge/Google Colab-yellow.svg?style=for-the-badge&logo=googlecolab&logoColor=white"></imag>&nbsp;
 <img src="https://img.shields.io/badge/Visual Studio COde-blue.svg?style=for-the-badge"></imag>&nbsp;
-<img src="https://img.shields.io/badge/CSS3-F7DF1E.svg?style=for-the-badge&logo=css3&logoColor=black"></imag>&nbsp;
+<img src="https://img.shields.io/badge/Figma-red.svg?style=for-the-badge&logo=Figma&logoColor=white"></imag>&nbsp;
 <img src="https://img.shields.io/badge/Htmlt5-orange.svg?style=for-the-badge&logo=html5&logoColor=white"></imag>&nbsp;
+<img src="https://img.shields.io/badge/CSS3-yellow.svg?style=for-the-badge&logo=css3&logoColor=white"></imag>&nbsp;
+<img src="https://img.shields.io/badge/Jira-blue.svg?style=for-the-badge&logo=jira&logoColor=white"></imag>&nbsp;
 <img src="https://img.shields.io/badge/GitHub-black.svg?style=for-the-badge&logo=GitHub&logoColor=white"></imag>&nbsp;
+<img src="https://img.shields.io/badge/Git-red.svg?style=for-the-badge&logo=Git&logoColor=white"></imag>&nbsp;
+
 
 ## 🎯 Objetivo do Projeto
 Este projeto visa criar uma plataforma web que oferece uma análise de desempenho dos municípios do estado São Paulo sobre o dados do comércio exterior, utilizando dados abertos do Ministério do Desenvolvimento, Indústria, Comércio e Serviços. A ferramenta permitirá que tomadores de decisão identifiquem municípios em ascensão, estagnação ou declínio no mercado internacional.
