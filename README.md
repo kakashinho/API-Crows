@@ -1,19 +1,30 @@
 # **API 1 SEMESTRE - Crows**
 
 ## 🎯 Objetivo do Projeto
-Este projeto visa criar uma plataforma web que oferece informações sobre o desempenho dos municípios de São Paulo no comércio exterior, utilizando dados abertos do Ministério do Desenvolvimento, Indústria, Comércio e Serviços. A ferramenta permitirá que tomadores de decisão identifiquem municípios em ascensão, estagnação ou declínio no mercado internacional.
+Este projeto visa criar uma plataforma web que oferece uma análise de desempenho dos municípios do estado São Paulo sobre o dados do comércio exterior, utilizando dados abertos do Ministério do Desenvolvimento, Indústria, Comércio e Serviços. A ferramenta permitirá que tomadores de decisão identifiquem municípios em ascensão, estagnação ou declínio no mercado internacional.
 
 ## 💡 Visão do Produto
 Este projeto é fundamental para fornecer aos gestores e tomadores de decisão dados claros e acessíveis sobre o desempenho dos municípios de São Paulo no comércio exterior. Com base em informações atualizadas, a plataforma permitirá identificar oportunidades de crescimento, monitorar a evolução de mercados internacionais e tomar decisões estratégicas para impulsionar a competitividade regional.
 
 ## ⚙️Metodologia
-A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incremental para o gerenciamento de projetos. Scrum foca na colaboração constante, entregas rápidas e adaptação contínua às mudanças. O trabalho é dividido em ciclos curtos chamados **sprints**, que normalmente duram de 1 a 4 semanas. Durante cada sprint, equipes multidisciplinares trabalham em conjunto para entregar funcionalidades incrementais do produto. O Scrum é estruturado em papéis bem definidos, como o **Product Owne**r (responsável por priorizar as tarefas), o **Scrum Master** (facilitador do processo) e a equipe de desenvolvimento. A metodologia promove a transparência, a comunicação constante e a melhoria contínua, garantindo entregas mais eficientes e alinhadas às necessidades do cliente.
+A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incremental para o gerenciamento de projetos. Scrum foca na colaboração constante, entregas rápidas e adaptação contínua às mudanças. O trabalho é dividido em ciclos curtos chamados **sprints**, que normalmente duram de 1 a 4 semanas. Durante cada sprint, equipes multidisciplinares trabalham em conjunto para entregar funcionalidades incrementais do produto. O Scrum é estruturado em papéis bem definidos, como o **Product Owner** (responsável por priorizar as tarefas), o **Scrum Master** (facilitador do processo) e a equipe de desenvolvimento. A metodologia promove a transparência, a comunicação constante e a melhoria contínua, garantindo entregas mais eficientes e alinhadas às necessidades do cliente.
 
 ## 💡 MVP (Produto Mínimo Viável)
-MVP da 1 sprint do projeto -
 
-## ⏳ Sprints
-Liste aqui as sprints planejadas para o desenvolvimento do projeto, seus objetivos e prazos.
+1. Wireframe: [Protótipo navegável]()
+2. Web Site: [Primeira versão]()
+3. Web Site: [Sistema completo]()
+
+
+## 📅Sprints 
+
+### Sprint - 1️⃣ 🎯 ([Clique aqui](/)):  Concluído ✅ 30/03/2025
+
+### Sprint - 2️⃣ 🎯 ([Clique aqui](/)):  Concluído ☑️ 27/04/2025
+
+### Sprint - 3️⃣ 🎯 ([Clique aqui](/)):  Concluído ☑️ 25/05/2025
+
+
 
 ## 🛠️ Backlog do Produto
 
