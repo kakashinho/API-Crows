@@ -51,7 +51,10 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 
 
 ## 🛠️ Backlog do Produto
+![Backlog do Produto-imagens-0](https://github.com/user-attachments/assets/5d01e5fc-3553-48d7-a08f-6a751408cf7f)
 
+## 🌱 Backlog da Sprint
+![Backlog do Produto-imagens-1](https://github.com/user-attachments/assets/4185786d-691c-4bc6-822a-16aed1b8ded0)
 
 
 
