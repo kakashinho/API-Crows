@@ -1,5 +1,15 @@
 # **API 1 SEMESTRE - Crows**
 
+## Índice
+1. [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+2. [Objetivo do Projeto](#-objetivo-do-projeto)
+3. [Visão do Produto](#-visão-do-produto)
+4. [Metodologia](#%EF%B8%8F-metodologia)
+5. [MVP](#-mvp-produto-mínimo-viável)
+6. [Sprints](#-sprints)
+7. [Backlog do Produto](#%EF%B8%8F-backlog-do-produto)
+8. [Autores](#-autores)
+
 ## 👨🏻‍💻 Tecnologias Utilizadas
 
 <img src="https://img.shields.io/badge/Python-blue.svg?style=for-the-badge&logo=Python&logoColor=white"></imag>&nbsp;
@@ -25,7 +35,7 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 
 ## 💡 MVP (Produto Mínimo Viável)
 
-1. Wireframe: [Protótipo navegável]()
+1. Wireframe: ![Protótipo navegável](/assets/protótipo-figma.gif)
 2. Web Site: [Primeira versão]()
 3. Web Site: [Sistema completo]()
 
@@ -46,17 +56,15 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 
 
 ## 👨‍💻 Autores
-| Nome      | Função          | GitHub                          | Linkedin                      |
-|-----------|-----------------|---------------------------------|--------------------------------|
-| João Vitor Silva Correa Siqueira | Product Owner  | [GitHub](https://github.com/kakashinho) | [Linkedin](https://www.linkedin.com/in/joao-vitor-siqueira-a2a2a3227/)
-|Decio Teixeira de Souza Júnior | Scrum Master | [GitHub](https://github.com/Deciosouza) | [Linkedin](https://www.linkedin.com/in/dcojunior/) |
-| Gabriel Kodato Faria | Desenvolvedor | [GitHub](https://github.com/Kodatoo) | [Linkedin](https://www.linkedin.com/in/gabriel-kodato-faria-b745742b8/) |
-| Arthur Óliver Rossi Alves | Desenvolvedor | [GitHub](https://github.com/arthur-oliver) | [Linkedin](https://www.linkedin.com/in/arthur-%C3%B3liver-728123350/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app) |
-| Ana Elize Graciano | Desenvolvedor | [GitHub](https://github.com/Ane-Graciano) | [Linkedin](https://www.linkedin.com/in/ana-elize-graciano-107448359/) |
-| Gustavo Ribeiro da Rosa | Desenvolvedor | [GitHub](https://github.com/gustasvos) | [Linkedin](https://www.linkedin.com/in/gustavo-rosa-46a251180/) |
-| Lais Zanardi Inocencio | Desenvolvedor | [GitHub](https://github.com/lais-zanardi) | [Linkedin](https://www.linkedin.com/in/lais-zanardi-inocencio/) |
-|Hiroshi Yamashita dos Santos | Desenvolvedor | [GitHub](https://github.com/Hiroshi-Yamashita-Santos) | [Linkedin](https://www.linkedin.com/in/hiroshi-yamashita-dos-santos-a29440359/) |
-| Vivian Inacio Silva | Desenvolvedor | [GitHub](https://github.com/Vivian-Inacio) | [Linkedin](https://br.linkedin.com/in/vivian-in%C3%A1cio-silva-469094359) |
 
-
-
+| Nome      | Função          | Redes Sociais |
+|-----------|-----------------|---------------|
+| João Vitor Silva Correa Siqueira | Product Owner  | <a href="https://github.com/kakashinho"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/joao-vitor-siqueira-a2a2a3227/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
+| Decio Teixeira de Souza Júnior | Scrum Master | <a href="https://github.com/Deciosouza"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/dcojunior/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
+| Gabriel Kodato Faria | Desenvolvedor | <a href="https://github.com/Kodatoo"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/gabriel-kodato-faria-b745742b8/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
+| Arthur Óliver Rossi Alves | Desenvolvedor | <a href="https://github.com/arthur-oliver"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/arthur-%C3%B3liver-728123350/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
+| Ana Elize Graciano | Desenvolvedor | <a href="https://github.com/Ane-Graciano"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/ana-elize-graciano-107448359/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
+| Gustavo Ribeiro da Rosa | Desenvolvedor | <a href="https://github.com/gustasvos"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/gustavo-rosa-46a251180/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
+| Lais Zanardi Inocencio | Desenvolvedor | <a href="https://github.com/lais-zanardi"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/lais-zanardi-inocencio/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
+| Hiroshi Yamashita dos Santos | Desenvolvedor | <a href="https://github.com/Hiroshi-Yamashita-Santos"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/hiroshi-yamashita-dos-santos-a29440359/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
+| Vivian Inacio Silva | Desenvolvedor | <a href="https://github.com/Vivian-Inacio"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://br.linkedin.com/in/vivian-in%C3%A1cio-silva-469094359"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
