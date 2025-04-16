@@ -7,3 +7,6 @@
 
 # ignorar pasta venv do python
 /venv
+
+#ignorar cache das pastas Python
+__pycache__/
