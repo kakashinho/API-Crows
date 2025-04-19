@@ -52,22 +52,22 @@ a:link {
 
   .filtro{
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto;
   }
 
   .botão{
     grid-column-start: 1;
-    grid-column-end: 1;
+    grid-column-end: 0;
+    background-color: #DDDDDD;
   }
   
   .tela-gráficos{
     grid-column-start: 2;
-    grid-column-end: 5;
-    background-color: #DDDDDD;
+    grid-column-end: 6;
     width: 100%;
     border: none;
   }
-  
+
   .campo-data {
     display: flex;
     flex-direction: column;
