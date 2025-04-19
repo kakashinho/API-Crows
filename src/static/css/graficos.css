@@ -67,3 +67,17 @@ a:link {
     width: 100%;
     border: none;
   }
+
+
+  footer{
+    background-color: #2978DF;
+    padding-top: 2%;
+    padding-bottom: 1%;
+    margin-top: 15%;
+  }
+
+  #link-footer{
+    display: flex;
+    justify-content: center;
+    gap: 3%;
+  }
