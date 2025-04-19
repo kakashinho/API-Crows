@@ -25,10 +25,14 @@
             <div class="botão">
                 <h3>Selecione o intervalo de datas para os gráficos</h3>
                 <form action="{{ url_for('graficos') }}" method="POST">
-                    <label for="data_inicial">Data Inicial:</label>
-                    <input type="date" id="data_inicial" name="data_inicial" value="2019-01-01" min="2019-01-01" max="2025-12-31">
-                    <label for="data_final">Data Final:</label>
-                    <input type="date" id="data_final" name="data_final" value="2025-12-31" min="2019-01-01" max="2025-12-31">
+                    <div class="campo-data">
+                        <label for="data_inicial">Data Inicial:</label>
+                        <input type="date" id="data_inicial" name="data_inicial" value="2019-01-01" min="2019-01-01" max="2025-12-31">
+                    </div>
+                    <div class="campo-data">
+                        <label for="data_final">Data Final:</label>
+                        <input type="date" id="data_final" name="data_final" value="2025-12-31" min="2019-01-01" max="2025-12-31">
+                    </div>
                     <button type="submit">Gerar Gráficos</button>
                 </form>
             </div>

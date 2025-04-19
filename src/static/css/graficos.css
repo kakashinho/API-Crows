@@ -67,7 +67,12 @@ a:link {
     width: 100%;
     border: none;
   }
-
+  
+  .campo-data {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
 
   footer{
     background-color: #2978DF;
