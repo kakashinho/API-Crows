@@ -1,0 +1,51 @@
+body{
+    font-family: 'Figtree', sans-serif;
+ }
+
+ header{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    background-color: #2978DF;
+    color: #F7F7F7;
+    padding: 1%;
+    /* margin-bottom: 2%; */
+}
+
+header nav{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+#navbar > p{
+    font-style: normal;
+    font-weight: 700;
+ }
+
+ #navbar > p{
+    font-style: normal;
+    font-weight: 700;
+  }
+ #navbar > p{
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  /* link */
+a:link {
+    color: white;
+    text-decoration: none;
+  }
+  a:visited {
+    color: white;
+  }
+  a:hover {
+    color: #1a4e93;
+  }
+  a:active {
+    color: #0e2b51;
+  }
+
