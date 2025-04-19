@@ -21,25 +21,29 @@
     </header>
 
     <main>
-        <section>
-            <h1>Selecione o intervalo de datas para os gráficos</h1>
-            <form action="{{ url_for('graficos') }}" method="POST">
-                <label for="data_inicial">Data Inicial:</label>
-                <input type="date" id="data_inicial" name="data_inicial" value="2019-01-01" min="2019-01-01" max="2025-12-31">
+        <section class="filtro">
+            <div class="botão">
+                <h3>Selecione o intervalo de datas para os gráficos</h3>
+                <form action="{{ url_for('graficos') }}" method="POST">
+                    <label for="data_inicial">Data Inicial:</label>
+                    <input type="date" id="data_inicial" name="data_inicial" value="2019-01-01" min="2019-01-01" max="2025-12-31">
+                    <label for="data_final">Data Final:</label>
+                    <input type="date" id="data_final" name="data_final" value="2025-12-31" min="2019-01-01" max="2025-12-31">
+                    <button type="submit">Gerar Gráficos</button>
+                </form>
+            </div>
 
-                <label for="data_final">Data Final:</label>
-                <input type="date" id="data_final" name="data_final" value="2025-12-31" min="2019-01-01" max="2025-12-31">
+            
 
-                <button type="submit">Gerar Gráficos</button>
-            </form>
+            <div class="tela-gráficos">
+                {% if mostrar_grafico %}
+                <h2>Gráfico de Balança Comercial</h2>
+                <iframe src="{{ url_for('grafico_resultado') }}"></iframe>
+                {% endif %}
+            </div>
         </section>
 
-        {% if mostrar_grafico %}
-        <section style="margin-top: 40px;">
-            <h2>Gráfico de Balança Comercial</h2>
-            <iframe src="{{ url_for('grafico_resultado') }}" width="100%" height="600" style="border:none;"></iframe>
-        </section>
-        {% endif %}
+      
     </main>
 
     <footer>

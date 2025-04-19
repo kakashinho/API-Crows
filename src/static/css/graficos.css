@@ -49,3 +49,21 @@ a:link {
     color: #0e2b51;
   }
 
+
+  .filtro{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+  }
+
+  .botão{
+    grid-column-start: 1;
+    grid-column-end: 1;
+  }
+  
+  .tela-gráficos{
+    grid-column-start: 2;
+    grid-column-end: 5;
+    background-color: #DDDDDD;
+    width: 100%;
+    border: none;
+  }
