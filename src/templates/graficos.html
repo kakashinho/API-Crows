@@ -8,7 +8,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <link rel="stylesheet" href="../static/css/graficos.css"> <!--Css para ver como está no live server-->
+    
+    <!-- fontes -->    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+
 </head>
+
 <body>
     <header id="navbar">
         <p>CROWS</p>
@@ -21,30 +27,55 @@
     </header>
 
     <main>
-        <section class="filtro">
-            <div class="botão">
-                <h3>Selecione o intervalo de datas para os gráficos</h3>
-                <form action="{{ url_for('graficos') }}" method="POST">
-                    <div class="campo-data">
-                        <label for="data_inicial">Data Inicial:</label>
-                        <input type="date" id="data_inicial" name="data_inicial" value="2019-01-01" min="2019-01-01" max="2025-12-31">
-                    </div>
-                    <div class="campo-data">
-                        <label for="data_final">Data Final:</label>
-                        <input type="date" id="data_final" name="data_final" value="2025-12-31" min="2019-01-01" max="2025-12-31">
-                    </div>
-                    <button type="submit">Gerar Gráficos</button>
-                </form>
-            </div>
+        <section class="filtro rounded-5">
+            <form action="{{ url_for('graficos') }}" method="POST">                
+                
+                <p>TIPO DE ANÁLISE</p>
+                <input type="radio" id="tipo" name="exportacao" value="exportacao">
+                <label for="tipo">Exportação</label><br>
 
+                <p>MÉTRICA</p>
+                <input type="radio" id="agregado" name="metrica">
+                <label for="agregado">Valor Agregado</label><br>
+                
+                <input type="radio" id="fob" name="metrica">
+                <label for="fob">Valor FOB</label><br>
+
+                <input type="radio" id="liquido" name="metrica">
+                <label for="liquido">Kg Líquido</label><br>
+
+                <p>ESCOPO</p>
+                <input type="radio" id="cidade" name="escopo">
+                <label for="cidade">Cidades</label><br>
+                
+                <input type="radio" id="pais" name="escopo">
+                <label for="pais">Países</label><br>
+
+                <input type="radio" id="produto" name="escopo">
+                <label for="produto">Produtos</label><br>
+
+                
+                <p>Selecione o intervalo de datas para os gráficos</p>
+                <div class="campo-data">
+                    <label for="data_inicial">Data Inicial:</label>
+                    <input type="date" id="data_inicial" name="data_inicial" value="2019-01-01" min="2019-01-01" max="2025-12-31">
+                </div>
+                <div class="campo-data">
+                    <label for="data_final">Data Final:</label>
+                    <input type="date" id="data_final" name="data_final" value="2025-12-31" min="2019-01-01" max="2025-12-31">
+                </div>
+                <button type="submit">Gerar Gráficos</button>
+            </form>
             
+            <aside class="selecione-data rounded-5">
+            </aside>
+        </section>
 
-            <div class="tela-gráficos">
-                {% if mostrar_grafico %}
-                <h2>Gráfico de Balança Comercial</h2>
-                <iframe src="{{ url_for('grafico_resultado') }}"></iframe>
-                {% endif %}
-            </div>
+        <section class="grafico">
+            {% if mostrar_grafico %}
+            <h2>Gráfico de Balança Comercial</h2>
+            <iframe src="{{ url_for('grafico_resultado') }}" frameborder="0"></iframe>
+            {% endif %}
         </section>
 
       
