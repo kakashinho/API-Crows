@@ -63,6 +63,12 @@ main {
   background-color: #ffffff;
 }
 
+.selected-value {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
 /* .selecione-data{ */
   /* grid-column-start: 1;
   grid-column-end: 0; */

@@ -67,14 +67,22 @@
                 <label for="produto">Por carga</label><br>
 
                 <!-- Campos de input -->
-                <!-- <div id="campo-cidade" class="campo-input">
-                    <label for="input-cidade">Digite o município:</label>
-                    <input type="text" id="input-cidade">
-                </div> -->
-
                 <div id="campo-microrregiao" class="campo-input">
-                    <label for="input-microrregiao">Digite a microrregião:</label>
-                    <input type="text" id="input-microrregiao">
+                    <select name="input-microrregiao" id="input-microrregiao">
+                        <option value="sao-paulo" selected>São Paulo</option>
+                        <option value="sorocaba">Sorocaba</option>
+                        <option value="bauru">Bauru</option>
+                        <option value="marilia">Marília</option>
+                        <option value="presidente-prudente">Presidente Prudente</option>
+                        <option value="aracatuba">Araçatuba</option>
+                        <option value="sjrp">São José do Rio Preto</option>
+                        <option value="riberao-preto">Ribeirão Preto</option>
+                        <option value="araraquara">Araraquara</option>
+                        <option value="campinas">Campinas</option>
+                        <option value="sjc">São José dos Campos</option>
+                    </select>
+
+
                 </div>
 
                 <div id="campo-porte" class="campo-input">
@@ -83,8 +91,9 @@
                 </div>
 
                 <div id="campo-carga" class="campo-input">
-                    <label for="input-carga">Digite a carga:</label>
+                    <label for="input-carga">Código SH4:</label>
                     <input type="text" id="input-carga">
+
                 </div>
 
                 <button type="submit">Gerar Gráficos</button>
