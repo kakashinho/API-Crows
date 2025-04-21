@@ -104,19 +104,79 @@ main {
   margin-bottom: 2%;
 }
 
-.campo-input {
+/* .campo-input {
   display: none;
   margin-top: 10px;
 }
 
 .campo-input {
-  /* border: solid salmon; */
 }
 
 .campo-input > select {
   width: 100%;
-  background-color: crimson;
+  height: auto;
+  border-radius: 12px;
+  background-color: #dddddd;
+} */
+
+ /* Estilizando o container */
+ .campo-input {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  font-family: 'Arial', sans-serif;
 }
+
+/* Estilo para o select */
+select {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  font-size: 16px;
+  background-color: #f8f8f8;
+  color: #333;
+  appearance: none;  /* Remove o estilo padrão do navegador */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Cor de fundo do select ao focar */
+select:focus {
+  border-color: #007BFF;
+  outline: none;
+  background-color: #e8f0fe;
+}
+
+/* Estilo da seta do select */
+select::-ms-expand {
+  display: none; /* Remove a seta do IE */
+}
+
+/* Criação de uma seta customizada */
+.campo-input::after {
+  content: '▼';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #666;
+  pointer-events: none;
+}
+
+/* Adicionando sombra para dar um efeito de profundidade */
+select {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Efeito de hover */
+select:hover {
+  border-color: #0056b3;
+  background-color: #e2e8f0;
+}
+
 
 footer{
   background-color: #2978DF;
@@ -140,6 +200,8 @@ footer{
     font-size: large !important;
   }
   #filtro label input{
+  #main_section p{
     font-size: medium !important;
   }
+}
 }
