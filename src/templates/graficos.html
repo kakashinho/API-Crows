@@ -98,9 +98,6 @@
 
                 <button type="submit">Gerar Gráficos</button>
             </form>
-
-            <aside class="selecione-data rounded-5">
-            </aside>
         </section>
 
         <section class="grafico">
@@ -109,19 +106,18 @@
             <iframe class="responsive-iframe" src="{{ url_for('grafico_resultado') }}" frameborder="0"></iframe>
             {% endif %}
         </section>
-
-
+        
+        <footer>
+            <nav id="link-footer">
+                <a href="{{ url_for('home') }}">Sobre</a>
+                <a href="{{ url_for('graficos') }}">Gráficos</a>
+                <a href="#">Municípios</a>
+                <a href="#">Contato</a>
+            </nav>
+            <h6>©2025 Crows</h6>
+        </footer>
     </main>
 
-    <footer>
-        <nav id="link-footer">
-            <a href="{{ url_for('home') }}">Sobre</a>
-            <a href="{{ url_for('graficos') }}">Gráficos</a>
-            <a href="#">Municípios</a>
-            <a href="#">Contato</a>
-        </nav>
-        <h6>©2025 Crows</h6>
-    </footer>
 
 
     <script>
