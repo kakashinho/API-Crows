@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +9,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <link rel="stylesheet" href="../static/css/graficos.css"> <!--Css para ver como está no live server-->
-    
-    <!-- fontes -->    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
-
 </head>
 
 <body>
@@ -27,46 +23,73 @@
     </header>
 
     <main>
-        <section class="filtro rounded-5">
-            <form action="{{ url_for('graficos') }}" method="POST">                
-                
-                <p>TIPO DE ANÁLISE</p>
-                <input type="radio" id="tipo" name="exportacao" value="exportacao">
+        <section class="filtro">
+            <form action="{{ url_for('graficos') }}" method="POST">
+
+                <p>Selecione o intervalo de datas para os gráficos</p>
+                <div class="campo-data">
+                    <label for="data_inicial">Ano inicial:</label>
+                    <input type="range" class="form-range" id="ano_inicial" name="ano_inicial" min="2019" max="2024">
+                </div>
+                <div class="campo-data">
+                    <label for="data_final">Ano final:</label>
+                    <input type="range" class="form-range" id="ano_inicial" name="ano_inicial" min="2019" max="2024">
+                </div>
+
+                <p class="">TIPO DE ANÁLISE</p>
+                <input type="radio" id="tipo" name="exp-imp" value="exportacao">
                 <label for="tipo">Exportação</label><br>
+                <input type="radio" id="tipo" name="exp-imp" value="importacao">
+                <label for="tipo">Importação</label><br>
 
                 <p>MÉTRICA</p>
                 <input type="radio" id="agregado" name="metrica">
                 <label for="agregado">Valor Agregado</label><br>
-                
+
                 <input type="radio" id="fob" name="metrica">
                 <label for="fob">Valor FOB</label><br>
 
                 <input type="radio" id="liquido" name="metrica">
                 <label for="liquido">Kg Líquido</label><br>
 
-                <p>ESCOPO</p>
-                <input type="radio" id="cidade" name="escopo">
-                <label for="cidade">Cidades</label><br>
-                
-                <input type="radio" id="pais" name="escopo">
-                <label for="pais">Países</label><br>
 
-                <input type="radio" id="produto" name="escopo">
-                <label for="produto">Produtos</label><br>
+                <p>Tipos de filtros</p>
+                <input type="radio" id="cidade" name="tipos-filtro" onclick="mostrarCampo('cidade')">
+                <label for="cidade">Municípios SP</label><br>
 
-                
-                <p>Selecione o intervalo de datas para os gráficos</p>
-                <div class="campo-data">
-                    <label for="data_inicial">Data Inicial:</label>
-                    <input type="date" id="data_inicial" name="data_inicial" value="2019-01-01" min="2019-01-01" max="2025-12-31">
+                <input type="radio" id="microrregiao" name="tipos-filtro" onclick="mostrarCampo('microrregiao')">
+                <label for="pais">Microrregião</label><br>
+
+                <input type="radio" id="porte" name="tipos-filtro" onclick="mostrarCampo('porte')">
+                <label for="produto">Portes Semelhantes</label><br>
+
+                <input type="radio" id="carga" name="tipos-filtro" onclick="mostrarCampo('carga')">
+                <label for="produto">Por carga</label><br>
+
+                <!-- Campos de input -->
+                <!-- <div id="campo-cidade" class="campo-input">
+                    <label for="input-cidade">Digite o município:</label>
+                    <input type="text" id="input-cidade">
+                </div> -->
+
+                <div id="campo-microrregiao" class="campo-input">
+                    <label for="input-microrregiao">Digite a microrregião:</label>
+                    <input type="text" id="input-microrregiao">
                 </div>
-                <div class="campo-data">
-                    <label for="data_final">Data Final:</label>
-                    <input type="date" id="data_final" name="data_final" value="2025-12-31" min="2019-01-01" max="2025-12-31">
+
+                <div id="campo-porte" class="campo-input">
+                    <label for="input-porte">Digite o porte:</label>
+                    <input type="text" id="input-porte">
                 </div>
+
+                <div id="campo-carga" class="campo-input">
+                    <label for="input-carga">Digite a carga:</label>
+                    <input type="text" id="input-carga">
+                </div>
+
                 <button type="submit">Gerar Gráficos</button>
             </form>
-            
+
             <aside class="selecione-data rounded-5">
             </aside>
         </section>
@@ -74,11 +97,11 @@
         <section class="grafico">
             {% if mostrar_grafico %}
             <h2>Gráfico de Balança Comercial</h2>
-            <iframe src="{{ url_for('grafico_resultado') }}" frameborder="0"></iframe>
+            <iframe class="responsive-iframe" src="{{ url_for('grafico_resultado') }}" frameborder="0"></iframe>
             {% endif %}
         </section>
 
-      
+
     </main>
 
     <footer>
@@ -90,5 +113,21 @@
         </nav>
         <h6>©2025 Crows</h6>
     </footer>
+
+
+    <script>
+        function mostrarCampo(filtro) {
+            // Esconde todos os campos de input
+            const campos = document.querySelectorAll('.campo-input');
+            campos.forEach(campo => campo.style.display = 'none');
+
+            // Exibe o campo correspondente
+            const campoSelecionado = document.getElementById('campo-' + filtro);
+            if (campoSelecionado) {
+                campoSelecionado.style.display = 'block';
+            }
+        }
+    </script>
 </body>
+
 </html>
