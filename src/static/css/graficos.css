@@ -136,10 +136,10 @@ footer{
   section{
     font-size: x-large !important;
   }
-  h2{
+  h3{
     font-size: large !important;
   }
-  #main_article p{
+  #filtro label input{
     font-size: medium !important;
   }
 }
