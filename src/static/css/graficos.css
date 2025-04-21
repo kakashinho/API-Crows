@@ -117,3 +117,15 @@ footer{
   justify-content: center;
   gap: 3%;
 }
+
+@media (max-width: 639px){
+  article{
+    font-size: x-large !important;
+  }
+  h2{
+    font-size: large !important;
+  }
+  #main_article p{
+    font-size: medium !important;
+  }
+}
