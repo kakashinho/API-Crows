@@ -3,6 +3,7 @@
 
 body{
     font-family: 'Figtree', sans-serif !important;
+    background-color: #ffffff;
  }
 
  header{
@@ -54,14 +55,11 @@ main {
 
 
 .filtro{
-  /* display: grid; */
-  /* grid-template-columns: auto auto auto auto auto; */
-  /* height: 97.6%; */
   height: auto;
-  padding: 2%;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  /* margin-bottom: 50%; */
+  padding: 10%;
+  padding-left: 9%;
+  margin-top: 2%;
+  border-radius: 20px;
   /* border: solid crimson; */
   background-color: #ffffff;
 }
@@ -70,14 +68,22 @@ main {
   margin-top: 5%;
 }
 
+.filtro h3 {
+  margin-top: 12%;
+  margin-bottom: 3.7%;
+}
+
+.filtro input {
+  margin-bottom: 4.5%;
+}
 
 .grafico{
-  /* grid-column-start: 2;
-  grid-column-end: 6; */
   position: relative;
   overflow: hidden;
   width: 100%;
   grid-column: span 2;
+  border-bottom-left-radius: 20px;
+  margin-bottom: 0.4%;
   /* padding-top: 56.25%; */
   /* border: solid black; */
 }
@@ -103,13 +109,21 @@ main {
   margin-top: 10px;
 }
 
+.campo-input {
+  /* border: solid salmon; */
+}
+
+.campo-input > select {
+  width: 100%;
+  background-color: crimson;
+}
+
 footer{
   background-color: #2978DF;
   padding-top: 2%;
   padding-bottom: 1%;
   /* border: solid coral; */
   grid-column: span 3;
-  /* margin-top: 15%; */
 }
 
 #link-footer{
@@ -119,7 +133,7 @@ footer{
 }
 
 @media (max-width: 639px){
-  article{
+  section{
     font-size: x-large !important;
   }
   h2{

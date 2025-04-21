@@ -26,7 +26,7 @@
         <section class="filtro">
             <form action="{{ url_for('graficos') }}" method="POST">
 
-                <p>Selecione o intervalo de datas para os gráficos</p>
+                <h3 style="margin-top: 2%;">PERÍODO</h3>
                 <div class="campo-data">
                     <label for="data_inicial">Ano inicial:</label>
                     <input type="range" class="form-range" id="ano_inicial" name="ano_inicial" min="2019" max="2024">
@@ -36,13 +36,13 @@
                     <input type="range" class="form-range" id="ano_inicial" name="ano_inicial" min="2019" max="2024">
                 </div>
 
-                <p class="">TIPO DE ANÁLISE</p>
+                <h3>TIPO DE ANÁLISE</h3>
                 <input type="radio" id="tipo" name="exp-imp" value="exportacao">
                 <label for="tipo">Exportação</label><br>
                 <input type="radio" id="tipo" name="exp-imp" value="importacao">
                 <label for="tipo">Importação</label><br>
 
-                <p>MÉTRICA</p>
+                <h3>MÉTRICA</h3>
                 <input type="radio" id="agregado" name="metrica">
                 <label for="agregado">Valor Agregado</label><br>
 
@@ -53,7 +53,7 @@
                 <label for="liquido">Kg Líquido</label><br>
 
 
-                <p>Tipos de filtros</p>
+                <h3>REGIÃO</h3>
                 <input type="radio" id="cidade" name="tipos-filtro" onclick="mostrarCampo('cidade')">
                 <label for="cidade">Municípios SP</label><br>
 
