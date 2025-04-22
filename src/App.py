@@ -11,6 +11,10 @@ app = Flask(__name__,
 def home():
     return render_template('home.html')
 
+@app.route('/feedback')
+def feedback():
+    return render_template('feedback.html')
+
 @app.route('/graficos', methods=['GET', 'POST'])
 def graficos():
     mostrar_grafico = False
