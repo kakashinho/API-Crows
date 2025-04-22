@@ -36,7 +36,7 @@ def selecionar_top_cidades(df, coluna_valor, n=5):
     )
     return df[df['NO_MUN_MIN'].isin(top)]
 
-# ------------------------- Método que faz o Gráfico de Balança Comercial --------------------------------------------
+# ------------------------- Método que faz o Gráfico de Balança Comercial -------------------------------------------
 # Função principal da balança comercial
 def balanca_comercial(df_exp, df_imp, df_mun):
     df_exp = adicionar_ano(df_exp)
@@ -62,7 +62,7 @@ def balanca_comercial(df_exp, df_imp, df_mun):
     top_cidades = selecionar_top_cidades(balanca, 'BALANCA', n=5)
 
     # Paleta
-    paleta_de_cores = px.colors.qualitative.Set1
+    paleta_de_cores = px.colors.qualitative.Set3
 
     # Gráfico
     fig = px.line(
@@ -133,3 +133,60 @@ def balanca_comercial(df_exp, df_imp, df_mun):
     fig.write_html(caminho_arquivo)
 
     return fig
+# ------------------------- Método que faz o Gráfico de Todas as Cargas --------------------------------------------
+
+# Função principal da balança comercial por produto
+def funil_por_produto(df, df_prod, informacao):
+
+    # Agrupa por produto (SH4), somando VL_FOB
+    df_total = agrupar_df(df,['SH4'], 'VL_FOB', 'sum')
+
+    # Ordena pelo VL_FOB (maior saldo)
+    df_total = df_total.sort_values(by='VL_FOB', ascending=False)
+
+    # Limita o texto do nome do produto a 20 caracteres e adiciona "..." para deixar mais legível em menus
+    df_sh4_resumo = df_prod.copy()
+    df_sh4_resumo['PRODUTO_LIMITADO'] = df_sh4_resumo['PRODUTO'].str.slice(0, 20) + '...'
+
+    # Mescla com as cargas 
+    df_total = mesclar_df(df_total, df_sh4_resumo, ['SH4'], how='left')
+
+    # Ordena por (VL_FOB)
+    df_total = df_total.sort_values(by='VL_FOB', ascending=False).head(20)
+
+    # Ordena por (VL_FOB)
+    df_total = df_total.sort_values(by='VL_FOB', ascending=True)
+
+     # Paleta
+    paleta_de_cores = px.colors.qualitative.Set3
+
+    # Gera gráfico de funil
+    fig = px.funnel(
+        df_total,
+        y='PRODUTO_LIMITADO',
+        x='VL_FOB',
+        title=f'{informacao} por Produto (Top Produtos)',
+        labels={'VL_FOB': 'Exportação (US$)', 'PRODUTO_LIMITADO': 'Produto'},
+        color='PRODUTO_LIMITADO',
+        color_discrete_sequence=paleta_de_cores  # Corrigido aqui (falta de vírgula)
+    )
+
+    # Layout
+    fig.update_layout(
+        font=dict(family='Arial', size=12),
+        plot_bgcolor='white',
+        showlegend=False,
+        margin=dict(l=100, r=40, t=80, b=40),
+    )
+
+    # Formatação dos valores dentro do funil
+    fig.update_traces(texttemplate='R$ %{x:,.0f}', textposition='inside')
+
+    # Salvar HTML
+    pasta_graficos = 'graficos-dinamicos'
+    os.makedirs(pasta_graficos, exist_ok=True)
+    caminho_arquivo = os.path.join(pasta_graficos, 'funil_por_produto.html')
+    fig.write_html(caminho_arquivo)
+
+    return fig
+
