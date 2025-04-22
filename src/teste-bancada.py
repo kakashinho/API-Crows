@@ -88,9 +88,16 @@ regioes = pd.DataFrame({'Cidades': lista_cidades, 'Regiao': 'São José dos Camp
 # ----------------------------
 # Seleção de período
 # ----------------------------
+
+# Obter o ano e o mês atual
 ano_atual = pd.to_datetime('today').year
-ano_inicial = st.sidebar.slider("Ano inicial", min_value=2019, max_value=ano_atual, value=ano_atual)
+mes_atual = pd.to_datetime('today').month
+
+# Adicionar widgets para selecionar ano e mês
+ano_inicial = st.sidebar.slider("Ano inicial", min_value=2019, max_value=ano_atual, value=2019)
+mes_inicial = st.sidebar.slider("Mês inicial", min_value=1, max_value=12, value=1)
 ano_final = st.sidebar.slider("Ano final", min_value=2019, max_value=ano_atual, value=ano_atual)
+mes_final = st.sidebar.slider("Mês final", min_value=1, max_value=12, value=mes_atual)
 
 # ----------------------------
 # Filtros do usuário
@@ -154,9 +161,16 @@ if st.sidebar.button('Filtrar') or True:
             df_ano = carregar_dados_dataframe_imp(ano)
             df_completo_imp = pd.concat([df_completo_imp, df_ano], ignore_index=True)
 
-            # Inicializa os dois dataframes
-            df_filtrado_exp = df_completo_exp.copy()
-            df_filtrado_imp = df_completo_imp.copy()
+        data_inicial = f'{ano_inicial}-{mes_inicial}-01'
+        data_final = f'{ano_final}-{mes_final}-01'
+
+        # Filtrar os dados com base no intervalo de datas
+        df_completo_exp = df_completo_exp[(df_completo_exp['DATA'] >= data_inicial) & (df_completo_exp['DATA'] <= data_final)]
+        df_completo_imp = df_completo_imp[(df_completo_imp['DATA'] >= data_inicial) & (df_completo_imp['DATA'] <= data_final)]
+
+        # Inicializa os dois dataframes
+        df_filtrado_exp = df_completo_exp.copy()
+        df_filtrado_imp = df_completo_imp.copy()
 
         # -------------------- Filtro por Microrregião --------------------
         if regiao:
@@ -238,15 +252,17 @@ if st.sidebar.button('Filtrar') or True:
 
         # -------------------- Geração do Gráfico ---------------------------------
         from gerar_graficos import balanca_comercial
+        from gerar_graficos import funil_por_produto
 
-        # Chama a função e passa os dataframes
-        fig = balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun)
+        fig_1 = balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun)                
+        fig_2 = funil_por_produto(df_filtrado_exp, df_sh4,'Exportações')
 
         # Divisão de colunas no Streamlit
-        col1, col2, col3 = st.columns(3)
+        col1, col2 = st.columns(2)
 
         # Exibe o gráfico no Streamlit
-        col1.plotly_chart(fig)
+        col1.plotly_chart(fig_1)
+        col2.plotly_chart(fig_2)
 
 else:
     st.sidebar.write("Escolha os filtros e clique em 'Filtrar'")
