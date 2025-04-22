@@ -73,6 +73,10 @@ main {
   margin-bottom: 3.7%;
 }
 
+.filtro h5 {
+  margin-bottom: 2%;
+}
+
 .filtro input {
   margin-bottom: 4.5%;
 }
@@ -104,7 +108,7 @@ main {
   margin-bottom: 2%;
 }
 
-/* .campo-input {
+.campo-input {
   display: none;
   margin-top: 10px;
 }
@@ -117,7 +121,7 @@ main {
   height: auto;
   border-radius: 12px;
   background-color: #dddddd;
-} */
+}
 
  /* Estilizando o container */
  .campo-input {
@@ -129,7 +133,7 @@ main {
 }
 
 /* Estilo para o select */
-select {
+.campo-input > select {
   width: 100%;
   padding: 12px 20px;
   border-radius: 8px;
@@ -143,40 +147,27 @@ select {
 }
 
 /* Cor de fundo do select ao focar */
-select:focus {
+.campo-input > select:focus {
   border-color: #007BFF;
   outline: none;
   background-color: #e8f0fe;
 }
 
 /* Estilo da seta do select */
-select::-ms-expand {
+.campo-input > select::-ms-expand {
   display: none; /* Remove a seta do IE */
 }
 
-/* Criação de uma seta customizada */
-.campo-input::after {
-  content: '▼';
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 18px;
-  color: #666;
-  pointer-events: none;
-}
-
 /* Adicionando sombra para dar um efeito de profundidade */
-select {
+.campo-input > select {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Efeito de hover */
-select:hover {
+.campo-input > select:hover {
   border-color: #0056b3;
   background-color: #e2e8f0;
 }
-
 
 footer{
   background-color: #2978DF;
