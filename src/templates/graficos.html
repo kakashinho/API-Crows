@@ -101,9 +101,14 @@
 
         <section class="grafico">
             {% if mostrar_grafico %}
-            <h2>Gráfico de Balança Comercial</h2>
-            <iframe class="responsive-iframe" src="{{ url_for('grafico_resultado') }}" frameborder="0"></iframe>
+            <!-- <h2>Gráfico de Balança Comercial</h2> -->
+             <div class="teste">
+                <iframe class="responsive-iframe" src="{{ url_for('grafico_resultado') }}" frameborder="0"></iframe>
+                <iframe class="responsive-iframe" src="{{ url_for('grafico_resultado') }}" frameborder="0"></iframe>
+             </div>
+           
             {% endif %}
+
         </section>
         
         <footer>
