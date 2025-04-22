@@ -133,16 +133,22 @@ def balanca_comercial(df_exp, df_imp, df_mun):
     fig.write_html(caminho_arquivo)
 
     return fig
+
 # ------------------------- Método que faz o Gráfico de Todas as Cargas --------------------------------------------
 
 # Função principal da balança comercial por produto
-def funil_por_produto(df, df_prod, informacao):
+def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO):
 
-    # Agrupa por produto (SH4), somando VL_FOB
-    df_total = agrupar_df(df,['SH4'], 'VL_FOB', 'sum')
+    # Agrupa por produto (SH4), somando COLUNA_TIPO
+    if COLUNA_TIPO == 'VL_FOB':
+        df_total = agrupar_df(df, ['SH4'], COLUNA_TIPO, 'sum')
+    elif COLUNA_TIPO == 'VALOR AGREGADO':
+        df_total = agrupar_df(df, ['SH4'], COLUNA_TIPO, 'mean')
+    elif COLUNA_TIPO == 'KG_LIQUIDO': 
+        df_total = agrupar_df(df, ['SH4'], COLUNA_TIPO, 'sum')
 
-    # Ordena pelo VL_FOB (maior saldo)
-    df_total = df_total.sort_values(by='VL_FOB', ascending=False)
+    # Ordena pelo COLUNA_TIPO (maior saldo)
+    df_total = df_total.sort_values(by=f'{COLUNA_TIPO}', ascending=False)
 
     # Limita o texto do nome do produto a 20 caracteres e adiciona "..." para deixar mais legível em menus
     df_sh4_resumo = df_prod.copy()
@@ -151,11 +157,11 @@ def funil_por_produto(df, df_prod, informacao):
     # Mescla com as cargas 
     df_total = mesclar_df(df_total, df_sh4_resumo, ['SH4'], how='left')
 
-    # Ordena por (VL_FOB)
-    df_total = df_total.sort_values(by='VL_FOB', ascending=False).head(20)
+    # Ordena por COLUNA_TIPO
+    df_total = df_total.sort_values(by=f'{COLUNA_TIPO}', ascending=False).head(20)
 
-    # Ordena por (VL_FOB)
-    df_total = df_total.sort_values(by='VL_FOB', ascending=True)
+    # Ordena por COLUNA_TIPO
+    df_total = df_total.sort_values(by=f'{COLUNA_TIPO}', ascending=True)
 
      # Paleta
     paleta_de_cores = px.colors.qualitative.Set3
@@ -164,9 +170,9 @@ def funil_por_produto(df, df_prod, informacao):
     fig = px.funnel(
         df_total,
         y='PRODUTO_LIMITADO',
-        x='VL_FOB',
-        title=f'{informacao} por Produto (Top Produtos)',
-        labels={'VL_FOB': 'Exportação (US$)', 'PRODUTO_LIMITADO': 'Produto'},
+        x=f'{COLUNA_TIPO}',
+        title=f'{informacao} por Produto (Top Produtos por {COLUNA_TIPO})',
+        labels={f'{COLUNA_TIPO}': f'{informacao} (US$)', 'PRODUTO_LIMITADO': 'Produto'},
         color='PRODUTO_LIMITADO',
         color_discrete_sequence=paleta_de_cores  # Corrigido aqui (falta de vírgula)
     )
@@ -189,7 +195,6 @@ def funil_por_produto(df, df_prod, informacao):
     fig.write_html(caminho_arquivo)
 
     return fig
-
 
 # ------------------------- Método que faz o Gráfico de Ranking de Municípios Valor Agregado --------------------------------------------
 # Top 10 municípios por Valor Agregado de exportações e importações

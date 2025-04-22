@@ -254,15 +254,30 @@ if st.sidebar.button('Filtrar') or True:
         from gerar_graficos import balanca_comercial
         from gerar_graficos import funil_por_produto
 
-        fig_1 = balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun)                
-        fig_2 = funil_por_produto(df_filtrado_exp, df_sh4,'Exportações')
+        fig_1 = balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun)
+        informacao = 'Exportação'
+        fig_2 = funil_por_produto(df_filtrado_exp, df_sh4, informacao, 'VALOR AGREGADO')
+        fig_3 = funil_por_produto(df_filtrado_exp, df_sh4, informacao, 'VL_FOB')
+        fig_4 = funil_por_produto(df_filtrado_exp, df_sh4, informacao, 'KG_LIQUIDO')
+        informacao = 'Importação'
+        fig_5 = funil_por_produto(df_filtrado_imp, df_sh4, informacao, 'VALOR AGREGADO')
+        fig_6 = funil_por_produto(df_filtrado_imp, df_sh4, informacao, 'VL_FOB')
+        fig_7 = funil_por_produto(df_filtrado_imp, df_sh4, informacao, 'KG_LIQUIDO')
 
         # Divisão de colunas no Streamlit
         col1, col2 = st.columns(2)
+        col3, col4 = st.columns(2)
+        col5, col6 = st.columns(2)
+        col7, col8 = st.columns(2)
 
         # Exibe o gráfico no Streamlit
         col1.plotly_chart(fig_1)
         col2.plotly_chart(fig_2)
+        col3.plotly_chart(fig_3)
+        col4.plotly_chart(fig_4)
+        col5.plotly_chart(fig_5)
+        col6.plotly_chart(fig_6)
+        col7.plotly_chart(fig_7)
 
 else:
     st.sidebar.write("Escolha os filtros e clique em 'Filtrar'")
