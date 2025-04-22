@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
-from gerar_graficos import balanca_comercial  # Função que gera o HTML do gráfico
+from gerar_graficos import balanca_comercial,ranking_vl_agregado  # Função que gera o HTML do gráfico
 
 app = Flask(__name__,
             template_folder=os.path.join(os.getcwd(), 'templates'),
@@ -37,7 +37,9 @@ def graficos():
             df_completo_imp = pd.concat([df_completo_imp, carregar_dados_dataframe(ano, 'imp')], ignore_index=True)
 
         if not df_completo_exp.empty and not df_completo_imp.empty:
+            tipo = 'exp'
             balanca_comercial(df_completo_exp, df_completo_imp, df_mun)
+            ranking_vl_agregado(df_mun,df_completo_exp,df_completo_imp,tipo)
             mostrar_grafico = True
 
     return render_template('graficos.html', mostrar_grafico=mostrar_grafico)
@@ -46,6 +48,16 @@ def graficos():
 def grafico_resultado():
     caminho = os.path.join(os.getcwd(), 'graficos-dinamicos')  # ou use src/graficos-dinamicos se estiver dentro da pasta src
     return send_from_directory(caminho, 'balanca_comercial.html')
+
+@app.route('/grafico_vlagregado_exp_resultado')
+def grafico_vlagregado_exp_resultado():
+    caminho = os.path.join(os.getcwd(), 'graficos-dinamicos')  # ou use src/graficos-dinamicos se estiver dentro da pasta src
+    return send_from_directory(caminho, 'ranking_vl_agregado_exp.html')
+
+@app.route('/grafico_vlagregado_imp_resultado')
+def grafico_vlagregado_imp_resultado():
+    caminho = os.path.join(os.getcwd(), 'graficos-dinamicos')  # ou use src/graficos-dinamicos se estiver dentro da pasta src
+    return send_from_directory(caminho, 'ranking_vl_agregado_imp.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
