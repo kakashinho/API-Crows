@@ -18,9 +18,11 @@ def graficos():
     if request.method == 'POST':
         data_inicial = request.form['data_inicial']
         data_final = request.form['data_final']
-        ano_inicial = int(data_inicial[:4])
-        ano_final = int(data_final[:4])
 
+        # Converte para int se quiser usar como ano
+        ano_inicial = int(data_inicial)
+        ano_final = int(data_final)
+        
         base_path = os.path.dirname(os.path.abspath(__file__))
         caminho_mun = os.path.join(base_path, 'tabelas-relacionais', 'df_mun.csv')
         df_mun = pd.read_csv(caminho_mun) if os.path.exists(caminho_mun) else pd.DataFrame()
