@@ -150,18 +150,24 @@ def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO):
     # Ordena pelo COLUNA_TIPO (maior saldo)
     df_total = df_total.sort_values(by=f'{COLUNA_TIPO}', ascending=False)
 
-    # Limita o texto do nome do produto a 20 caracteres e adiciona "..." para deixar mais legível em menus
-    df_sh4_resumo = df_prod.copy()
-    df_sh4_resumo['PRODUTO_LIMITADO'] = df_sh4_resumo['PRODUTO'].str.slice(0, 20) + '...'
+    # Garante que SH4 tenha um único produto associado
+    df_sh4_resumo = df_prod[['SH4', 'PRODUTO']].drop_duplicates(subset='SH4')
 
-    # Mescla com as cargas 
+    # Mescla com o total de cargas
     df_total = mesclar_df(df_total, df_sh4_resumo, ['SH4'], how='left')
 
-    # Ordena por COLUNA_TIPO
-    df_total = df_total.sort_values(by=f'{COLUNA_TIPO}', ascending=False).head(20)
+    # Agrupa por SH4 e PRODUTO para evitar duplicação de barras
+    df_total = df_total.groupby(['SH4', 'PRODUTO'], as_index=False)[COLUNA_TIPO].sum()
 
-    # Ordena por COLUNA_TIPO
-    df_total = df_total.sort_values(by=f'{COLUNA_TIPO}', ascending=True)
+    # Cria nome de produto limitado
+    df_total['PRODUTO_LIMITADO'] = df_total['PRODUTO'].str.slice(0, 20) + '...'
+
+    # Agrupa por nome truncado para evitar múltiplos valores em uma barra
+    df_total = df_total.groupby('PRODUTO_LIMITADO', as_index=False)[COLUNA_TIPO].sum()
+
+    # Seleciona top 20 produtos
+    df_total = df_total.sort_values(by=COLUNA_TIPO, ascending=False).head(20)
+    df_total = df_total.sort_values(by=COLUNA_TIPO, ascending=True)
 
      # Paleta
     paleta_de_cores = px.colors.qualitative.Set3
