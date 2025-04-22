@@ -190,3 +190,49 @@ def funil_por_produto(df, df_prod, informacao):
 
     return fig
 
+
+# ------------------------- Método que faz o Gráfico de Ranking de Municípios Valor Agregado --------------------------------------------
+# Top 10 municípios por Valor Agregado de exportações e importações
+
+def ranking_vl_agregado(df_mun,df_exp,df_imp, tipo):
+    
+    if(tipo == 'exp'):
+        df = adicionar_ano(df_exp)
+
+        # Agrupamento
+        tipo_anos = agrupar_df(df, ['CO_MUN'], 'VALOR AGREGADO', 'mean')
+        tipo_anos.rename(columns={'VALOR AGREGADO':'VALOR_AGREGADO'}, inplace=True)
+    elif(tipo == 'imp'):
+        df = adicionar_ano(df_imp)
+
+        # agrupamento
+        tipo_anos = agrupar_df(df,['CO_MUN'], 'VALOR AGREGADO', 'mean')
+        tipo_anos.rename(columns={'VALOR AGREGADO':'VALOR_AGREGADO'}, inplace=True)
+    
+    # Adiciona o nome dos municípios
+    municipios = mesclar_df(tipo_anos, df_mun[['CO_MUN', 'NO_MUN_MIN']], ['CO_MUN'])
+
+    # Selecionar as 10 cidades com maior valor agregado
+    municipios_top10 = municipios.sort_values(by="VALOR_AGREGADO", ascending=False).head(10)
+
+    # Paleta
+    paleta_de_cores = px.colors.qualitative.Set1
+
+    # Gráfico
+    fig = px.bar(
+        municipios_top10,
+        x='NO_MUN_MIN',
+        y='VALOR_AGREGADO',
+        color='NO_MUN_MIN',
+        title=f'Top 10 municípios por Valor Agregado de {tipo}',
+        labels={'NO_MUN_MIN': 'Município', 'VALOR AGREGADO': 'valor agregado'},
+        color_discrete_sequence=paleta_de_cores,
+    )
+
+    # Salvar HTML
+    pasta_graficos = 'graficos-dinamicos'
+    os.makedirs(pasta_graficos, exist_ok=True)
+    caminho_arquivo = os.path.join(pasta_graficos, f'ranking_vl_agregado_{tipo}.html')
+    fig.write_html(caminho_arquivo)
+
+    return fig
