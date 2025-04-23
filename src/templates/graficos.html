@@ -28,14 +28,15 @@
 
                 <h3 style="margin-top: 2%;">PERÍODO</h3>
                 <div class="campo-data">
-                    <label for="data_inicial">Ano inicial:</label>
-                    <input type="range" class="form-range" id="data_inicial" name="data_inicial" min="2019" max="2024" value="2020">
+                    <label for="data_inicial">Data inicial: <span id="label_inicial"></span></label>
+                    <input type="range" id="data_inicial" name="data_inicial" min="0" max="74" value="0">
                 </div>
+                
                 <div class="campo-data">
-                    <label for="data_final">Ano final:</label>
-                    <input type="range" class="form-range" id="data_final" name="data_final" min="2019" max="2024" value="2024">
+                    <label for="data_final">Data final: <span id="label_final"></span></label>
+                    <input type="range" id="data_final" name="data_final" min="0" max="74" value="74">
                 </div>
-
+                               
                 <h3>TIPO DE ANÁLISE</h3>
                 <input type="radio" id="tipo" name="exp-imp" value="exportacao">
                 <label for="tipo">Exportação</label><br>
@@ -53,46 +54,23 @@
                 <label for="liquido">Kg Líquido</label><br>
 
 
-                <h3>REGIÃO</h3>
-                <input type="radio" id="cidade" name="tipos-filtro" onclick="mostrarCampo('cidade')">
-                <label for="cidade">Municípios SP</label><br>
+                <h3>Filtrar por:</h3>
+                <input type="radio" id="cidades" name="filtro" value="municipios">
+                <label for="cidades">Municípios SP</label><br>
 
-                <input type="radio" id="microrregiao" name="tipos-filtro" onclick="mostrarCampo('microrregiao')">
-                <label for="pais">Microrregião</label><br>
+                <input type="radio" id="regiao" name="filtro" value="microrregiao">
+                <label for="regiao">Microrregião</label><br>
 
-                <input type="radio" id="porte" name="tipos-filtro" onclick="mostrarCampo('porte')">
-                <label for="produto">Portes Semelhantes</label><br>
+                <input type="radio" id="portes" name="filtro" value="portes">
+                <label for="portes">Portes Semelhantes</label><br>
 
-                <input type="radio" id="carga" name="tipos-filtro" onclick="mostrarCampo('carga')">
+                <input type="radio" id="carga" name="filtro" value="carga">
                 <label for="produto">Por carga</label><br>
 
-                <!-- Campos de input -->
-                <div id="campo-microrregiao" class="campo-input">
-                    <h5>SELECIONE A MICRORREGIÃO:</h5>
-                    <select name="input-microrregiao" id="input-microrregiao">
-                        <option value="sao-paulo" selected>São Paulo</option>
-                        <option value="sorocaba">Sorocaba</option>
-                        <option value="bauru">Bauru</option>
-                        <option value="marilia">Marília</option>
-                        <option value="presidente-prudente">Presidente Prudente</option>
-                        <option value="aracatuba">Araçatuba</option>
-                        <option value="sjrp">São José do Rio Preto</option>
-                        <option value="riberao-preto">Ribeirão Preto</option>
-                        <option value="araraquara">Araraquara</option>
-                        <option value="campinas">Campinas</option>
-                        <option value="sjc">São José dos Campos</option>
+                <div>
+                    <select id="opcoes-select">
+                        <option value="">Selecione uma opção</option>
                     </select>
-                </div>
-
-                <div id="campo-porte" class="campo-input">
-                    <label for="input-porte">Digite o porte:</label>
-                    <input type="text" id="input-porte">
-                </div>
-
-                <div id="campo-carga" class="campo-input">
-                    <label for="input-carga">Código SH4:</label>
-                    <input type="text" id="input-carga">
-
                 </div>
 
                 <button type="submit">Gerar Gráficos</button>
@@ -123,20 +101,113 @@
         </footer>
     </main>
 
-
-
     <script>
-        function mostrarCampo(filtro) {
-            // Esconde todos os campos de input
-            const campos = document.querySelectorAll('.campo-input');
-            campos.forEach(campo => campo.style.display = 'none');
-
-            // Exibe o campo correspondente
-            const campoSelecionado = document.getElementById('campo-' + filtro);
-            if (campoSelecionado) {
-                campoSelecionado.style.display = 'block';
+        // Cria lista de meses/anos entre 2019-01 e 2024-12 (72 meses)
+        const meses = [];
+        for (let ano = 2019; ano <= 2025; ano++) {
+            for (let mes = 1; mes <= 12; mes++) {
+                const mesFormatado = mes.toString().padStart(2, '0');
+                meses.push(`${ano}-${mesFormatado}`);
             }
         }
+    
+        const dataInicialInput = document.getElementById('data_inicial');
+        const dataFinalInput = document.getElementById('data_final');
+        const labelInicial = document.getElementById('label_inicial');
+        const labelFinal = document.getElementById('label_final');
+    
+        // Função para atualizar o texto visível com o mês/ano
+        function atualizarLabel(input, label) {
+            const index = parseInt(input.value, 10);
+            label.textContent = meses[index];
+        }
+    
+        // Eventos de mudança nos sliders
+        dataInicialInput.addEventListener('input', () => {
+            atualizarLabel(dataInicialInput, labelInicial);
+        });
+    
+        dataFinalInput.addEventListener('input', () => {
+            atualizarLabel(dataFinalInput, labelFinal);
+        });
+    
+        // Atualiza os labels ao carregar a página
+        atualizarLabel(dataInicialInput, labelInicial);
+        atualizarLabel(dataFinalInput, labelFinal);
+    </script>
+
+    <script>
+        document.getElementById('opcoes-select').style.display = 'none';
+        const select = document.getElementById('opcoes-select');
+        const radios = document.getElementsByName('filtro');
+    
+        // Função para carregar CSV
+        async function carregarCSV(path) {
+            const response = await fetch(path);
+            const texto = await response.text();
+            const linhas = texto.trim().split('\n').slice(1); // pula o cabeçalho
+
+            // Usando uma expressão regular para dividir corretamente, tratando as aspas
+            return linhas.map(linha => {
+                return linha.split('","').map(celula => celula.replace(/"/g, ''));
+            });
+        }
+    
+        // Função para atualizar as opções do select
+        async function atualizarSelect(valor) {
+            select.innerHTML = '<option value="">Selecione uma opção</option>';
+            let opcoes = [];
+    
+            // Caso o filtro selecionado seja "microrregiao"
+            if (valor === 'microrregiao') {
+                document.getElementById('opcoes-select').style.display = 'block';
+                const linhas = [
+                ["Araraquara"],
+                ["Araçatuba"],
+                ["Bauru"],
+                ["Campinas"],
+                ["Marília"],
+                ["Presidente Prudente"],
+                ["Ribeirão Preto"],
+                ["São José do Rio Preto"],
+                ["São Paulo"],
+                ["São José dos Campos"]
+                ];
+                const regioes = linhas.map(l => l[0]);
+                opcoes = regioes;
+    
+            // Caso o filtro seja "portes" ou "municipios"
+            } else if (valor === 'portes') {
+                document.getElementById('opcoes-select').style.display = 'block';
+                const linhas = await carregarCSV('{{ url_for("static", filename="opcoes-csv/df_mun.csv") }}');
+                const cidades = [...new Set(linhas.map(l => l[0]))].sort();
+                opcoes = cidades;
+    
+            // Caso o filtro seja "carga"
+            } else if (valor === 'carga') {
+                document.getElementById('opcoes-select').style.display = 'block';
+                const linhas = await carregarCSV('{{ url_for("static", filename="opcoes-csv/df_sh4.csv") }}');
+                const cargas = linhas.map(l => l[0]);
+                opcoes = cargas;
+            } else if (valor == 'municipios'){
+                document.getElementById('opcoes-select').style.display = 'none';
+            }
+    
+            // Adicionando as opções ao select
+            opcoes.forEach(op => {
+                const opt = document.createElement('option');
+                opt.value = op;
+                opt.textContent = op;
+                select.appendChild(opt);
+            });
+        }
+    
+        // Adicionando evento nos rádios de filtro
+        radios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                atualizarSelect(e.target.value);
+            });
+        });
     </script>
 </body>
 
