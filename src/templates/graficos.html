@@ -68,7 +68,7 @@
                 <input type="radio" id="carga" name="filtro" value="carga">
                 <label for="produto">Por carga</label><br>
 
-                <div>
+                <div class="select-box">
                     <select id="opcoes-select">
                         <option value="">Selecione uma opção</option>
                     </select>
@@ -187,7 +187,7 @@
             } else if (valor === 'carga') {
                 document.getElementById('opcoes-select').style.display = 'block';
                 const linhas = await carregarCSV('{{ url_for("static", filename="opcoes-csv/df_sh4.csv") }}');
-                const cargas = linhas.map(l => l[0]);
+                const cargas = linhas.map(l => l[0].substring(0,30)+'...');
                 opcoes = cargas;
             } else if (valor == 'municipios'){
                 document.getElementById('opcoes-select').style.display = 'none';
