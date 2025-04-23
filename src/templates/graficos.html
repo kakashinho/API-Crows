@@ -19,6 +19,7 @@
             <a href="{{ url_for('graficos') }}">Gráficos</a>
             <a href="#">Municípios</a>
             <a href="#">Contato</a>
+            <a href="{{ url_for('feedback') }}">Feedback</a>
         </nav>
     </header>
 
@@ -80,7 +81,7 @@
         <section class="grafico">
             {% if mostrar_grafico %}
             <!-- <h2>Gráfico de Balança Comercial</h2> -->
-             <div class="teste">
+             <div class="iframe-graficos">
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_primeiro') }}" frameborder="0"></iframe>
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_segundo') }}" frameborder="0" ></iframe>
              </div>
