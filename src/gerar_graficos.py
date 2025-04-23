@@ -139,13 +139,15 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
 
 # Função principal da balança comercial por produto
 def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
+    import os #VERIFICAR NECESSIDADE!!! *************************************************
+    import plotly.express as px #VERIFICAR NECESSIDADE!!! *******************************
 
-    # Agrupa por produto (SH4), somando COLUNA_TIPO
+    # Agrupa por produto (SH4), somando ou tirando média de acordo com a coluna
     if COLUNA_TIPO == 'VL_FOB':
         df_total = agrupar_df(df, ['SH4'], COLUNA_TIPO, 'sum')
     elif COLUNA_TIPO == 'VALOR AGREGADO':
         df_total = agrupar_df(df, ['SH4'], COLUNA_TIPO, 'mean')
-    elif COLUNA_TIPO == 'KG_LIQUIDO': 
+    elif COLUNA_TIPO == 'KG_LIQUIDO':
         df_total = agrupar_df(df, ['SH4'], COLUNA_TIPO, 'sum')
 
     # Ordena pelo COLUNA_TIPO (maior saldo)
@@ -160,28 +162,38 @@ def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
     # Agrupa por SH4 e PRODUTO para evitar duplicação de barras
     df_total = df_total.groupby(['SH4', 'PRODUTO'], as_index=False)[COLUNA_TIPO].sum()
 
-    # Cria nome de produto limitado
+    # Cria nome de produto limitado apenas para o eixo Y
     df_total['PRODUTO_LIMITADO'] = df_total['PRODUTO'].str.slice(0, 20) + '...'
-
-    # Agrupa por nome truncado para evitar múltiplos valores em uma barra
-    df_total = df_total.groupby('PRODUTO_LIMITADO', as_index=False)[COLUNA_TIPO].sum()
 
     # Seleciona top 20 produtos
     df_total = df_total.sort_values(by=COLUNA_TIPO, ascending=False).head(20)
+
+    # Agrupa novamente por PRODUTO_LIMITADO para evitar erro de barras duplicadas
+    df_total = df_total.groupby('PRODUTO_LIMITADO', as_index=False).agg({
+        COLUNA_TIPO: 'sum',
+        'PRODUTO': 'first'  # Pega um nome completo representativo
+    })
+
+    # Reordena para visualização crescente
     df_total = df_total.sort_values(by=COLUNA_TIPO, ascending=True)
 
-     # Paleta
+    # Paleta de cores
     paleta_de_cores = px.colors.qualitative.Set3
 
-    # Gera gráfico de funil
+    # Gera gráfico de funil com nome completo no hover
     fig = px.funnel(
         df_total,
         y='PRODUTO_LIMITADO',
         x=f'{COLUNA_TIPO}',
         title=f'{informacao} por Produto (Top Produtos por {COLUNA_TIPO})',
-        labels={f'{COLUNA_TIPO}': f'{informacao} (US$)', 'PRODUTO_LIMITADO': 'Produto'},
+        labels={f'{COLUNA_TIPO}': f'{informacao} (R$)', 'PRODUTO_LIMITADO': 'Produto'},
         color='PRODUTO_LIMITADO',
-        color_discrete_sequence=paleta_de_cores  # Corrigido aqui (falta de vírgula)
+        hover_name='PRODUTO',  # Mostra nome completo no tooltip
+        hover_data={
+            'PRODUTO_LIMITADO': False,  # Remove o truncado do hover
+            f'{COLUNA_TIPO}': True
+        },
+        color_discrete_sequence=paleta_de_cores
     )
 
     # Layout
@@ -194,15 +206,18 @@ def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
 
     # Formatação dos valores dentro do funil
     fig.update_traces(texttemplate='R$ %{x:,.0f}', textposition='inside')
-    if retorno == 'fig': return fig
 
-    # Salvar HTML
+    # Retorno em figura ou como caminho do HTML
+    if retorno == 'fig':
+        return fig
+
     pasta_graficos = 'graficos-dinamicos'
     os.makedirs(pasta_graficos, exist_ok=True)
     caminho_arquivo = os.path.join(pasta_graficos, 'funil_por_produto.html')
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
+
 # ------------------------- Método que faz o Gráfico de Ranking de Municípios Valor Agregado --------------------------------------------
 # Top 10 municípios por Valor Agregado de exportações e importações
 
