@@ -81,9 +81,8 @@
             {% if mostrar_grafico %}
             <!-- <h2>Gráfico de Balança Comercial</h2> -->
              <div class="teste">
-                <iframe class="responsive-iframe" src="{{ url_for('grafico_resultado') }}" frameborder="0"></iframe>
-                <iframe class="responsive-iframe" src="{{ url_for('grafico_vlagregado_exp_resultado') }}" frameborder="0" ></iframe>
-                <iframe class="responsive-iframe" src="{{ url_for('grafico_vlagregado_imp_resultado') }}" frameborder="0" ></iframe>
+                <iframe class="responsive-iframe" src="{{ url_for('grafico_primeiro') }}" frameborder="0"></iframe>
+                <iframe class="responsive-iframe" src="{{ url_for('grafico_segundo') }}" frameborder="0" ></iframe>
              </div>
            
             {% endif %}

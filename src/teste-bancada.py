@@ -254,15 +254,15 @@ if st.sidebar.button('Filtrar') or True:
         from gerar_graficos import balanca_comercial
         from gerar_graficos import funil_por_produto
 
-        fig_1 = balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun)
+        fig_1 = balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun, 'fig')
         informacao = 'Exportação'
-        fig_2 = funil_por_produto(df_filtrado_exp, df_sh4, informacao, 'VALOR AGREGADO')
-        fig_3 = funil_por_produto(df_filtrado_exp, df_sh4, informacao, 'VL_FOB')
-        fig_4 = funil_por_produto(df_filtrado_exp, df_sh4, informacao, 'KG_LIQUIDO')
+        fig_2 = funil_por_produto(df_filtrado_exp, df_sh4, informacao, 'VALOR AGREGADO','fig')
+        fig_3 = funil_por_produto(df_filtrado_exp, df_sh4, informacao, 'VL_FOB','fig')
+        fig_4 = funil_por_produto(df_filtrado_exp, df_sh4, informacao, 'KG_LIQUIDO','fig')
         informacao = 'Importação'
-        fig_5 = funil_por_produto(df_filtrado_imp, df_sh4, informacao, 'VALOR AGREGADO')
-        fig_6 = funil_por_produto(df_filtrado_imp, df_sh4, informacao, 'VL_FOB')
-        fig_7 = funil_por_produto(df_filtrado_imp, df_sh4, informacao, 'KG_LIQUIDO')
+        fig_5 = funil_por_produto(df_filtrado_imp, df_sh4, informacao, 'VALOR AGREGADO','fig')
+        fig_6 = funil_por_produto(df_filtrado_imp, df_sh4, informacao, 'VL_FOB','fig')
+        fig_7 = funil_por_produto(df_filtrado_imp, df_sh4, informacao, 'KG_LIQUIDO','fig')
 
         # Divisão de colunas no Streamlit
         col1, col2 = st.columns(2)

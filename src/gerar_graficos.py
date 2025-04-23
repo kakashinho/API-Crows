@@ -38,7 +38,7 @@ def selecionar_top_cidades(df, coluna_valor, n=5):
 
 # ------------------------- Método que faz o Gráfico de Balança Comercial -------------------------------------------
 # Função principal da balança comercial
-def balanca_comercial(df_exp, df_imp, df_mun):
+def balanca_comercial(df_exp, df_imp, df_mun, retorno):
     df_exp = adicionar_ano(df_exp)
     df_imp = adicionar_ano(df_imp)
 
@@ -125,6 +125,7 @@ def balanca_comercial(df_exp, df_imp, df_mun):
         y0=0, y1=0,
         line=dict(color="black", width=2, dash="dashdot"),
     )
+    if retorno == 'fig': return fig
 
     # Salvar HTML
     pasta_graficos = 'graficos-dinamicos'
@@ -132,12 +133,12 @@ def balanca_comercial(df_exp, df_imp, df_mun):
     caminho_arquivo = os.path.join(pasta_graficos, 'balanca_comercial.html')
     fig.write_html(caminho_arquivo)
 
-    return fig
+    return caminho_arquivo
 
 # ------------------------- Método que faz o Gráfico de Todas as Cargas --------------------------------------------
 
 # Função principal da balança comercial por produto
-def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO):
+def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
 
     # Agrupa por produto (SH4), somando COLUNA_TIPO
     if COLUNA_TIPO == 'VL_FOB':
@@ -193,6 +194,7 @@ def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO):
 
     # Formatação dos valores dentro do funil
     fig.update_traces(texttemplate='R$ %{x:,.0f}', textposition='inside')
+    if retorno == 'fig': return fig
 
     # Salvar HTML
     pasta_graficos = 'graficos-dinamicos'
@@ -200,12 +202,12 @@ def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO):
     caminho_arquivo = os.path.join(pasta_graficos, 'funil_por_produto.html')
     fig.write_html(caminho_arquivo)
 
-    return fig
+    return caminho_arquivo
 
 # ------------------------- Método que faz o Gráfico de Ranking de Municípios Valor Agregado --------------------------------------------
 # Top 10 municípios por Valor Agregado de exportações e importações
 
-def ranking_vl_agregado(df_mun,df_exp,df_imp, tipo):
+def ranking_vl_agregado(df_mun,df_exp,df_imp, tipo, retorno):
     
     if(tipo == 'exp'):
         df = adicionar_ano(df_exp)
@@ -239,6 +241,7 @@ def ranking_vl_agregado(df_mun,df_exp,df_imp, tipo):
         labels={'NO_MUN_MIN': 'Município', 'VALOR AGREGADO': 'valor agregado'},
         color_discrete_sequence=paleta_de_cores,
     )
+    if retorno == 'fig': return fig
 
     # Salvar HTML
     pasta_graficos = 'graficos-dinamicos'
@@ -246,4 +249,4 @@ def ranking_vl_agregado(df_mun,df_exp,df_imp, tipo):
     caminho_arquivo = os.path.join(pasta_graficos, f'ranking_vl_agregado_{tipo}.html')
     fig.write_html(caminho_arquivo)
 
-    return fig
+    return caminho_arquivo
