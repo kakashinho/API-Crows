@@ -68,7 +68,7 @@
                 <input type="radio" id="carga" name="filtro" value="carga">
                 <label for="produto">Por carga</label><br>
 
-                <div class="select-box">
+                <div class="campo-input">
                     <select id="opcoes-select">
                         <option value="">Selecione uma opção</option>
                     </select>
@@ -174,6 +174,7 @@
                 ["São José dos Campos"]
                 ];
                 const regioes = linhas.map(l => l[0]);
+                select.innerHTML = '<option value="">Selecione uma microrregião</option>'
                 opcoes = regioes;
     
             // Caso o filtro seja "portes" ou "municipios"
@@ -182,12 +183,14 @@
                 const linhas = await carregarCSV('{{ url_for("static", filename="opcoes-csv/df_mun.csv") }}');
                 const cidades = [...new Set(linhas.map(l => l[0]))].sort();
                 opcoes = cidades;
+                select.innerHTML = '<option value="">Selecione uma cidade</option>'
     
             // Caso o filtro seja "carga"
             } else if (valor === 'carga') {
                 document.getElementById('opcoes-select').style.display = 'block';
                 const linhas = await carregarCSV('{{ url_for("static", filename="opcoes-csv/df_sh4.csv") }}');
                 const cargas = linhas.map(l => l[0].substring(0,30)+'...');
+                select.innerHTML = '<option value="">Selecione uma carga</option>'
                 opcoes = cargas;
             } else if (valor == 'municipios'){
                 document.getElementById('opcoes-select').style.display = 'none';

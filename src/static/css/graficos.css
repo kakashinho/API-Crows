@@ -86,9 +86,8 @@ main {
   margin-bottom: 4.5%;
 }
 
-.filtro .teste .opcoes-select{
-  border: solid black;
-  width: 25px;
+.filtro select {
+
 }
 
 .grafico{
@@ -126,12 +125,9 @@ main {
 }
 
 .campo-input {
-  display: none;
   margin-top: 10px;
 }
 
-.campo-input {
-}
 
 .campo-input > select {
   width: 100%;
