@@ -45,13 +45,13 @@
                 <label for="tipo">Importação</label><br>
 
                 <h3>MÉTRICA</h3>
-                <input type="radio" id="agregado" name="metrica">
+                <input type="radio" id="agregado" name="metrica" value="VALOR AGREGADO">
                 <label for="agregado">Valor Agregado</label><br>
 
-                <input type="radio" id="fob" name="metrica">
+                <input type="radio" id="fob" name="metrica" value="VL_FOB">
                 <label for="fob">Valor FOB</label><br>
 
-                <input type="radio" id="liquido" name="metrica">
+                <input type="radio" id="liquido" name="metrica" value="KG_LIQUIDO">
                 <label for="liquido">Kg Líquido</label><br>
 
 
@@ -84,6 +84,7 @@
              <div class="iframe-graficos">
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_primeiro') }}" frameborder="0"></iframe>
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_segundo') }}" frameborder="0" ></iframe>
+                <iframe class="responsive-iframe" src="{{ url_for('grafico_terceiro') }}" frameborder="0" ></iframe>
              </div>
            
             {% endif %}

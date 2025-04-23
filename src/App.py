@@ -2,7 +2,7 @@
 import os
 import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, abort
-from gerar_graficos import balanca_comercial,ranking_vl_agregado  # Função que gera o HTML do gráfico
+from gerar_graficos import balanca_comercial,ranking_municipios,funil_por_produto  # Função que gera o HTML do gráfico
 
 #----------------- Criação da Aplicação Flask -------------
 app = Flask(__name__,
@@ -46,6 +46,10 @@ def graficos():
         ano_inicial = int(data_inicial[:4])
         ano_final = int(data_final[:4])
 
+        #pegando o filtro do front
+        tipo = request.form['exp-imp']
+        metrica = request.form['metrica']
+
         # Converte para datetime se precisar
         data_inicial_dt = pd.to_datetime(data_inicial)
         data_final_dt = pd.to_datetime(data_final)
@@ -54,6 +58,8 @@ def graficos():
         base_path = os.path.dirname(os.path.abspath(__file__))
         caminho_mun = os.path.join(base_path, 'tabelas-relacionais', 'df_mun.csv')
         df_mun = pd.read_csv(caminho_mun) if os.path.exists(caminho_mun) else pd.DataFrame()
+        caminho_sh4 = os.path.join(base_path, 'tabelas-relacionais', 'df_sh4.csv')
+        df_sh4 = pd.read_csv(caminho_sh4) if os.path.exists(caminho_sh4) else pd.DataFrame()
 
         #Função para carregar dados por ano
         def carregar_dados_dataframe(ano, tipo):
@@ -80,9 +86,9 @@ def graficos():
 
         #Se dados existem, gera os gráficos
         if not df_completo_exp.empty and not df_completo_imp.empty:
-            tipo = 'exp'
             caminhos.append(balanca_comercial(df_completo_exp, df_completo_imp, df_mun,''))
-            caminhos.append(ranking_vl_agregado(df_mun,df_completo_exp,df_completo_imp,tipo,''))
+            caminhos.append(funil_por_produto(df_completo_exp, df_sh4, tipo, metrica,''))
+            caminhos.append(ranking_municipios(df_mun,df_completo_exp,df_completo_imp,tipo,metrica,''))
             mostrar_grafico = True
 
     #Renderiza a página de gráficos
@@ -102,6 +108,14 @@ def grafico_segundo():
         return abort(404, description="Gráfico não encontrado.")
     pasta, nome_arquivo = os.path.split(caminhos[1])
     return send_from_directory(pasta, nome_arquivo)
+
+@app.route('/grafico_terceiro')
+def grafico_terceiro():
+    if len(caminhos) < 3 or not os.path.exists(caminhos[2]):
+        return abort(404, description="Gráfico não encontrado.")
+    pasta, nome_arquivo = os.path.split(caminhos[2])
+    return send_from_directory(pasta, nome_arquivo)
+
 
 #----------------- Inicia o servidor Flask ---------------
 #Roda a aplicação localmente com debug=True (útil durante o desenvolvimento).
