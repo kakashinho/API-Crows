@@ -139,8 +139,6 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
 
 # Função principal da balança comercial por produto
 def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
-    import os #VERIFICAR NECESSIDADE!!! *************************************************
-    import plotly.express as px #VERIFICAR NECESSIDADE!!! *******************************
 
     # Agrupa por produto (SH4), somando ou tirando média de acordo com a coluna
     if COLUNA_TIPO == 'VL_FOB':
