@@ -164,7 +164,7 @@ def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
     df_total['PRODUTO_LIMITADO'] = df_total['PRODUTO'].str.slice(0, 20) + '...'
 
     # Seleciona top 20 produtos
-    df_total = df_total.sort_values(by=COLUNA_TIPO, ascending=False).head(21)
+    df_total = df_total.sort_values(by=COLUNA_TIPO, ascending=False).head(20)
 
     # Agrupa novamente por PRODUTO_LIMITADO para evitar erro de barras duplicadas
     df_total = df_total.groupby('PRODUTO_LIMITADO', as_index=False).agg({
