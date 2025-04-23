@@ -36,21 +36,58 @@ def selecionar_top_cidades(df, coluna_valor, n=5):
     )
     return df[df['NO_MUN_MIN'].isin(top)]
 
+# Padroniza adição de ano e mês no df
+def adicionar_mes_ano(df):
+    df['DATA'] = pd.to_datetime(df['DATA'])
+    df['ANO'] = df['DATA'].dt.year
+    df['MES'] = df['DATA'].dt.month
+    df['ANO_MES'] = df['DATA'].dt.to_period('M').astype(str)
+    return df
+
 # ------------------------- Método que faz o Gráfico de Balança Comercial -------------------------------------------
 # Função principal da balança comercial
 def balanca_comercial(df_exp, df_imp, df_mun, retorno):
-    df_exp = adicionar_ano(df_exp)
-    df_imp = adicionar_ano(df_imp)
+    df_exp = adicionar_mes_ano(df_exp)
+    df_imp = adicionar_mes_ano(df_imp)
 
-    # Agrupamento
-    exp_anos = agrupar_df(df_exp, ['CO_MUN', 'ANO'], 'VL_FOB', 'sum')
-    exp_anos.rename(columns={'VL_FOB': 'EXPORTACAO'}, inplace=True)
+    # Determina se período é menor que um ano
+    data_inicio = pd.to_datetime(df_exp['DATA'].min())
+    data_fim = pd.to_datetime(df_exp['DATA'].max())
+    intervalo_meses = (data_fim.year - data_inicio.year) * 12 + data_fim.month - data_inicio.month
+    usar_visualizacao_mensal = intervalo_meses < 12
 
-    imp_anos = agrupar_df(df_imp, ['CO_MUN', 'ANO'], 'VL_FOB', 'sum')
-    imp_anos.rename(columns={'VL_FOB': 'IMPORTACAO'}, inplace=True)
+    # Agrupamento baseado no período
+    if usar_visualizacao_mensal:
 
-    # Mescla exportação e importação
-    balanca = mesclar_df(exp_anos, imp_anos, ['CO_MUN', 'ANO'], how='outer').fillna(0)
+        # Agrupamento MENSAL
+        exp_mensal = agrupar_df(df_exp, ['CO_MUN', 'ANO', 'MES', 'ANO_MES'], 'VL_FOB', 'sum')
+        imp_mensal = agrupar_df(df_imp, ['CO_MUN', 'ANO', 'MES', 'ANO_MES'], 'VL_FOB', 'sum')
+        
+        exp_mensal.rename(columns={'VL_FOB': 'EXPORTACAO'}, inplace=True)
+        imp_mensal.rename(columns={'VL_FOB': 'IMPORTACAO'}, inplace=True)
+
+        # Mescla exportação e importação
+        balanca = mesclar_df(exp_mensal, imp_mensal, ['CO_MUN', 'ANO', 'MES', 'ANO_MES'], how='outer').fillna(0)
+        balanca['ANO_MES'] = pd.to_datetime(balanca['ANO_MES'])
+
+
+        eixo_x = 'ANO_MES'
+        titulo = 'Balança Comercial por Município (Exportação - Importação) \nVisualização mensal'
+
+    else:
+        # Agrupamento
+        exp_anos = agrupar_df(df_exp, ['CO_MUN', 'ANO'], 'VL_FOB', 'sum')
+        exp_anos.rename(columns={'VL_FOB': 'EXPORTACAO'}, inplace=True)
+
+        imp_anos = agrupar_df(df_imp, ['CO_MUN', 'ANO'], 'VL_FOB', 'sum')
+        imp_anos.rename(columns={'VL_FOB': 'IMPORTACAO'}, inplace=True)
+
+        # Mescla exportação e importação
+        balanca = mesclar_df(exp_anos, imp_anos, ['CO_MUN', 'ANO'], how='outer').fillna(0)
+
+        eixo_x = 'ANO'
+        titulo = 'Balança Comercial por Município (Exportação - Importação)'
+        tickformat = None  # Usa default (número)
 
     # Calcula a balança
     balanca = calcular_diferenca(balanca, 'EXPORTACAO', 'IMPORTACAO', 'BALANCA')
@@ -60,6 +97,7 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
 
     # Top cidades
     top_cidades = selecionar_top_cidades(balanca, 'BALANCA', n=5)
+      
 
     # Paleta
     paleta_de_cores = px.colors.qualitative.Set3
@@ -67,18 +105,18 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
     # Gráfico
     fig = px.line(
         top_cidades,
-        x='ANO',
+        x=eixo_x,
         y='BALANCA',
         color='NO_MUN_MIN',
         markers=True,
-        title='Balança Comercial por Município (Exportação - Importação)',
+        title=titulo,
         labels={'NO_MUN_MIN': 'Município', 'BALANCA': 'Balança Comercial (US$)'},
         line_shape='linear',
         hover_data={'NO_MUN_MIN': True, 'BALANCA': ':.2f'},
         color_discrete_sequence=paleta_de_cores,
     )
 
-    # Anotações
+      # Anotações
     for trace in fig.data:
         for x, y in zip(trace['x'], trace['y']):
             if y >= 1e9:
@@ -101,8 +139,39 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
                 opacity=0.8
             )
 
-    # Layout
-    fig.update_layout(
+
+    # Formata gráfico para visualização mensal
+    if usar_visualizacao_mensal:
+        # Eixo X
+        fig.update_xaxes(
+        tickformat="%b/%Y",
+        tickmode='auto',
+        tickangle=45
+        )
+
+        # Layout
+        fig.update_layout(
+        title={'text': 'Balança Comercial por Município (Exportação - Importação)\nVisualização Mensal', 'x': 0.5, 'xanchor': 'center'},
+        xaxis_title='Período',
+        yaxis_title='Balança Comercial (R$)',
+        legend_title='Município',
+        font=dict(family='Arial', size=12),
+        hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
+        plot_bgcolor='white',
+        margin=dict(l=60, r=60, t=100, b=60),
+        showlegend=True,
+        )
+        # Linha de base
+        fig.add_shape(
+            type="line",
+            x0=top_cidades['ANO_MES'].min(), x1=top_cidades['ANO_MES'].max(),
+            y0=0, y1=0,
+            line=dict(color="black", width=2, dash="dashdot"),
+        )
+
+    else:
+        # Layout
+        fig.update_layout(
         title={'text': 'Balança Comercial por Município (Exportação - Importação)', 'x': 0.5, 'xanchor': 'center'},
         xaxis_title='Ano',
         yaxis_title='Balança Comercial (R$)',
@@ -113,18 +182,19 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
         margin=dict(l=60, r=60, t=100, b=60),
         showlegend=True,
     )
+        fig.update_xaxes(tickmode='linear', dtick=1)
+         
+         # Linha de base
+        fig.add_shape(
+            type="line",
+            x0=top_cidades['ANO'].min(), x1=top_cidades['ANO'].max(),
+            y0=0, y1=0,
+            line=dict(color="black", width=2, dash="dashdot"),
+        )
 
-    # Eixos
-    fig.update_xaxes(tickmode='linear', dtick=1)
+    # Eixo Y    
     fig.update_yaxes(tickprefix="R$ ", tickformat=",.0s", ticksuffix="B")
 
-    # Linha de base
-    fig.add_shape(
-        type="line",
-        x0=top_cidades['ANO'].min(), x1=top_cidades['ANO'].max(),
-        y0=0, y1=0,
-        line=dict(color="black", width=2, dash="dashdot"),
-    )
     if retorno == 'fig': return fig
 
     # Salvar HTML
