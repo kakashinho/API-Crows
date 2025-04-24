@@ -25,6 +25,7 @@ header nav{
   font-family: 'chakra petch';
   font-style: normal;
   font-weight: 700;
+  cursor: default;
 }
 
 /* link */

@@ -27,6 +27,7 @@ header nav{
     font-family: 'chakra petch';
     font-style: normal;
     font-weight: 700;
+    cursor: default;
 }
 
   /* link */
@@ -51,6 +52,9 @@ main {
   background-color: #DDDDDD;
 }
 
+.filtro label {
+  font-size: 100%;
+}
 
 .filtro{
   height: auto;
@@ -192,7 +196,7 @@ footer{
   gap: 3%;
 }
 
-@media (max-width: 639px){
+@media (max-width: 430px){
   section{
     font-size: x-large !important;
   }
