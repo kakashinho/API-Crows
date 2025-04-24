@@ -125,30 +125,27 @@ main {
 }
 
 .campo-input {
-  margin-top: 10px;
-}
-
-
-.campo-input > input {
-  width: 100%;
+  margin-top: 2%;
+  width: auto;
   height: auto;
-  border-radius: 12px;
-  background-color: #dddddd;
+  border-radius: 10px;
+  position: relative;
+  width: auto;
+  margin: 2% auto;
 }
+
+
+
+
 
  /* Estilizando o container */
- .campo-input {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-  margin: 20px auto;
-  font-family: 'Arial', sans-serif;
-}
+ 
 
 /* Estilo para o select */
 .campo-input > input {
-  width: 100%;
-  padding: 12px 20px;
+  width: 95%;
+  padding: 5%;
+  margin-right: 6%;
   border-radius: 8px;
   border: 2px solid #ccc;
   font-size: 16px;
@@ -173,7 +170,7 @@ main {
 
 /* Adicionando sombra para dar um efeito de profundidade */
 .campo-input > input {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Efeito de hover */
