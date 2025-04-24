@@ -68,9 +68,10 @@
                 <label for="produto">Por carga</label><br>
 
                 <div class="campo-input">
-                    <select id="opcoes-select">
+                    <input type="text" list="opcoes-select" >
+                    <datalist id="opcoes-select">
                         <option value="">Selecione uma opção</option>
-                    </select>
+                    </datalist>
                 </div>
 
                 <button type="submit">Gerar Gráficos</button>
@@ -159,7 +160,7 @@
     
             // Caso o filtro selecionado seja "microrregiao"
             if (valor === 'microrregiao') {
-                document.getElementById('opcoes-select').style.display = 'block';
+                document.getElementById('opcoes-select').style.display = 'none';
                 const linhas = [
                 ["Araraquara"],
                 ["Araçatuba"],
@@ -178,7 +179,7 @@
     
             // Caso o filtro seja "portes" ou "municipios"
             } else if (valor === 'portes') {
-                document.getElementById('opcoes-select').style.display = 'block';
+                document.getElementById('opcoes-select').style.display = 'none';
                 const linhas = await carregarCSV('{{ url_for("static", filename="opcoes-csv/df_mun.csv") }}');
                 const cidades = [...new Set(linhas.map(l => l[0]))].sort();
                 opcoes = cidades;
@@ -186,7 +187,7 @@
     
             // Caso o filtro seja "carga"
             } else if (valor === 'carga') {
-                document.getElementById('opcoes-select').style.display = 'block';
+                document.getElementById('opcoes-select').style.display = 'none';
                 const linhas = await carregarCSV('{{ url_for("static", filename="opcoes-csv/df_sh4.csv") }}');
                 const cargas = linhas.map(l => l[0].substring(0,30)+'...');
                 select.innerHTML = '<option value="">Selecione uma carga</option>'

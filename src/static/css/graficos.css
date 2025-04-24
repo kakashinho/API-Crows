@@ -129,7 +129,7 @@ main {
 }
 
 
-.campo-input > select {
+.campo-input > input {
   width: 100%;
   height: auto;
   border-radius: 12px;
@@ -146,7 +146,7 @@ main {
 }
 
 /* Estilo para o select */
-.campo-input > select {
+.campo-input > input {
   width: 100%;
   padding: 12px 20px;
   border-radius: 8px;
@@ -160,24 +160,24 @@ main {
 }
 
 /* Cor de fundo do select ao focar */
-.campo-input > select:focus {
+.campo-input > input:focus {
   border-color: #007BFF;
   outline: none;
   background-color: #e8f0fe;
 }
 
 /* Estilo da seta do select */
-.campo-input > select::-ms-expand {
+.campo-input > input::-ms-expand {
   display: none; /* Remove a seta do IE */
 }
 
 /* Adicionando sombra para dar um efeito de profundidade */
-.campo-input > select {
+.campo-input > input {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Efeito de hover */
-.campo-input > select:hover {
+.campo-input > input:hover {
   border-color: #0056b3;
   background-color: #e2e8f0;
 }
