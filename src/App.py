@@ -50,46 +50,40 @@ def graficos():
         tipo = request.form['exp-imp']
         metrica = request.form['metrica']
 
-        # Converte para datetime se precisar
-        data_inicial_dt = pd.to_datetime(data_inicial)
-        data_final_dt = pd.to_datetime(data_final)
-        
-        # Caminho para o CSV de municípios
-        base_path = os.path.dirname(os.path.abspath(__file__))
-        caminho_mun = os.path.join(base_path, 'tabelas-relacionais', 'df_mun.csv')
-        df_mun = pd.read_csv(caminho_mun) if os.path.exists(caminho_mun) else pd.DataFrame()
-        caminho_sh4 = os.path.join(base_path, 'tabelas-relacionais', 'df_sh4.csv')
-        df_sh4 = pd.read_csv(caminho_sh4) if os.path.exists(caminho_sh4) else pd.DataFrame()
+        #verifica se foi escolhido o tipo e a metrica
+        if tipo and metrica:
+            # Caminho para o CSV de municípios
+            base_path = os.path.dirname(os.path.abspath(__file__))
+            caminho_mun = os.path.join(base_path, 'tabelas-relacionais', 'df_mun.csv')
+            df_mun = pd.read_csv(caminho_mun) if os.path.exists(caminho_mun) else pd.DataFrame()
+            caminho_sh4 = os.path.join(base_path, 'tabelas-relacionais', 'df_sh4.csv')
+            df_sh4 = pd.read_csv(caminho_sh4) if os.path.exists(caminho_sh4) else pd.DataFrame()
 
-        #Função para carregar dados por ano
-        def carregar_dados_dataframe(ano, tipo):
-            caminho = os.path.join(base_path, 'arquivos-brutos-csv', 'exportacoes' if tipo == 'exp' else 'importacoes', f'df_{tipo}_{ano}.csv')
-            return pd.read_csv(caminho) if os.path.exists(caminho) else pd.DataFrame()
+            #Função para carregar dados por ano
+            def carregar_dados_dataframe(ano, tipo):
+                caminho = os.path.join(base_path, 'arquivos-brutos-csv', 'exportacoes' if tipo == 'exp' else 'importacoes', f'df_{tipo}_{ano}.csv')
+                return pd.read_csv(caminho) if os.path.exists(caminho) else pd.DataFrame()
 
-        #Concatena dados de vários anos
-        df_completo_exp, df_completo_imp = pd.DataFrame(), pd.DataFrame()
-        for ano in range(ano_final, ano_inicial - 1, -1):
-            df_completo_exp = pd.concat([df_completo_exp, carregar_dados_dataframe(ano, 'exp')], ignore_index=True)
-            df_completo_imp = pd.concat([df_completo_imp, carregar_dados_dataframe(ano, 'imp')], ignore_index=True)
-        
-        data_inicial = f'{data_inicial}-01'
-        data_final = f'{data_final}-01'
+            #Concatena dados de vários anos
+            df_completo_exp, df_completo_imp = pd.DataFrame(), pd.DataFrame()
+            for ano in range(ano_final, ano_inicial - 1, -1):
+                df_completo_exp = pd.concat([df_completo_exp, carregar_dados_dataframe(ano, 'exp')], ignore_index=True)
+                df_completo_imp = pd.concat([df_completo_imp, carregar_dados_dataframe(ano, 'imp')], ignore_index=True)
+            
+            data_inicial = f'{data_inicial}-01'
+            data_final = f'{data_final}-01'
 
-        # Converte as datas selecionadas também
-        data_inicial_dt = pd.to_datetime(data_inicial)
-        data_final_dt = pd.to_datetime(data_final)
+            # Filtrar os dados com base no intervalo de datas
+            df_filtrado_exp, df_filtrado_imp = pd.DataFrame(), pd.DataFrame()
+            df_filtrado_exp = df_completo_exp[(df_completo_exp['DATA'] >= data_inicial) & (df_completo_exp['DATA'] <= data_final)]
+            df_filtrado_imp = df_completo_imp[(df_completo_imp['DATA'] >= data_inicial) & (df_completo_imp['DATA'] <= data_final)]
 
-        # Filtrar os dados com base no intervalo de datas
-        df_filtrado_exp, df_filtrado_imp = pd.DataFrame(), pd.DataFrame()
-        df_filtrado_exp = df_completo_exp[(df_completo_exp['DATA'] >= data_inicial) & (df_completo_exp['DATA'] <= data_final)]
-        df_filtrado_imp = df_completo_imp[(df_completo_imp['DATA'] >= data_inicial) & (df_completo_imp['DATA'] <= data_final)]
-
-        #Se dados existem, gera os gráficos
-        if not df_completo_exp.empty and not df_completo_imp.empty:
-            caminhos.append(balanca_comercial(df_completo_exp, df_completo_imp, df_mun,''))
-            caminhos.append(funil_por_produto(df_completo_exp, df_sh4, tipo, metrica,''))
-            caminhos.append(ranking_municipios(df_mun,df_completo_exp,df_completo_imp,tipo,metrica,''))
-            mostrar_grafico = True
+            #Se dados existem, gera os gráficos
+            if not df_filtrado_exp.empty and not df_filtrado_imp.empty:
+                caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,''))
+                caminhos.append(funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica,''))
+                caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp,tipo,metrica,''))
+                mostrar_grafico = True
 
     #Renderiza a página de gráficos
     return render_template('graficos.html', mostrar_grafico=mostrar_grafico)
