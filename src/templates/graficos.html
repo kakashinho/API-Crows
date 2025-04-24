@@ -66,9 +66,9 @@
 
                 <input type="radio" id="carga" name="filtro" value="carga">
                 <label for="produto">Por carga</label><br>
-
-                <div class="campo-input">
-                    <input type="text" list="opcoes-select" >
+                
+                <div class="campo-input" >
+                    <input type="text" list="opcoes-select"  name="opcao">
                     <datalist id="opcoes-select">
                         <option value="">Selecione uma opção</option>
                     </datalist>
@@ -85,6 +85,7 @@
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_primeiro') }}" frameborder="0"></iframe>
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_segundo') }}" frameborder="0" ></iframe>
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_terceiro') }}" frameborder="0" ></iframe>
+                <!--<iframe class="responsive-iframe" src="{{ url_for('grafico_quarto') }}" frameborder="0" ></iframe>-->
              </div>
            
             {% endif %}

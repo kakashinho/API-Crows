@@ -10,3 +10,8 @@
 
 #ignorar cache das pastas Python
 __pycache__/
+
+#Gráficos gerados que sempre serão modificados
+balanca_comercial.html
+funil_por_produto.html
+ranking_municipios.html
