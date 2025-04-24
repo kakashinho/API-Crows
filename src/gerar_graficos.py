@@ -112,26 +112,30 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
 
     # Anotações nos pontos
     for trace in fig.data:
-        for x, y in zip(trace['x'], trace['y']):
+        textos = []
+        for y in trace['y']:
             if y >= 1e9:
-                label = f'R$ {y / 1e9:.1f}B'
+                textos.append(f'R$ {y / 1e9:.1f}B')
             elif y >= 1e6:
-                label = f'R$ {y / 1e6:.1f}M'
+                textos.append(f'R$ {y / 1e6:.1f}M')
+            elif abs(y) >= 1e9:
+                textos.append(f'R$ {"-" if y < 0 else ""}{abs(y) / 1e9:.1f}B')
+            elif abs(y) >= 1e6:
+                textos.append(f'R$ {"-" if y < 0 else ""}{abs(y) / 1e6:.1f}M')
             else:
-                label = f'R$ {y:.2f}'
-            fig.add_annotation(
-                x=x, y=y,
-                text=label,
-                showarrow=True,
-                arrowhead=2,
-                ax=0, ay=-15,
-                font=dict(size=10, color='black'),
-                bgcolor='white',
-                borderpad=2,
-                bordercolor='black',
-                borderwidth=1,
-                opacity=0.8
-            )
+                textos.append(f'R$ {y:,.2f}')
+            
+        # Atribui os textos ao trace para que apareçam como labels
+        trace.text = textos
+        trace.textposition = 'top center'
+        trace.mode = 'lines+markers+text'
+        trace.textfont = dict(size=10, color='black', family='Arial')
+        trace.hovertemplate = (
+        '<b>%{text}</b><br>' +
+        'Ano/Mês: %{x}<br>' +
+        'Valor: R$ %{y:,.2f}<extra></extra>'
+        )
+        trace.text = textos
 
     # Layout geral
     fig.update_layout(
@@ -271,10 +275,10 @@ def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
 def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,retorno):
     
     if(tipo == 'exportacao'):
-        df = adicionar_ano(df_exp)
+        df = df_exp
 
     elif(tipo == 'importacao'):
-        df = adicionar_ano(df_imp)
+        df = df_imp
     else:
         raise ValueError(f"Tipo inválido: {tipo}")
 
