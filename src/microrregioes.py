@@ -7,7 +7,7 @@ municipios_sao_jose_rio_preto = [
     # Microrregião de Jales
     "Aparecida d'Oeste", "Aspásia", "Dirce Reis", "Dolcinópolis", "Jales",
     "Marinópolis", "Mesópolis", "Nova Canaã Paulista", "Palmeira d'Oeste",
-    "Paranapuã", "Pontalinda", "Populina", "Rubineia", "Santa Albertina",
+    "Paranapuã", "Pontalinda", "Populina", "Rubinéia", "Santa Albertina",
     "Santa Clara d'Oeste", "Santa Fé do Sul", "Santa Rita d'Oeste",
     "Santa Salete", "Santana da Ponte Pensa", "São Francisco", "Três Fronteiras",
     "Urânia", "Vitória Brasil",
@@ -64,7 +64,7 @@ municipios_ribeirao_preto = [
     # Microrregião de Jaboticabal
     "Bebedouro", "Cândido Rodrigues", "Fernando Prestes", "Guariba",
     "Jaboticabal", "Monte Alto", "Monte Azul Paulista", "Pirangi",
-    "Pitangueiras", "Santa Ernestina", "Taiaçu", "Taiuva", "Taquaral",
+    "Pitangueiras", "Santa Ernestina", "Taiaçu", "Taiúva", "Taquaral",
     "Taquaritinga", "Terra Roxa", "Viradouro", "Vista Alegre do Alto",
     
     # Microrregião de Ribeirão Preto
@@ -107,7 +107,7 @@ municipios_bauru = [
     "Presidente Alves", "Reginópolis", "Ubirajara", "Uru",
 
     # Microrregião de Jaú
-    "Bariri", "Barra Bonita", "Bocaina", "Boraceia", "Dois Córregos",
+    "Bariri", "Barra Bonita", "Bocaina", "Boracéia", "Dois Córregos",
     "Igaraçu do Tietê", "Itaju", "Itapuí", "Jaú", "Macatuba", "Mineiros do Tietê",
     "Pederneiras",
 
@@ -160,7 +160,7 @@ municipios_campinas = [
     "Valinhos", "Vinhedo",
 
     # Microrregião de Amparo
-    "Águas de Lindóia", "Amparo", "Lindoia", "Monte Alegre do Sul",
+    "Águas de Lindóia", "Amparo", "Lindóia", "Monte Alegre do Sul",
     "Pedra Bela", "Pinhalzinho", "Serra Negra", "Socorro",
     # Região de Jundiaí
     "Campo Limpo Paulista", "Itupeva", "Jundiaí", "Louveira", "Várzea Paulista",
@@ -201,7 +201,7 @@ municipios_marilia_assis = [
     # Microrregião de Marília
     "Álvaro de Carvalho", "Alvinlândia", "Echaporã", "Fernão", "Gália",
     "Garça", "Lupércio", "Marília", "Ocauçu", "Oriente", "Oscar Bressane",
-    "Pompeia", "Vera Cruz",
+    "Pompéia", "Vera Cruz",
 
     # Mesorregião de Assis
     # Microrregião de Assis
@@ -321,6 +321,35 @@ listas_municipios = [
     municipios_sao_jose_dos_campos, municipios_sao_paulo
 ]
 
+regioes = [
+    "São José do Rio Preto",
+    "Ribeirão Preto",
+    "Araçatuba",
+    "Bauru",
+    "Araraquara",
+    "Piracicaba",
+    "Campinas",
+    "Presidente Prudente",
+    "Marília e Assis",
+    "Sorocaba",
+    "São José dos Campos",
+    "São Paulo"
+]
+
+# Criando a lista de tuplas (região, município)
+dados = []
+for i in range(len(regioes)):
+    for municipio in listas_municipios[i]:
+        dados.append((regioes[i], municipio))   
+
+# Criando o DataFrame
+df_regioes = pd.DataFrame(dados, columns=["Região", "Município"])
+
+# Ordenando o DataFrame por "Região" e "Município"
+df_regioes_sorted = df_regioes.sort_values(by=["Região", "Município"])
+
+#======================= Verificação da Lista com o DataFrame ===============
+
 # Junta todas as listas de municípios em uma só
 todos_municipios = sum(listas_municipios, [])
 
@@ -349,29 +378,13 @@ caminho_mun = os.path.join(base_path, 'tabelas-relacionais', 'df_mun.csv')
 if os.path.exists(caminho_mun):
     df_mun = pd.read_csv(caminho_mun)
 
-# Função para normalizar os nomes (remove acentos e coloca tudo em minúsculas)
-def normalizar_nome(nome):
-    if not isinstance(nome, str):  # Verifica se é uma string
-        return nome  # Se não for, retorna o valor original
-    nome = nome.strip()  # Remove espaços extras
-    nome = nome.lower()  # Coloca tudo em minúsculas
-    nome = unicodedata.normalize('NFKD', nome).encode('ASCII', 'ignore').decode('ASCII')  # Remove acentos e caracteres especiais
-    return nome
-
-# Suponha que você tenha a lista de municípios e o DataFrame com as colunas dos municípios
-todos_municipios = sum(listas_municipios, [])  # Concatenando todas as listas de municípios
-
-# Normalizando os dados da lista
-df_lista_municipios = pd.DataFrame([normalizar_nome(mun) for mun in todos_municipios], columns=["municipio"])
-
-# Normalizando os dados do DataFrame
-df_mun['NO_MUN_MIN_NORMALIZADO'] = df_mun['NO_MUN_MIN'].apply(normalizar_nome)
+df_lista_municipios = pd.DataFrame([mun for mun in todos_municipios], columns=["municipio"])
 
 # Verificando quais municípios da lista não estão no DataFrame
-faltando = df_lista_municipios[~df_lista_municipios["municipio"].isin(df_mun['NO_MUN_MIN_NORMALIZADO'])]
+faltando = df_lista_municipios[~df_lista_municipios["municipio"].isin(df_mun['NO_MUN_MIN'])]
 
 # Verificando quais municípios do DataFrame não estão na lista
-extra_na_lista = df_mun[~df_mun['NO_MUN_MIN_NORMALIZADO'].isin(df_lista_municipios['municipio'])]
+extra_na_lista = df_mun[~df_mun['NO_MUN_MIN'].isin(df_lista_municipios['municipio'])]
 
 # Exibindo os resultados
 from IPython.display import display
@@ -384,3 +397,11 @@ display(extra_na_lista["NO_MUN_MIN"])
 
 print(f"Total de municípios no DataFrame: {df_lista_municipios['municipio'].nunique()}")
 print(f"Total de municípios no DataFrame: {df_mun['NO_MUN_MIN'].nunique()}")
+
+#======================= Salvando o Arquivo ===============
+
+# Salvando o DataFrame em um arquivo CSV
+# df_regioes.to_csv(f'./arquivos-brutos-csv/importacoes//df_regioes.csv', index=False)
+
+# Salva como CSV com aspas em tudo
+df_regioes_sorted.to_csv('./tabelas-relacionais/df_regioes.csv', index=False)
