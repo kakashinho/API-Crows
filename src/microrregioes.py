@@ -1,5 +1,6 @@
 import pandas as pd
 import unicodedata
+from collections import Counter
 import os
 
 municipios_sao_jose_rio_preto = [
@@ -160,7 +161,14 @@ municipios_campinas = [
 
     # Microrregião de Amparo
     "Águas de Lindóia", "Amparo", "Lindoia", "Monte Alegre do Sul",
-    "Pedra Bela", "Pinhalzinho", "Serra Negra", "Socorro"
+    "Pedra Bela", "Pinhalzinho", "Serra Negra", "Socorro",
+    # Região de Jundiaí
+    "Campo Limpo Paulista", "Itupeva", "Jundiaí", "Louveira", "Várzea Paulista",
+
+    # Região de Bragança Paulista
+    "Atibaia", "Bom Jesus dos Perdões", "Bragança Paulista", "Itatiba",
+    "Jarinu", "Joanópolis", "Morungaba", "Nazaré Paulista", "Piracaia",
+    "Tuiuti", "Vargem"
 ]
 
 municipios_presidente_prudente = [
@@ -272,12 +280,8 @@ municipios_sao_jose_dos_campos = [
     
     # Mesorregião do Litoral Sul Paulista
 
-    # Microrregião de Registro
-    "Barra do Turvo", "Cajati", "Cananéia", "Eldorado", "Iguape", 
-    "Ilha Comprida", "Jacupiranga", "Juquiá", "Miracatu", "Pariquera-Açu", "Registro",
-
     # Microrregião de Itanhaém
-    "Sete Barras", "Itanhaém", "Itariri", "Mongaguá", "Pedro de Toledo", "Peruíbe"
+    "Itanhaém", "Itariri", "Mongaguá", "Pedro de Toledo", "Peruíbe"
 ]
 
 municipios_sao_paulo = [
@@ -287,10 +291,10 @@ municipios_sao_paulo = [
     "Pirapora do Bom Jesus", "Santana de Parnaíba",
 
     # Microrregião de Franco da Rocha
-    "Caieiras", "Francisco Morato", "Franco da Rocha",
+    "Caieiras", "Francisco Morato", "Franco da Rocha","Mairiporã",
 
     # Microrregião de Guarulhos
-    "Arujá", "Guarulhos", 
+    "Arujá", "Guarulhos", "Santa Isabel", 
 
     # Microrregião de Itapecerica da Serra
     "Cotia", "Embu", "Embu-Guaçu", "Itapecerica da Serra", 
@@ -316,7 +320,27 @@ listas_municipios = [
     municipios_presidente_prudente, municipios_marilia_assis, municipios_sorocaba, 
     municipios_sao_jose_dos_campos, municipios_sao_paulo
 ]
-print(sum(len(lista) for lista in listas_municipios))
+
+# Junta todas as listas de municípios em uma só
+todos_municipios = sum(listas_municipios, [])
+
+# Conta quantas vezes cada município aparece
+contador = Counter(todos_municipios)
+
+# Filtra os que aparecem mais de uma vez
+duplicados = {mun: count for mun, count in contador.items() if count > 1}
+
+# Mostra os resultados
+if duplicados:
+    print(f"\n🔁 Municípios repetidos ({len(duplicados)}):")
+    for mun, count in duplicados.items():
+        print(f"- {mun}: {count} vezes")
+else:
+    print("\n✅ Nenhum município repetido encontrado.")
+
+# E também o total geral
+print(f"\n📋 Total de municípios (incluindo repetições): {len(todos_municipios)}")
+print(f"📋 Total de municípios únicos: {len(set(todos_municipios))}")
 
 # Caminho base para os arquivos CSV
 base_path = os.path.dirname(os.path.abspath(__file__))
@@ -324,9 +348,6 @@ base_path = os.path.dirname(os.path.abspath(__file__))
 caminho_mun = os.path.join(base_path, 'tabelas-relacionais', 'df_mun.csv')
 if os.path.exists(caminho_mun):
     df_mun = pd.read_csv(caminho_mun)
-
-print(f"Total de municípios no DataFrame: {df_mun['NO_MUN_MIN'].nunique()}")
-
 
 # Função para normalizar os nomes (remove acentos e coloca tudo em minúsculas)
 def normalizar_nome(nome):
@@ -355,10 +376,11 @@ extra_na_lista = df_mun[~df_mun['NO_MUN_MIN_NORMALIZADO'].isin(df_lista_municipi
 # Exibindo os resultados
 from IPython.display import display
 
-display('municípios da lista não estão no DataFrame:')
+display('municípios da lista que não estão no DataFrame:')
 display(faltando["municipio"])
 
-display('municípios do DataFrame não estão na lista:')
+display('municípios do DataFrame que não estão na lista:')
 display(extra_na_lista["NO_MUN_MIN"])
 
-# 18 + 639 = 657
+print(f"Total de municípios no DataFrame: {df_lista_municipios['municipio'].nunique()}")
+print(f"Total de municípios no DataFrame: {df_mun['NO_MUN_MIN'].nunique()}")
