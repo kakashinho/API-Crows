@@ -63,7 +63,7 @@ a:active {
 }
 
 /* botão que está dentro do id='texto' */
-#texto > button{
+#texto > a{
   border: #fff;
   border-radius: 20px;
   padding: 2%;
@@ -104,7 +104,7 @@ a:active {
   margin-bottom: 20%;
 }
 
-button{
+.button{
   border-color: #2978DF;
   border-radius: 20px;
   background-color: #fff;
