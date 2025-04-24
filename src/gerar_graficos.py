@@ -50,44 +50,21 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
     df_exp = adicionar_mes_ano(df_exp)
     df_imp = adicionar_mes_ano(df_imp)
 
-    # Determina se período é menor que um ano
-    data_inicio = pd.to_datetime(df_exp['DATA'].min())
-    data_fim = pd.to_datetime(df_exp['DATA'].max())
-    intervalo_meses = (data_fim.year - data_inicio.year) * 12 + data_fim.month - data_inicio.month
-    usar_visualizacao_mensal = intervalo_meses < 12
+    # Verfica o periodo está dentre um ano
+    coluna = 'ANO'
+    qtd_exp, qtd_imp = df_exp['ANO'].nunique(), df_imp['ANO'].nunique()
+    if qtd_exp == 1 and qtd_imp == 1:
+        coluna = 'MES'
 
-    # Agrupamento baseado no período
-    if usar_visualizacao_mensal:
+    # Agrupamento
+    exp_anos = agrupar_df(df_exp, ['CO_MUN', coluna], 'VL_FOB', 'sum')
+    exp_anos.rename(columns={'VL_FOB': 'EXPORTACAO'}, inplace=True)
 
-        # Agrupamento MENSAL
-        exp_mensal = agrupar_df(df_exp, ['CO_MUN', 'ANO', 'MES', 'ANO_MES'], 'VL_FOB', 'sum')
-        imp_mensal = agrupar_df(df_imp, ['CO_MUN', 'ANO', 'MES', 'ANO_MES'], 'VL_FOB', 'sum')
-        
-        exp_mensal.rename(columns={'VL_FOB': 'EXPORTACAO'}, inplace=True)
-        imp_mensal.rename(columns={'VL_FOB': 'IMPORTACAO'}, inplace=True)
+    imp_anos = agrupar_df(df_imp, ['CO_MUN', coluna], 'VL_FOB', 'sum')
+    imp_anos.rename(columns={'VL_FOB': 'IMPORTACAO'}, inplace=True)
 
-        # Mescla exportação e importação
-        balanca = mesclar_df(exp_mensal, imp_mensal, ['CO_MUN', 'ANO', 'MES', 'ANO_MES'], how='outer').fillna(0)
-        balanca['ANO_MES'] = pd.to_datetime(balanca['ANO_MES'])
-
-
-        eixo_x = 'ANO_MES'
-        titulo = 'Balança Comercial por Município (Exportação - Importação) \nVisualização mensal'
-
-    else:
-        # Agrupamento
-        exp_anos = agrupar_df(df_exp, ['CO_MUN', 'ANO'], 'VL_FOB', 'sum')
-        exp_anos.rename(columns={'VL_FOB': 'EXPORTACAO'}, inplace=True)
-
-        imp_anos = agrupar_df(df_imp, ['CO_MUN', 'ANO'], 'VL_FOB', 'sum')
-        imp_anos.rename(columns={'VL_FOB': 'IMPORTACAO'}, inplace=True)
-
-        # Mescla exportação e importação
-        balanca = mesclar_df(exp_anos, imp_anos, ['CO_MUN', 'ANO'], how='outer').fillna(0)
-
-        eixo_x = 'ANO'
-        titulo = 'Balança Comercial por Município (Exportação - Importação)'
-        tickformat = None  # Usa default (número)
+    # Mescla exportação e importação
+    balanca = mesclar_df(exp_anos, imp_anos, ['CO_MUN', coluna], how='outer').fillna(0)
 
     # Calcula a balança
     balanca = calcular_diferenca(balanca, 'EXPORTACAO', 'IMPORTACAO', 'BALANCA')
@@ -97,26 +74,43 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
 
     # Top cidades
     top_cidades = selecionar_top_cidades(balanca, 'BALANCA', n=5)
-      
 
     # Paleta
-    paleta_de_cores = px.colors.qualitative.Set3
+    paleta_de_cores = [
+        "#003d80",   # azul bem escuro
+        "#0059b3",  # azul escuro
+        "#0073e6",  # azul intenso
+        "#3399ff",  # azul
+        "#66b2ff",  # azul médio
+        "#99ccff",  # azul claro
+        "#cce5ff"  # azul bem claro  
+    ]
 
     # Gráfico
     fig = px.line(
         top_cidades,
-        x=eixo_x,
+        x=coluna,
         y='BALANCA',
         color='NO_MUN_MIN',
         markers=True,
-        title=titulo,
-        labels={'NO_MUN_MIN': 'Município', 'BALANCA': 'Balança Comercial (US$)'},
+        title='Balança Comercial por Município (Exportação - Importação)',
+        labels={'NO_MUN_MIN': 'Município', 'BALANCA': 'Balança Comercial (R$)'},
         line_shape='linear',
         hover_data={'NO_MUN_MIN': True, 'BALANCA': ':.2f'},
-        color_discrete_sequence=paleta_de_cores,
+        color_discrete_sequence=paleta_de_cores
     )
 
-      # Anotações
+    # Se for gráfico por mês, ajustar eixo X com os nomes corretos
+    if coluna == 'MES':
+        meses_nomes = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+        fig.update_xaxes(
+            tickmode='array',
+            tickvals=list(range(1, 13)),
+            ticktext=meses_nomes
+        )
+
+    # Anotações nos pontos
     for trace in fig.data:
         for x, y in zip(trace['x'], trace['y']):
             if y >= 1e9:
@@ -139,41 +133,10 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
                 opacity=0.8
             )
 
-
-    # Formata gráfico para visualização mensal
-    if usar_visualizacao_mensal:
-        # Eixo X
-        fig.update_xaxes(
-        tickformat="%b/%Y",
-        tickmode='auto',
-        tickangle=45
-        )
-
-        # Layout
-        fig.update_layout(
-        title={'text': 'Balança Comercial por Município (Exportação - Importação)\nVisualização Mensal', 'x': 0.5, 'xanchor': 'center'},
-        xaxis_title='Período',
-        yaxis_title='Balança Comercial (R$)',
-        legend_title='Município',
-        font=dict(family='Arial', size=12),
-        hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
-        plot_bgcolor='white',
-        margin=dict(l=60, r=60, t=100, b=60),
-        showlegend=True,
-        )
-        # Linha de base
-        fig.add_shape(
-            type="line",
-            x0=top_cidades['ANO_MES'].min(), x1=top_cidades['ANO_MES'].max(),
-            y0=0, y1=0,
-            line=dict(color="black", width=2, dash="dashdot"),
-        )
-
-    else:
-        # Layout
-        fig.update_layout(
+    # Layout geral
+    fig.update_layout(
         title={'text': 'Balança Comercial por Município (Exportação - Importação)', 'x': 0.5, 'xanchor': 'center'},
-        xaxis_title='Ano',
+        xaxis_title='Mês' if coluna == 'MES' else 'Ano',
         yaxis_title='Balança Comercial (R$)',
         legend_title='Município',
         font=dict(family='Arial', size=12),
@@ -182,19 +145,26 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
         margin=dict(l=60, r=60, t=100, b=60),
         showlegend=True,
     )
-        fig.update_xaxes(tickmode='linear', dtick=1)
-         
-         # Linha de base
-        fig.add_shape(
-            type="line",
-            x0=top_cidades['ANO'].min(), x1=top_cidades['ANO'].max(),
-            y0=0, y1=0,
-            line=dict(color="black", width=2, dash="dashdot"),
-        )
 
-    # Eixo Y    
-    fig.update_yaxes(tickprefix="R$ ", tickformat=",.0s", ticksuffix="B")
+    # Grade de fundo com linhas cinza claro
+    fig.update_xaxes(
+        showgrid=True,
+        gridcolor='#eeeeee',
+        gridwidth=1
+    )
+    fig.update_yaxes(
+        showgrid=True,
+        gridcolor='#eeeeee',
+        gridwidth=1
+    )
 
+    # Linha de base
+    fig.add_shape(
+        type="line",
+        x0=top_cidades[coluna].min(), x1=top_cidades[coluna].max(),
+        y0=0, y1=0,
+        line=dict(color="black", width=2, dash="dashdot"),
+    )
     if retorno == 'fig': return fig
 
     # Salvar HTML
@@ -204,6 +174,7 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
+
 
 # ------------------------- Método que faz o Gráfico de Todas as Cargas --------------------------------------------
 
@@ -246,7 +217,15 @@ def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
     df_total = df_total.sort_values(by=COLUNA_TIPO, ascending=True)
 
     # Paleta de cores
-    paleta_de_cores = px.colors.qualitative.Set3
+    paleta_de_cores = [
+        "#3399ff",  # azul
+        "#66b2ff",  # azul médio
+        "#99ccff",  # azul claro
+        "#cce5ff",  # azul bem claro  
+        "#003d80",   # azul bem escuro
+        "#0059b3",  # azul escuro
+        "#0073e6"  # azul intenso
+    ]
 
     # Gera gráfico de funil com nome completo no hover
     fig = px.funnel(
@@ -326,7 +305,16 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,retorno):
         municipios_top10 = municipios.sort_values(by="KG_LIQUIDO", ascending=False).head(10)
 
     # Paleta
-    paleta_de_cores = px.colors.qualitative.Set1
+    paleta_de_cores = [
+        "#003d80",   # azul bem escuro
+        "#0059b3",  # azul escuro
+        "#0073e6",  # azul intenso
+        "#3399ff",  # azul
+        "#66b2ff",  # azul médio
+        "#99ccff",  # azul claro
+        "#cce5ff"  # azul bem claro  
+    ]
+
 
     # Gráfico
     fig = px.bar(
