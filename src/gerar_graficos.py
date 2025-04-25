@@ -44,6 +44,9 @@ def adicionar_mes_ano(df):
     df['ANO_MES'] = df['DATA'].dt.to_period('M').astype(str)
     return df
 
+def quebrar_texto(texto, largura=30):
+    return '<br>'.join([texto[i:i+largura] for i in range(0, len(texto), largura)])
+
 # ------------------------- Método que faz o Gráfico de Balança Comercial -------------------------------------------
 # Função principal da balança comercial
 def balanca_comercial(df_exp, df_imp, df_mun, retorno):
@@ -94,7 +97,7 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
         color='NO_MUN_MIN',
         markers=True,
         title='Balança Comercial por Município (Exportação - Importação)',
-        labels={'NO_MUN_MIN': 'Município', 'BALANCA': 'Balança Comercial (R$)'},
+        labels={'NO_MUN_MIN': 'Município', 'BALANCA': 'Balança Comercial (US$)'},
         line_shape='linear',
         hover_data={'NO_MUN_MIN': True, 'BALANCA': ':.2f'},
         color_discrete_sequence=paleta_de_cores
@@ -115,15 +118,15 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
         textos = []
         for y in trace['y']:
             if y >= 1e9:
-                textos.append(f'R$ {y / 1e9:.1f}B')
+                textos.append(f'US$ {y / 1e9:.1f}B')
             elif y >= 1e6:
-                textos.append(f'R$ {y / 1e6:.1f}M')
+                textos.append(f'US$ {y / 1e6:.1f}M')
             elif abs(y) >= 1e9:
-                textos.append(f'R$ {"-" if y < 0 else ""}{abs(y) / 1e9:.1f}B')
+                textos.append(f'US$ {"-" if y < 0 else ""}{abs(y) / 1e9:.1f}B')
             elif abs(y) >= 1e6:
-                textos.append(f'R$ {"-" if y < 0 else ""}{abs(y) / 1e6:.1f}M')
+                textos.append(f'US$ {"-" if y < 0 else ""}{abs(y) / 1e6:.1f}M')
             else:
-                textos.append(f'R$ {y:,.2f}')
+                textos.append(f'US$ {y:,.2f}')
             
         # Atribui os textos ao trace para que apareçam como labels
         trace.text = textos
@@ -133,7 +136,7 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
         trace.hovertemplate = (
         '<b>%{text}</b><br>' +
         'Ano/Mês: %{x}<br>' +
-        'Valor: R$ %{y:,.2f}<extra></extra>'
+        'Valor: US$ %{y:,.2f}<extra></extra>'
         )
         trace.text = textos
 
@@ -141,7 +144,7 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
     fig.update_layout(
         title={'text': 'Balança Comercial por Município (Exportação - Importação)', 'x': 0.5, 'xanchor': 'center'},
         xaxis_title='Mês' if coluna == 'MES' else 'Ano',
-        yaxis_title='Balança Comercial (R$)',
+        yaxis_title='Balança Comercial (US$)',
         legend_title='Município',
         font=dict(family='Arial', size=12),
         hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
@@ -183,42 +186,42 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
 # ------------------------- Método que faz o Gráfico de Todas as Cargas --------------------------------------------
 
 # Função principal da balança comercial por produto
-def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
+def funil_por_produto(df, df_sh4, tipo, metrica, retorno):
 
     # Agrupa por produto (SH4), somando ou tirando média de acordo com a coluna
-    if COLUNA_TIPO == 'VL_FOB':
-        df_total = agrupar_df(df, ['SH4'], COLUNA_TIPO, 'sum')
-    elif COLUNA_TIPO == 'VALOR AGREGADO':
-        df_total = agrupar_df(df, ['SH4'], COLUNA_TIPO, 'mean')
-    elif COLUNA_TIPO == 'KG_LIQUIDO':
-        df_total = agrupar_df(df, ['SH4'], COLUNA_TIPO, 'sum')
+    if metrica == 'VL_FOB':
+        df_total = agrupar_df(df, ['SH4'], metrica, 'sum')
+    elif metrica == 'VALOR AGREGADO':
+        df_total = agrupar_df(df, ['SH4'], metrica, 'mean')
+    elif metrica == 'KG_LIQUIDO':
+        df_total = agrupar_df(df, ['SH4'], metrica, 'sum')
 
-    # Ordena pelo COLUNA_TIPO (maior saldo)
-    df_total = df_total.sort_values(by=f'{COLUNA_TIPO}', ascending=False)
+    # Ordena pelo metrica (maior saldo)
+    df_total = df_total.sort_values(by=f'{metrica}', ascending=False)
 
     # Garante que SH4 tenha um único produto associado
-    df_sh4_resumo = df_prod[['SH4', 'PRODUTO']].drop_duplicates(subset='SH4')
+    df_sh4_resumo = df_sh4[['SH4', 'PRODUTO']].drop_duplicates(subset='SH4')
 
     # Mescla com o total de cargas
     df_total = mesclar_df(df_total, df_sh4_resumo, ['SH4'], how='left')
 
     # Agrupa por SH4 e PRODUTO para evitar duplicação de barras
-    df_total = df_total.groupby(['SH4', 'PRODUTO'], as_index=False)[COLUNA_TIPO].sum()
+    df_total = df_total.groupby(['SH4', 'PRODUTO'], as_index=False)[metrica].sum()
 
     # Cria nome de produto limitado apenas para o eixo Y
     df_total['PRODUTO_LIMITADO'] = df_total['PRODUTO'].str.slice(0, 20) + '...'
 
     # Seleciona top 20 produtos
-    df_total = df_total.sort_values(by=COLUNA_TIPO, ascending=False).head(20)
+    df_total = df_total.sort_values(by=metrica, ascending=False).head(20)
 
     # Agrupa novamente por PRODUTO_LIMITADO para evitar erro de barras duplicadas
     df_total = df_total.groupby('PRODUTO_LIMITADO', as_index=False).agg({
-        COLUNA_TIPO: 'sum',
+        metrica: 'sum',
         'PRODUTO': 'first'  # Pega um nome completo representativo
     })
 
     # Reordena para visualização crescente
-    df_total = df_total.sort_values(by=COLUNA_TIPO, ascending=True)
+    df_total = df_total.sort_values(by=metrica, ascending=True)
 
     # Paleta de cores
     paleta_de_cores = [
@@ -231,32 +234,39 @@ def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
         "#0073e6"  # azul intenso
     ]
 
+    df_total['hover_text'] = (
+    "Descrição: " + df_total['PRODUTO'].apply(lambda x: quebrar_texto(x, 60))
+    )
+
+    tipo_lower = tipo.lower()
     # Gera gráfico de funil com nome completo no hover
     fig = px.funnel(
         df_total,
         y='PRODUTO_LIMITADO',
-        x=f'{COLUNA_TIPO}',
-        title=f'{informacao} por Produto (Top Produtos por {COLUNA_TIPO})',
-        labels={f'{COLUNA_TIPO}': f'{informacao} (R$)', 'PRODUTO_LIMITADO': 'Produto'},
+        x=f'{metrica}',
+        title=f'TOP 20 Produtos em {tipo_lower} por {metrica} dos municípios',
+        labels={f'{metrica}': f'{tipo} (US$)', 'PRODUTO_LIMITADO': 'Produto'},
         color='PRODUTO_LIMITADO',
-        hover_name='PRODUTO',  # Mostra nome completo no tooltip
+        hover_name='hover_text',  # Mostra nome completo no tooltip
         hover_data={
             'PRODUTO_LIMITADO': False,  # Remove o truncado do hover
-            f'{COLUNA_TIPO}': True
+            f'{metrica}': True
         },
         color_discrete_sequence=paleta_de_cores
     )
 
     # Layout
     fig.update_layout(
+        title_x=0.5,
         font=dict(family='Arial', size=12),
-        plot_bgcolor='white',
+        # hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
+        # plot_bgcolor='white',
+        margin=dict(l=60, r=60, t=100, b=60),
         showlegend=False,
-        margin=dict(l=100, r=40, t=80, b=40),
     )
 
     # Formatação dos valores dentro do funil
-    fig.update_traces(texttemplate='R$ %{x:,.0f}', textposition='inside')
+    fig.update_traces(texttemplate='US$ %{x:,.0f}', textposition='inside')
 
     # Retorno em figura ou como caminho do HTML
     if retorno == 'fig':
@@ -272,15 +282,7 @@ def funil_por_produto(df, df_prod, informacao, COLUNA_TIPO, retorno):
 # ------------------------- Método que faz o Gráfico de Ranking de Municípios Valor Agregado --------------------------------------------
 # Top 10 municípios por Valor Agregado de exportações e importações
 
-def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,retorno):
-    
-    if(tipo == 'exportacao'):
-        df = df_exp
-
-    elif(tipo == 'importacao'):
-        df = df_imp
-    else:
-        raise ValueError(f"Tipo inválido: {tipo}")
+def ranking_municipios(df,df_mun,tipo,metrica,retorno):
 
     # agrupamento
     if(metrica == 'VALOR AGREGADO'):
@@ -319,16 +321,24 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,retorno):
         "#cce5ff"  # azul bem claro  
     ]
 
-
+    tipo_lower = tipo.lower()
+    
     # Gráfico
     fig = px.bar(
-         municipios_top10,
+        municipios_top10,
         x='NO_MUN_MIN',
         y=f'{metrica}',
         color='NO_MUN_MIN',
-        title=f'Top 10 municípios por {metrica} de {tipo}',
+        title=f'Top 10 municípios por {metrica} sobre suas {tipo_lower}',
         # labels={'NO_MUN_MIN': 'Município', f'{metrica}': 'valor agregado'},
         color_discrete_sequence=paleta_de_cores,
+    )
+
+    fig.update_layout(
+    title_x=0.5,
+    font=dict(family='Arial', size=12),
+    margin=dict(l=60, r=60, t=100, b=60),
+    showlegend=False,
     )
     if retorno == 'fig': return fig
 
