@@ -224,6 +224,6 @@ def grafico_quarto():
 #----------------- Inicia o servidor Flask ---------------
 #Roda a aplicação localmente com debug=True (útil durante o desenvolvimento).
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=80)
 
 
