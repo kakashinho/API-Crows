@@ -181,11 +181,11 @@ def graficos():
                 if tipo == 'Exportacões':
                     caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,''))  
                     caminhos.append(funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica,''))
-                    caminhos.append(ranking_municipios(df_filtrado_exp, df_mun, tipo, metrica,''))
+                    caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
                 elif tipo == 'Importacões':
                     caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,''))  
                     caminhos.append(funil_por_produto(df_filtrado_imp, df_sh4, tipo,metrica,''))
-                    caminhos.append(ranking_municipios(df_filtrado_imp, df_mun, tipo, metrica,''))
+                    caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
                 mostrar_grafico = True
 
     #Renderiza a página de gráficos
