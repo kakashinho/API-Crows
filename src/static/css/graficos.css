@@ -90,10 +90,6 @@ main {
   margin-bottom: 4.5%;
 }
 
-.filtro select {
-
-}
-
 .grafico{
   position: relative;
   overflow: hidden;
@@ -138,13 +134,6 @@ main {
   margin: 2% auto;
 }
 
-
-
-
-
- /* Estilizando o container */
- 
-
 /* Estilo para o select */
 .campo-input > input {
   width: 95%;
@@ -169,7 +158,8 @@ main {
 
 /* Estilo da seta do select */
 .campo-input > input::-ms-expand {
-  display: none; /* Remove a seta do IE */
+  display: none;
+   /* Remove a seta do IE */
 }
 
 /* Adicionando sombra para dar um efeito de profundidade */
