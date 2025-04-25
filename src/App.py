@@ -93,10 +93,9 @@ def graficos():
             data_final = f'{data_final}-01'
 
             # Filtrar os dados com base no intervalo de datas
-            df_filtrado_exp, df_filtrado_imp = df_completo_exp, df_completo_imp
-            if str(data_inicial) != '2019-01-01 00:00:00' and str(data_final) != '2025-03-01 00:00:00':
-                df_filtrado_exp = df_completo_exp[(df_completo_exp['DATA'] >= data_inicial) & (df_completo_exp['DATA'] <= data_final)]
-                df_filtrado_imp = df_completo_imp[(df_completo_imp['DATA'] >= data_inicial) & (df_completo_imp['DATA'] <= data_final)]
+            df_filtrado_exp, df_filtrado_imp = pd.DataFrame(), pd.DataFrame()
+            df_filtrado_exp = df_completo_exp[(df_completo_exp['DATA'] >= data_inicial) & (df_completo_exp['DATA'] <= data_final)]
+            df_filtrado_imp = df_completo_imp[(df_completo_imp['DATA'] >= data_inicial) & (df_completo_imp['DATA'] <= data_final)]
 
             carga,cidade,regiao = '','',''
             if filtro == 'municipios':
@@ -152,14 +151,14 @@ def graficos():
                 cods_vizinhos = df_balanca.iloc[start:end]['CO_MUN']
 
                 # Filtra os dataframes de exportação e importação para esses municípios vizinhos
-                df_filtrado_exp = df_completo_exp[df_completo_exp['CO_MUN'].isin(cods_vizinhos)].reset_index(drop=True)
-                df_filtrado_imp = df_completo_imp[df_completo_imp['CO_MUN'].isin(cods_vizinhos)].reset_index(drop=True)
+                df_filtrado_exp =  df_filtrado_exp[ df_filtrado_exp['CO_MUN'].isin(cods_vizinhos)].reset_index(drop=True)
+                df_filtrado_imp = df_filtrado_imp[df_filtrado_imp['CO_MUN'].isin(cods_vizinhos)].reset_index(drop=True)
 
             elif filtro == 'carga':
                 carga = opcao.split(" - ")[0]
                 carga = int(carga)
 
-                df_exp_carga = df_completo_exp[df_completo_exp['SH4'] == carga]
+                df_exp_carga = df_filtrado_exp[df_filtrado_exp['SH4'] == carga]
                 df_imp_carga  = df_filtrado_imp[df_filtrado_imp['SH4'] == carga]
 
                 df_exp_agrupado = df_exp_carga.groupby('CO_MUN')['VL_FOB'].sum().reset_index()
@@ -174,16 +173,19 @@ def graficos():
                 df_filtrado_exp = df_filtrado_exp[df_filtrado_exp['CO_MUN'].isin(cods_exp_carga)]
                 df_filtrado_exp.reset_index(drop=True, inplace=True)
 
-                df_filtrado_imp = df_completo_imp[df_completo_imp['CO_MUN'].isin(cods_imp_carga)]
+                df_filtrado_imp = df_filtrado_imp[df_filtrado_imp['CO_MUN'].isin(cods_imp_carga)]
                 df_filtrado_imp.reset_index(drop=True, inplace=True)
-            
-            # return f"<h1>{carga}</h1><h1>{cidade}</h1><h1>{regiao}</h1>"
 
             #Se dados existem, gera os gráficos
             if not df_filtrado_exp.empty and not df_filtrado_imp.empty:
-                caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,''))
-                caminhos.append(funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica,''))
-                caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp,tipo,metrica,''))
+                if tipo == 'Exportacões':
+                    caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,''))  
+                    caminhos.append(funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica,''))
+                    caminhos.append(ranking_municipios(df_filtrado_exp, df_mun, tipo, metrica,''))
+                elif tipo == 'Importacões':
+                    caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,''))  
+                    caminhos.append(funil_por_produto(df_filtrado_imp, df_sh4, tipo,metrica,''))
+                    caminhos.append(ranking_municipios(df_filtrado_imp, df_mun, tipo, metrica,''))
                 mostrar_grafico = True
 
     #Renderiza a página de gráficos
