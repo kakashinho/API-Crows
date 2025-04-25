@@ -2,6 +2,7 @@ body{
     font-family: Quicksand, sans-serif;
     background: #adabab;
     display: flex;
+    flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -76,9 +77,11 @@ button:hover{
 .btn{
     display: inline-block;
     text-decoration: none;
-    width: 30%;
+    width: 20%;
     padding: 10px;
     margin-top: 20px ;
+    margin-left: auto;
+    margin-right: auto;
     background: #ffffff;
     color: #6ca1f1;
     font-size: 16px;
@@ -86,6 +89,7 @@ button:hover{
     border-color: #6ca1f1;
     border-style: solid;
     border-width: 3px;
+    text-align: center;
 }
 
 .btn:hover{
