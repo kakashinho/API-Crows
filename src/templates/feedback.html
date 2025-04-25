@@ -5,32 +5,63 @@
         <meta name="viewport" content="width=device-width; initial-scale=1.0">
         <title> Formulário de feedback </title>
         <link rel="stylesheet" href="{{url_for('static', filename='css/feedback.css')}}">
+        <style>
+            .mensagem_form_enviado {
+                margin-top: 20px;
+                padding: 10px;
+                border-radius: 5px;
+                text-align: center;
+                font-weight: bold;
+            }
+
+            .mensagem_form_enviado p {
+                margin: 0;
+            }
+
+            .mensagem_form_enviado p {
+                color: #ffffff;
+                background-color: #28a745; /* Verde para sucesso */
+            }
+
+            .mensagem_form_enviado.error p {
+                background-color: #dc3545; /* Vermelho para erro */
+            }
+        </style>
     </head>
     <body>
         <div class="container">
-           <h1> Avalie nosso serviço!</h1> 
-           <p>Sua opinião é muito importante para nós. <br>Avalie nosso atendimento e compartilhe sua experiência conosco. </p>
-           <form action="#">
-            <div class="star-rating">
-                <input type="radio" id="star5" value="5">
-                <label for="star5">&#9733</label>
+            <h1> Avalie nosso serviço!</h1> 
+            <p>Sua opinião é muito importante para nós. <br>Avalie nosso atendimento e compartilhe sua experiência conosco. </p>
 
-                <input type="radio"  id="star4" value="4">
-                <label for="star4">&#9733</label>
+            <!-- Exibição da mensagem de status -->
+            {% if status %}
+                <div class="mensagem_form_enviado">
+                    <p>{{ status }}</p>
+                </div>
+            {% endif %}
 
-                <input type="radio" id="star3"  value="3">
-                <label for="star3">&#9733</label>
+            <form action="{{ url_for('enviar_feedback') }}" method="POST">
+                <div class="star-rating">
+                    <input type="radio" name="avaliacao" id="star5" value="5" required>
+                    <label for="star5">&#9733</label>
 
-                <input type="radio"  id="star2" value="2">
-                <label for="star2">&#9733</label>
+                    <input type="radio" name="avaliacao" id="star4" value="4" required> 
+                    <label for="star4">&#9733</label>
 
-                <input type="radio"  id="star1" value="1">
-                <label for="star1">&#9733</label>
-            </div>
+                    <input type="radio" name="avaliacao" id="star3" value="3" required>
+                    <label for="star3">&#9733</label>
 
-            <textarea name="#" id="#" placeholder="Compartilhe aqui o que achou do nosso serviço..." required></textarea>
-            <button type="submit"> Enviar sua resposta</button>
-           </form>
+                    <input type="radio" name="avaliacao" id="star2" value="2" required>
+                    <label for="star2">&#9733</label>
+
+                    <input type="radio" name="avaliacao" id="star1" value="1" required>
+                    <label for="star1">&#9733</label>
+                </div>
+
+                <textarea name="mensagem" id="mensagem" placeholder="Compartilhe aqui o que achou do nosso serviço..." required></textarea>
+                <button type="submit"> Enviar sua resposta</button>
+            </form>
         </div>
+        <a href="{{ url_for('home') }}" class="btn">Página Inicial</a>
     </body>
 </html>
