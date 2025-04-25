@@ -279,66 +279,111 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno):
 
     return caminho_arquivo
 
-# ------------------------- Método que faz o Gráfico de Ranking de Municípios Valor Agregado --------------------------------------------
-# Top 10 municípios por Valor Agregado de exportações e importações
+# ------------------------- Método que faz o Gráfico de Ranking de Municípios --------------------------------------------
 
-def ranking_municipios(df,df_mun,tipo,metrica,retorno):
+def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno):
+    
+    if(tipo == 'Exportacões'):
+        df = adicionar_ano(df_exp)
+
+    elif(tipo == 'Importacões'):
+        df = adicionar_ano(df_imp)
+    else:
+        raise ValueError(f"Tipo inválido: {tipo}")
+    
+    # Garante que SH4 tenha um único produto associado
+    df_sh4_resumo = df_prod[['SH4', 'PRODUTO']].drop_duplicates(subset='SH4')
+    df_comp = mesclar_df(df,df_sh4_resumo, ['SH4'])
 
     # agrupamento
     if(metrica == 'VALOR AGREGADO'):
-        tipo_anos = agrupar_df(df,['CO_MUN'], 'VALOR AGREGADO', 'mean')
+        tipo_anos = agrupar_df(df_comp,['CO_MUN'], 'VALOR AGREGADO', 'mean')
         tipo_anos.rename(columns={'VALOR AGREGADO':'VALOR_AGREGADO'}, inplace=True)
         metrica = 'VALOR_AGREGADO'
         # Adiciona o nome dos municípios
         municipios = mesclar_df(tipo_anos, df_mun[['CO_MUN', 'NO_MUN_MIN']], ['CO_MUN'])
+        municipios_top10 = municipios.sort_values(by="VALOR_AGREGADO", ascending=False).head(10)  
 
-        # Selecionar as 10 cidades com maior valor agregado
-        municipios_top10 = municipios.sort_values(by="VALOR_AGREGADO", ascending=False).head(10)
+        cargas = df_comp.groupby(['CO_MUN', 'SH4','PRODUTO'],as_index=False)['VALOR AGREGADO'].mean()
+
+        cargas_top5 = cargas.sort_values(['CO_MUN','VALOR AGREGADO'], ascending=False)
+        cargas_top5 = cargas_top5.groupby('CO_MUN').head(5)
+
+        cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
+
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Agregado da Carga:' + cargas_top5['VALOR AGREGADO'].round(2).astype(str) + ')'
+        carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
+
+        
+        municipios_total = pd.merge(municipios_top10, carga_agrupada, on='CO_MUN', how='left')
+
     elif(metrica == 'VL_FOB'):
-        tipo_anos = agrupar_df(df,['CO_MUN'], 'VL_FOB', 'sum')
+        tipo_anos = agrupar_df(df_comp,['CO_MUN'], 'VL_FOB', 'sum')
 
         # Adiciona o nome dos municípios
         municipios = mesclar_df(tipo_anos, df_mun[['CO_MUN', 'NO_MUN_MIN']], ['CO_MUN'])
+        municipios_top10 = municipios.sort_values(by="VL_FOB", ascending=False).head(10)  
 
-        # Selecionar as 10 cidades com maior valor agregado
-        municipios_top10 = municipios.sort_values(by="VL_FOB", ascending=False).head(10)
+        cargas = df_comp.groupby(['CO_MUN', 'SH4','PRODUTO'],as_index=False)['VL_FOB'].sum()
+        cargas.rename(columns={'VL_FOB': 'VL FOB'}, inplace=True)
+
+        cargas_top5 = cargas.sort_values(['CO_MUN','VL FOB'], ascending=False)
+        cargas_top5 = cargas_top5.groupby('CO_MUN').head(5)
+
+        cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
+
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Fob:' + cargas_top5['VL FOB'].round(2).astype(str) + ')'
+        carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
+
+        
+        municipios_total = pd.merge(municipios_top10, carga_agrupada, on='CO_MUN', how='left')
+
     elif(metrica == 'KG_LIQUIDO'):
-        tipo_anos = agrupar_df(df,['CO_MUN'], 'KG_LIQUIDO', 'sum')
+        tipo_anos = agrupar_df(df_comp,['CO_MUN'], 'KG_LIQUIDO', 'sum')
+
         # Adiciona o nome dos municípios
         municipios = mesclar_df(tipo_anos, df_mun[['CO_MUN', 'NO_MUN_MIN']], ['CO_MUN'])
+        municipios_top10 = municipios.sort_values(by="KG_LIQUIDO", ascending=False).head(10)  
 
-        # Selecionar as 10 cidades com maior valor agregado
-        municipios_top10 = municipios.sort_values(by="KG_LIQUIDO", ascending=False).head(10)
+        cargas = df_comp.groupby(['CO_MUN', 'SH4','PRODUTO'],as_index=False)['KG_LIQUIDO'].sum()
+        cargas.rename(columns={'KG_LIQUIDO': 'KG LIQUIDO'}, inplace=True)
+
+        cargas_top5 = cargas.sort_values(['CO_MUN','KG LIQUIDO'], ascending=False)
+        cargas_top5 = cargas_top5.groupby('CO_MUN').head(5)
+
+        cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
+
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Por KG LIQUIDO:' + cargas_top5['KG LIQUIDO'].round(2).astype(str) + ')'
+        carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index() 
+
+        
+        municipios_total = pd.merge(municipios_top10, carga_agrupada, on='CO_MUN', how='left')
+
 
     # Paleta
     paleta_de_cores = [
+        "#26517f",
         "#003d80",   # azul bem escuro
         "#0059b3",  # azul escuro
         "#0073e6",  # azul intenso
         "#3399ff",  # azul
+        "#00bdf2",
+        "#71b2e1",
         "#66b2ff",  # azul médio
         "#99ccff",  # azul claro
         "#cce5ff"  # azul bem claro  
     ]
 
-    tipo_lower = tipo.lower()
-    
     # Gráfico
     fig = px.bar(
-        municipios_top10,
+        municipios_total,
         x='NO_MUN_MIN',
         y=f'{metrica}',
         color='NO_MUN_MIN',
-        title=f'Top 10 municípios por {metrica} sobre suas {tipo_lower}',
-        # labels={'NO_MUN_MIN': 'Município', f'{metrica}': 'valor agregado'},
+        title=f'Top 10 municípios por {metrica} de {tipo}',
+        labels={'NO_MUN_MIN': 'Município'},
+        hover_data = {'CO_MUN': False,f'{metrica}':True,'NO_MUN_MIN':True, 'descricao':True},
         color_discrete_sequence=paleta_de_cores,
-    )
-
-    fig.update_layout(
-    title_x=0.5,
-    font=dict(family='Arial', size=12),
-    margin=dict(l=60, r=60, t=100, b=60),
-    showlegend=False,
     )
     if retorno == 'fig': return fig
 
