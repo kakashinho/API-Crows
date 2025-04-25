@@ -221,9 +221,41 @@ def grafico_quarto():
     return send_from_directory(pasta, nome_arquivo)
 
 
-#----------------- Inicia o servidor Flask ---------------
+#----------------- Inicia o servidor Flask para Feedback ---------------
 #Roda a aplicação localmente com debug=True (útil durante o desenvolvimento).
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=80)
 
+# ---------------------- Banco de Dados Feedback ----------------------
+from flask_mysqldb import MySQL
 
+# Configurações de conexão com o MySQL
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'oliver'
+app.config['MYSQL_DB'] = 'feedback_database'
+
+mysql = MySQL(app)
+
+# ---------------------- Rota para receber feedback ----------------------
+@app.route('/enviar', methods=['POST'])
+def enviar_feedback():
+    avaliacao = request.form['avaliacao']
+    mensagem = request.form['mensagem']
+
+    try:
+        # Inserção no banco de dados
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO feedback (avaliacao, mensagem) VALUES (%s, %s)", (avaliacao, mensagem))
+        mysql.connection.commit()
+        cur.close()
+
+        # Se inserção for bem-sucedida, mensagem de sucesso
+        status = "Feedback enviado com sucesso! Agradecemos por sua avaliação."
+
+    except Exception as e:
+        # Caso ocorra erro, mensagem de erro
+        status = f"Erro ao enviar o feedback: {str(e)}. Tente novamente."
+
+    # Redireciona para a página de feedback com o status da operação
+    return render_template('feedback.html', status=status)
