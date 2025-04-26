@@ -23,6 +23,10 @@
 <img src="https://img.shields.io/badge/Jira-blue.svg?style=for-the-badge&logo=jira&logoColor=white"></imag>&nbsp;
 <img src="https://img.shields.io/badge/GitHub-black.svg?style=for-the-badge&logo=GitHub&logoColor=white"></imag>&nbsp;
 <img src="https://img.shields.io/badge/Git-red.svg?style=for-the-badge&logo=Git&logoColor=white"></imag>&nbsp;
+<img src="https://img.shields.io/badge/Plotly-yellow.svg?style=for-the-badge&logo=Plotly&logoColor=white"></imag>&nbsp;
+<img src="https://img.shields.io/badge/JavaScript-orange.svg?style=for-the-badge&logo=JavaScript&logoColor=white"></imag>&nbsp;
+<img src="https://img.shields.io/badge/MYSQL-blue.svg?style=for-the-badge&logo=MYSQL&logoColor=white"></imag>&nbsp;
+<img src="https://img.shields.io/badge/STREAMLIT-green.svg?style=for-the-badge&logo=STREAMLIT&logoColor=white"></imag>&nbsp;
 
 
 ## 🎯 Objetivo do Projeto
@@ -70,5 +74,5 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 | Gustavo Ribeiro da Rosa | Desenvolvedor | <a href="https://github.com/gustasvos"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/gustavo-rosa-46a251180/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
 | Hiroshi Yamashita dos Santos | Desenvolvedor | <a href="https://github.com/Hiroshi-Yamashita-Santos"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/hiroshi-yamashita-dos-santos-a29440359/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
 | Lais Zanardi Inocencio | Desenvolvedor | <a href="https://github.com/lais-zanardi"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/lais-zanardi-inocencio/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
-| Maria Fernanda | Desenvolvedor | <a href="https://github.com/mariaflbss"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/maria-fernanda-laboissiere-25362b353/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
+| Maria Fernanda de Oliveira Laboissiere | Desenvolvedor | <a href="https://github.com/mariaflbss"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/maria-fernanda-laboissiere-25362b353/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
 | Vivian Inacio Silva | Desenvolvedor | <a href="https://github.com/Vivian-Inacio"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://br.linkedin.com/in/vivian-in%C3%A1cio-silva-469094359"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
