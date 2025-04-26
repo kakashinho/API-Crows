@@ -45,7 +45,7 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 3. Web Site: [Sistema completo]()
 
 
-## 📅Sprints 
+## 📅Sprints
 
 ### Sprint - 1️⃣ 🎯 ([Clique aqui](/)):  Concluído ✅ 30/03/2025
 
