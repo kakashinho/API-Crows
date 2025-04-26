@@ -232,7 +232,7 @@ from flask_mysqldb import MySQL
 # Configurações de conexão com o MySQL
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'oliver'
+app.config['MYSQL_PASSWORD'] = 'meubd'
 app.config['MYSQL_DB'] = 'feedback_database'
 
 mysql = MySQL(app)
