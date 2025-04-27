@@ -1,6 +1,7 @@
 #--------------------------- Imports ----------------------
 import os
 import pandas as pd
+import mysql.connector
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, abort
 from gerar_graficos import balanca_comercial,ranking_municipios,funil_por_produto,ranking_municipios_cargas  # Função que gera o HTML do gráfico
 
@@ -223,19 +224,13 @@ def grafico_quarto():
     pasta, nome_arquivo = os.path.split(caminhos[3])
     return send_from_directory(pasta, nome_arquivo)
 
-
-#----------------- Inicia o servidor Flask para Feedback ---------------
-#Roda a aplicação localmente com debug=True (útil durante o desenvolvimento).
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=80)
-
 # ---------------------- Banco de Dados Feedback ----------------------
 from flask_mysqldb import MySQL
 
 # Configurações de conexão com o MySQL
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'oliver'
+app.config['MYSQL_PASSWORD'] = 'meubd'
 app.config['MYSQL_DB'] = 'feedback_database'
 
 mysql = MySQL(app)
@@ -262,3 +257,8 @@ def enviar_feedback():
 
     # Redireciona para a página de feedback com o status da operação
     return render_template('feedback.html', status=status)
+
+#----------------- Inicia o servidor Flask para Feedback ---------------
+#Roda a aplicação localmente com debug=True (útil durante o desenvolvimento).
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

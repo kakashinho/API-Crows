@@ -1,0 +1,44 @@
+--- TERMNINAL ---
+
+python -m venv venv
+cd src
+pip install -r .\requirements.txt
+pip install --upgrade flask-mysqldb
+python App.py     → Também pode ser substituido por:     flask run     → Também pode ser substituido por:     flask run --debug
+→ Será gerado um link de acesso ao site (para acessar = Ctl + Click)
+
+
+
+
+
+--- BANCO DE DADOS ---
+
+• Criar previamente em "MySQL Workbench":
+user: root
+senha: meubd
+
+• Ao acessar:
+1 - File
+2 - New Query Tab
+3 - Ctrl + Shift + S (salvar com nome "feedback")
+
+• Script:
+CREATE DATABASE feedback_database;
+use feedback_database;
+CREATE TABLE feedback (
+    id int auto_increment primary key,
+    avaliacao int,
+    mensagem text,
+    data_envio timestamp default current_timestamp
+);
+
+-- VIIZUALIZAR DADOS SALVOS
+select * from feedback;
+
+-- APAGAR TODOS OS DADOS SALVOS
+TRUNCATE TABLE feedback;
+
+
+-- PREDEFINIDOS:
+-- DATABASE nome: feedback_database
+-- DATABASE senha: meubd
