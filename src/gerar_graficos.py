@@ -442,25 +442,27 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
     # agrupamento
     if(metrica == 'VALOR AGREGADO'):
         # nessa estou separando por cargas
-        tipo_ano = agrupar_df(df_comp,['CO_MUN'], 'VALOR AGREGADO', 'mean')
-        tipo_ano.rename(columns={'VALOR AGREGADO':'VALOR_AGREGADO'}, inplace=True)
+        tipo_anos = agrupar_df(df_comp,['CO_MUN'], 'VALOR AGREGADO', 'mean')
+        tipo_anos.rename(columns={'VALOR AGREGADO':'VALOR_AGREGADO'}, inplace=True)
         metrica = 'VALOR_AGREGADO'
+    
         # Adiciona o nome dos municípios
-        municipios = mesclar_df(tipo_ano, df_mun[['CO_MUN', 'NO_MUN_MIN']], ['CO_MUN'])
-        municipios_10 = municipios.sort_values(by="VALOR_AGREGADO", ascending=False).head(10)  
+        municipios = mesclar_df(tipo_anos, df_mun[['CO_MUN', 'NO_MUN_MIN']], ['CO_MUN'])
+        municipios_top10 = municipios.sort_values(by="VALOR_AGREGADO", ascending=False).head(10)  
 
-        carga = df_comp.groupby(['CO_MUN', 'SH4','PRODUTO'],as_index=False)['VALOR AGREGADO'].mean()
+        cargas = df_comp.groupby(['CO_MUN', 'SH4','PRODUTO'],as_index=False)['VALOR AGREGADO'].mean()
 
-        cargas = carga.sort_values(['CO_MUN','VALOR AGREGADO'], ascending=False)
-        # cargas= cargas.groupby('CO_MUN')
+        cargas_top5 = cargas.sort_values(['CO_MUN','VALOR AGREGADO'], ascending=False)
+        cargas_top5 = cargas_top5.groupby('CO_MUN').head(30)
 
-        cargas['PRODUTO_LIMITADO'] = cargas['PRODUTO'].str.lower().str.slice(0, 10) + '...'
+        cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
 
-        cargas['descricao'] = cargas['SH4'].astype(str) + ' - ' + cargas['PRODUTO_LIMITADO'] + ' - (Valor :' + cargas['VALOR AGREGADO'].round(2).astype(str) + ')'
-        # carga_agrupada = cargas.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Agregado:' + cargas_top5['VALOR AGREGADO'].round(2).astype(str) + ')'
+        carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
 
         
-        municipios_total = pd.merge(municipios_10, cargas, on='CO_MUN', how='left')
+        municipios_total = pd.merge(municipios_top10, carga_agrupada, on='CO_MUN', how='left')
+        
 
     elif(metrica == 'VL_FOB'):
         # nesse está o hover com 30 cargas
@@ -496,7 +498,7 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
         cargas.rename(columns={'KG_LIQUIDO': 'KG LIQUIDO'}, inplace=True)
 
         cargas_top5 = cargas.sort_values(['CO_MUN','KG LIQUIDO'], ascending=False)
-        cargas_top5 = cargas_top5.groupby('CO_MUN').head(5)
+        cargas_top5 = cargas_top5.groupby('CO_MUN').head(30)
 
         cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
 
