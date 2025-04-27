@@ -41,27 +41,19 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 ## 💡 MVP (Produto Mínimo Viável)
 
 1. Wireframe: ![Protótipo navegável](/assets/protótipo-figma.gif)
-2. Web Site: [Primeira versão]()
+2. Web Site: ![Primeira versão](/assets/site-sprint-2.gif)
 3. Web Site: [Sistema completo]()
-
-
-## 📅 Sprints
-
-### Sprint - 1️⃣ 🎯 ([Clique aqui](/)):  Concluído ✅ 30/03/2025
-
-### Sprint - 2️⃣ 🎯 ([Clique aqui](/)):  Concluído ✅ 27/04/2025
-
-### Sprint - 3️⃣ 🎯 ([Clique aqui](/)):  Concluído ☑️ 25/05/2025
-
-
 
 ## 🛠️ Backlog do Produto
 ![Backlog do Produto-imagens-0](https://github.com/user-attachments/assets/5d01e5fc-3553-48d7-a08f-6a751408cf7f)
 
-## 🌱 Backlog da Sprint
-![Backlog do Produto-imagens-1](https://github.com/user-attachments/assets/4185786d-691c-4bc6-822a-16aed1b8ded0)
+## 📅 Sprints
 
+### Backlog Sprint - 1️⃣ 🎯 ([Clique aqui](/https://drive.google.com/uc?export=download&id=1bg6L60Ieog7swUUIAZnDOIgRCskI2Z5s)):  Concluído ✅ 30/03/2025
 
+### Backlog Sprint - 2️⃣ 🎯 ([Clique aqui](/https://drive.google.com/uc?export=download&id=1kCOHHIqylub6Uc_AEqbrAOEYBTYfXPUw)):  Concluído ✅ 27/04/2025
+
+### Backlog Sprint - 3️⃣ 🎯 ([Clique aqui](/)):  Concluído ☑️ 25/05/2025
 
 ## 👨‍💻 Autores
 
