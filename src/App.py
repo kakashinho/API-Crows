@@ -221,12 +221,6 @@ def grafico_quarto():
     pasta, nome_arquivo = os.path.split(caminhos[3])
     return send_from_directory(pasta, nome_arquivo)
 
-
-#----------------- Inicia o servidor Flask para Feedback ---------------
-#Roda a aplicação localmente com debug=True (útil durante o desenvolvimento).
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=80)
-
 # ---------------------- Banco de Dados Feedback ----------------------
 from flask_mysqldb import MySQL
 
@@ -260,3 +254,8 @@ def enviar_feedback():
 
     # Redireciona para a página de feedback com o status da operação
     return render_template('feedback.html', status=status)
+
+#----------------- Inicia o servidor Flask para Feedback ---------------
+#Roda a aplicação localmente com debug=True (útil durante o desenvolvimento).
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

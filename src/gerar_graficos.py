@@ -56,8 +56,10 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
     # Verfica o periodo está dentre um ano
     coluna = 'ANO'
     qtd_exp, qtd_imp = df_exp['ANO'].nunique(), df_imp['ANO'].nunique()
-    if qtd_exp == 1 and qtd_imp == 1:
+    if qtd_exp <= 1 and qtd_imp <= 1:
         coluna = 'MES'
+    elif qtd_exp <=3 and qtd_imp <= 3:
+        coluna = 'DATA'
 
     # Agrupamento
     exp_anos = agrupar_df(df_exp, ['CO_MUN', coluna], 'VL_FOB', 'sum')
@@ -111,6 +113,28 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
             tickmode='array',
             tickvals=list(range(1, 13)),
             ticktext=meses_nomes
+        )
+    
+    # Ajuste dinâmico de ticks no eixo X se houver muitos valores
+    if coluna == 'DATA':
+        # Dicionário para traduzir mês numérico para abreviação em português
+        meses_abreviados_pt = {
+            1: 'Jan', 2: 'Fev', 3: 'Mar', 4: 'Abr', 5: 'Mai', 6: 'Jun',
+            7: 'Jul', 8: 'Ago', 9: 'Set', 10: 'Out', 11: 'Nov', 12: 'Dez'
+        }
+
+        # Pega os valores únicos e ordenados
+        x_vals = sorted(top_cidades[coluna].unique())
+        step = len(x_vals) // 12 + 1
+        tick_vals = x_vals[::step]
+
+        # Gera os textos formatados: "Jan/2023", "Fev/2023", etc.
+        tick_text = [f"{meses_abreviados_pt[val.month]}/{val.year}" for val in tick_vals]
+
+        fig.update_xaxes(
+            tickmode='array',
+            tickvals=tick_vals,
+            ticktext=tick_text
         )
 
     # Anotações nos pontos
