@@ -2,6 +2,10 @@ import os
 import pandas as pd
 import plotly.express as px
 
+
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+
 # ------------------------- Funções --------------------------------------------
 # Função adiciona coluna de ano
 def adicionar_ano(df):
@@ -395,3 +399,154 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno):
 
     return caminho_arquivo
     
+
+
+def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno):
+    
+    if(tipo == 'Exportacões'):
+        df = adicionar_ano(df_exp)
+
+    elif(tipo == 'Importacões'):
+        df = adicionar_ano(df_imp)
+    else:
+        raise ValueError(f"Tipo inválido: {tipo}")
+    
+    # Garante que SH4 tenha um único produto associado
+    df_sh4_resumo = df_prod[['SH4', 'PRODUTO']].drop_duplicates(subset='SH4')
+    df_comp = mesclar_df(df,df_sh4_resumo, ['SH4'])
+
+    # agrupamento
+    if(metrica == 'VALOR AGREGADO'):
+        # nessa estou separando por cargas
+        tipo_ano = agrupar_df(df_comp,['CO_MUN'], 'VALOR AGREGADO', 'mean')
+        tipo_ano.rename(columns={'VALOR AGREGADO':'VALOR_AGREGADO'}, inplace=True)
+        metrica = 'VALOR_AGREGADO'
+        # Adiciona o nome dos municípios
+        municipios = mesclar_df(tipo_ano, df_mun[['CO_MUN', 'NO_MUN_MIN']], ['CO_MUN'])
+        municipios_10 = municipios.sort_values(by="VALOR_AGREGADO", ascending=False).head(10)  
+
+        carga = df_comp.groupby(['CO_MUN', 'SH4','PRODUTO'],as_index=False)['VALOR AGREGADO'].mean()
+
+        cargas = carga.sort_values(['CO_MUN','VALOR AGREGADO'], ascending=False)
+        # cargas= cargas.groupby('CO_MUN')
+
+        cargas['PRODUTO_LIMITADO'] = cargas['PRODUTO'].str.lower().str.slice(0, 10) + '...'
+
+        cargas['descricao'] = cargas['SH4'].astype(str) + ' - ' + cargas['PRODUTO_LIMITADO'] + ' - (Valor :' + cargas['VALOR AGREGADO'].round(2).astype(str) + ')'
+        # carga_agrupada = cargas.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
+
+        
+        municipios_total = pd.merge(municipios_10, cargas, on='CO_MUN', how='left')
+
+    elif(metrica == 'VL_FOB'):
+        # nesse está o hover com 30 cargas
+        tipo_anos = agrupar_df(df_comp,['CO_MUN'], 'VL_FOB', 'sum')
+
+        # Adiciona o nome dos municípios
+        municipios = mesclar_df(tipo_anos, df_mun[['CO_MUN', 'NO_MUN_MIN']], ['CO_MUN'])
+        municipios_top10 = municipios.sort_values(by="VL_FOB", ascending=False).head(10)  
+
+        cargas = df_comp.groupby(['CO_MUN', 'SH4','PRODUTO'],as_index=False)['VL_FOB'].sum()
+        cargas.rename(columns={'VL_FOB': 'VL FOB'}, inplace=True)
+
+        cargas_top5 = cargas.sort_values(['CO_MUN','VL FOB'], ascending=False)
+        cargas_top5 = cargas_top5.groupby('CO_MUN').head(30)
+
+        cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
+
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Fob:' + cargas_top5['VL FOB'].round(2).astype(str) + ')'
+        carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
+
+        
+        municipios_total = pd.merge(municipios_top10, carga_agrupada, on='CO_MUN', how='left')
+
+    elif(metrica == 'KG_LIQUIDO'):
+        # neste está igual o grafico só de ranking municipios, não tinha mexido nesse
+        tipo_anos = agrupar_df(df_comp,['CO_MUN'], 'KG_LIQUIDO', 'sum')
+
+        # Adiciona o nome dos municípios
+        municipios = mesclar_df(tipo_anos, df_mun[['CO_MUN', 'NO_MUN_MIN']], ['CO_MUN'])
+        municipios_top10 = municipios.sort_values(by="KG_LIQUIDO", ascending=False).head(10)  
+
+        cargas = df_comp.groupby(['CO_MUN', 'SH4','PRODUTO'],as_index=False)['KG_LIQUIDO'].sum()
+        cargas.rename(columns={'KG_LIQUIDO': 'KG LIQUIDO'}, inplace=True)
+
+        cargas_top5 = cargas.sort_values(['CO_MUN','KG LIQUIDO'], ascending=False)
+        cargas_top5 = cargas_top5.groupby('CO_MUN').head(5)
+
+        cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
+
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Por KG LIQUIDO:' + cargas_top5['KG LIQUIDO'].round(2).astype(str) + ')'
+        carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index() 
+
+        
+        municipios_total = pd.merge(municipios_top10, carga_agrupada, on='CO_MUN', how='left')
+
+
+    # Paleta
+    paleta_de_cores = [
+        "#26517f",
+        "#003d80",   # azul bem escuro
+        "#0059b3",  # azul escuro
+        "#0073e6",  # azul intenso
+        "#3399ff",  # azul
+        "#00bdf2",
+        "#71b2e1",
+        "#66b2ff",  # azul médio
+        "#99ccff",  # azul claro
+        "#cce5ff"  # azul bem claro  
+    ]
+
+    # Gráfico
+    fig = px.bar(
+        municipios_total,
+        x='NO_MUN_MIN',
+        y=f'{metrica}',
+        color='descricao',
+        title=f'Top 10 municípios por {metrica} de {tipo}',
+        labels={'NO_MUN_MIN': 'Município'},
+        hover_data = {'CO_MUN': False,f'{metrica}':True,'NO_MUN_MIN':True, 'descricao':True},
+        color_discrete_sequence=paleta_de_cores,
+    )
+
+
+    # fig = make_subplots(
+    #     rows = 10,
+    #     cols = 1,
+    #     subplot_titles = municipios_total["NO_MUN_MIN"].unique()
+    # )
+
+    # mun = municipios_total["NO_MUN_MIN"].unique()
+
+    # for i in range(len(mun)):
+    #     dados_mun = municipios_total[municipios_total['NO_MUN_MIN'] == mun[i]]
+    #     dados_mun = dados_mun.sort_values(by=f'{metrica}', ascending=False)
+    #     row = (i // 1) + 1
+    #     col = (i % 1) + 1
+
+    #     fig.add_trace(
+    #         go.Funnel(
+    #             y=dados_mun['descricao'],
+    #             x=dados_mun[f'{metrica}'],
+                
+    #             name = mun[i]
+    #         ),
+    #         row = row,
+    #         col = col
+    #     )
+    # fig.update_layout(
+    #     title_text="Top cargas por Município (Gráfico de Funil)", 
+    #     height=1200,
+    #     funnelmode="stack",
+        
+    #     )
+    
+    if retorno == 'fig': return fig
+
+    # Salvar HTML
+    pasta_graficos = 'graficos-dinamicos'
+    os.makedirs(pasta_graficos, exist_ok=True)
+    caminho_arquivo = os.path.join(pasta_graficos, 'ranking_municipios_cargas.html')
+    fig.write_html(caminho_arquivo)
+
+    return caminho_arquivo
