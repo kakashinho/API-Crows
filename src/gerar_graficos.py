@@ -576,3 +576,100 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
+
+def municipio_cargas(df, df_mun, df_sh4, cidade, tipo, metrica, retorno):
+    df_cidade = df[df['CO_MUN'] == cidade]
+
+    if metrica == 'VALOR AGREGADO':
+        # Agrupando por 'SH4' e calculando a média do 'VALOR AGREGADO'
+        df_group = df_cidade.groupby('SH4')[metrica].mean().reset_index()
+
+    elif metrica == 'VL_FOB' or metrica == 'KG_LIQUIDO':
+        # Agrupando por 'SH4' e calculando a soma da métrica
+        df_group = df_cidade.groupby('SH4')[metrica].sum().reset_index()
+    
+    # Adiciona o código do município para possibilitar o merge
+    df_group['CO_MUN'] = cidade  # Agora a coluna 'CO_MUN' está presente
+        
+    # Ordenando as cargas pela métrica de forma crescente
+    df_group = df_group.sort_values(by=metrica, ascending=True)
+
+    # Ordenando o df_final pela ordem dos municípios conforme top_municipios
+    df_final  = df_group.sort_values(by=metrica, ascending=False)
+
+    # Junta com os nomes dos municípios e produtos
+    df_final = df_final.merge(df_mun[['CO_MUN', 'NO_MUN_MIN']], on='CO_MUN', how='left')
+    df_final = df_final.merge(df_sh4[['SH4', 'PRODUTO']], on='SH4', how='left')
+
+    # Paleta
+    paleta_de_cores = [
+        "#26517f",
+        "#003d80",   # azul bem escuro
+        "#0059b3",  # azul escuro
+        "#0073e6",  # azul intenso
+        "#3399ff",  # azul
+        "#00bdf2",
+        "#71b2e1",
+        "#66b2ff",  # azul médio
+        "#99ccff",  # azul claro
+        "#cce5ff"  # azul bem claro  
+    ]
+    nome_municipio = df_final['NO_MUN_MIN'].iloc[0] if not df_final.empty else 'Município Desconhecido'
+
+    # Cálculo da porcentagem para cada linha
+    df_final['Porcentagem'] = (df_final[metrica] / df_final[metrica].sum()) * 100
+
+    # Função para converter valores em FOB para dólares e formatar adequadamente
+    def formatar_valor_fob(valor):
+        if valor >= 1e9:
+            return f"{valor / 1e9:.2f}B"  # Bilhões
+        elif valor >= 1e6:
+            return f"{valor / 1e6:.2f}M"  # Milhões
+        else:
+            return f"{valor:.2f}"  # Valores menores que milhão
+
+    # Converter a métrica (VALOR FOB) para formato de dólares
+    df_final['Valor'] = df_final[metrica].apply(formatar_valor_fob)
+
+    # Função para limitar o nome do produto a no máximo 4 palavras
+    def limitar_nome_produto(nome_produto):
+        palavras = nome_produto.split()[:4]  # Limita a 4 palavras
+        return  ' '.join(palavras) + '...'
+
+    # Aplicar a função de limitação ao nome do produto
+    df_final['Produto Resumido'] = df_final['PRODUTO'].apply(limitar_nome_produto)
+
+    # Gráfico tipo treemap
+    fig = px.treemap(
+        df_final,
+        path=['NO_MUN_MIN', 'Produto Resumido'],  # Hierarquia: primeiro município, depois produto resumido
+        values=metrica,  # A métrica será a área das caixas
+        hover_data={'CO_MUN': False, 'Valor': True, metrica: True, 'NO_MUN_MIN': True, 'PRODUTO': True},  # Informações ao passar o mouse
+        color='PRODUTO',  # Cor por produto
+        color_discrete_sequence=paleta_de_cores,  # Sua paleta de cores
+    )
+
+    # Garantir que o título aparece e definir a cor como branca
+    fig.update_layout(
+        title=f'',
+        title_font=dict(size=46, color='white'),  # Título com fonte maior e cor branca
+    )
+
+    # Adicionando o texto na caixa para mostrar o produto, o valor convertido e a porcentagem
+    fig.update_traces(
+        textinfo="label+value+percent entry",  # Exibe o nome do produto, o valor e a porcentagem
+        text=df_final['Valor'] + " " + df_final['Porcentagem'].apply(lambda x: f"{x:.2f}%"),  # Adiciona o texto personalizado com valor convertido e porcentagem
+        textfont=dict(size=50, color='white'),  # Aumenta o tamanho da fonte da porcentagem
+        textposition="middle center",  # Centraliza o texto nas caixas
+    )
+
+
+    if retorno == 'fig': return fig
+
+    # Salvar HTML
+    pasta_graficos = 'graficos-dinamicos'
+    os.makedirs(pasta_graficos, exist_ok=True)
+    caminho_arquivo = os.path.join(pasta_graficos, 'municipio_cargas.html')
+    fig.write_html(caminho_arquivo)
+
+    return caminho_arquivo
