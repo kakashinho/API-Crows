@@ -86,6 +86,9 @@
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_segundo') }}" frameborder="0" ></iframe>
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_terceiro') }}" frameborder="0" ></iframe>
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_quarto') }}" frameborder="0" ></iframe>
+                {% if grafico_quinto %}
+                <iframe class="responsive-iframe" src="{{ url_for('grafico_quinto') }}" frameborder="0" ></iframe>
+            {% endif %}
              </div>
            
             {% endif %}
