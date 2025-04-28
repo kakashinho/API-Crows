@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import mysql.connector
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, abort
-from gerar_graficos import balanca_comercial,ranking_municipios,funil_por_produto,ranking_municipios_cargas  # Função que gera o HTML do gráfico
+from gerar_graficos import balanca_comercial,ranking_municipios,funil_por_produto,ranking_municipios_cargas,municipio_cargas  # Função que gera o HTML do gráfico
 
 
 # ================== CARREGAR DATAFRAMES ANTES DE INICIAR O APP ==================
@@ -61,6 +61,7 @@ caminhos = []
 @app.route('/graficos', methods=['GET', 'POST'])
 def graficos():
     mostrar_grafico = False
+    grafico_quinto = False
 
     #Limpa os caminhos antes de gerar novos gráficos
     caminhos.clear()
@@ -128,7 +129,7 @@ def graficos():
             elif filtro == 'portes':
                 cidade = opcao.split(" - ")[0]
                 cidade = int(cidade)
-                
+                                
                 # Calcular o valor FOB total (exportações e importações)
                 df_exp = df_filtrado_exp.groupby('CO_MUN')['VL_FOB'].sum().reset_index(name='EXPORTACAO')
                 df_imp = df_filtrado_imp.groupby('CO_MUN')['VL_FOB'].sum().reset_index(name='IMPORTACAO')
@@ -142,12 +143,19 @@ def graficos():
                 # Ordena os municípios pela "força comercial"
                 df_balanca = df_balanca.sort_values(by='FORCA_COMERCIAL', ascending=False).reset_index(drop=True)
 
-                # Encontrar a posição do município desejado na lista
-                posicao = df_balanca[df_balanca['CO_MUN'] == cidade].index[0]
+                # Verifica se a cidade existe no DataFrame
+                resultados = df_balanca[df_balanca['CO_MUN'] == cidade]
 
+                # Se não houver resultados, lança um erro informando o problema
+                posicao = 5
+
+                if not resultados.empty:
+                    # Encontrar a posição do município desejado na lista
+                    posicao = df_balanca[df_balanca['CO_MUN'] == cidade].index[0]
+                
                 # Definir o intervalo para pegar os municípios vizinhos
-                start = max(posicao - 2, 0)
-                end = min(posicao + 4, len(df_balanca))
+                start = max(posicao - 5, 0)
+                end = min(posicao + 5, len(df_balanca))
 
                 # Seleciona os códigos dos municípios vizinhos
                 cods_vizinhos = df_balanca.iloc[start:end]['CO_MUN']
@@ -155,6 +163,8 @@ def graficos():
                 # Filtra os dataframes de exportação e importação para esses municípios vizinhos
                 df_filtrado_exp =  df_filtrado_exp[ df_filtrado_exp['CO_MUN'].isin(cods_vizinhos)].reset_index(drop=True)
                 df_filtrado_imp = df_filtrado_imp[df_filtrado_imp['CO_MUN'].isin(cods_vizinhos)].reset_index(drop=True)
+
+                grafico_quinto = True
 
             elif filtro == 'carga':
                 carga = opcao.split(" - ")[0]
@@ -185,15 +195,17 @@ def graficos():
                     caminhos.append(funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica,''))
                     caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
                     caminhos.append(ranking_municipios_cargas(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
+                    if cidade and not resultados.empty: caminhos.append(municipio_cargas(df_filtrado_exp, df_mun, df_sh4, cidade, tipo, metrica, ''))   
                 elif tipo == 'Importacões':
                     caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,''))  
                     caminhos.append(funil_por_produto(df_filtrado_imp, df_sh4, tipo,metrica,''))
                     caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
                     caminhos.append(ranking_municipios_cargas(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
+                    if  cidade and not resultados.empty: caminhos.append(municipio_cargas(df_filtrado_imp, df_mun, df_sh4, cidade, tipo, metrica, ''))
                 mostrar_grafico = True
 
     #Renderiza a página de gráficos
-    return render_template('graficos.html', mostrar_grafico=mostrar_grafico)
+    return render_template('graficos.html', mostrar_grafico=mostrar_grafico, grafico_quinto=grafico_quinto)
 
 #------ Rotas para exibir os arquivos HTML dos gráficos ----
 @app.route('/grafico_primeiro')
@@ -224,16 +236,25 @@ def grafico_quarto():
     pasta, nome_arquivo = os.path.split(caminhos[3])
     return send_from_directory(pasta, nome_arquivo)
 
+@app.route('/grafico_quinto')
+def grafico_quinto():
+    if len(caminhos) < 5 or not os.path.exists(caminhos[4]):
+        return abort(404, description="Gráfico não encontrado.")
+    pasta, nome_arquivo = os.path.split(caminhos[4])
+    return send_from_directory(pasta, nome_arquivo)
+
 # ---------------------- Banco de Dados Feedback ----------------------
-from flask_mysqldb import MySQL
+senha = 'meubd' #senha pc do arhur
+
+import mysql.connector
 
 # Configurações de conexão com o MySQL
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'meubd'
-app.config['MYSQL_DB'] = 'feedback_database'
-
-mysql = MySQL(app)
+db_config = {
+    'host': 'localhost',
+    'user': 'root', 
+    'password': senha,
+    'database': 'feedback_database'
+}
 
 # ---------------------- Rota para receber feedback ----------------------
 @app.route('/enviar', methods=['POST'])
@@ -242,11 +263,16 @@ def enviar_feedback():
     mensagem = request.form['mensagem']
 
     try:
+        # Conectar ao banco de dados
+        conn = mysql.connector.connect(**db_config)
+        cur = conn.cursor()
+
         # Inserção no banco de dados
-        cur = mysql.connection.cursor()
         cur.execute("INSERT INTO feedback (avaliacao, mensagem) VALUES (%s, %s)", (avaliacao, mensagem))
-        mysql.connection.commit()
+        conn.commit()
+
         cur.close()
+        conn.close()
 
         # Se inserção for bem-sucedida, mensagem de sucesso
         status = "Feedback enviado com sucesso! Agradecemos por sua avaliação."
