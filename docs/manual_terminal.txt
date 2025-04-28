@@ -1,8 +1,8 @@
 --- TERMNINAL ---
 
 python -m venv venv
-cd src
 .\venv\Scripts\activate
+cd src
 pip install -r .\requirements.txt
 pip install --upgrade flask-mysqldb
 python App.py     → Também pode ser substituido por:     flask run     → Também pode ser substituido por:     flask run --debug
