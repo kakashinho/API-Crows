@@ -143,20 +143,13 @@ def graficos():
                 # Ordena os municípios pela "força comercial"
                 df_balanca = df_balanca.sort_values(by='FORCA_COMERCIAL', ascending=False).reset_index(drop=True)
 
-                # Verifica se a cidade existe no DataFrame
-                resultados = df_balanca[df_balanca['CO_MUN'] == cidade]
-
-                # Se não houver resultados, lança um erro informando o problema
-                posicao = 5
-
-                if not resultados.empty:
-                    # Encontrar a posição do município desejado na lista
-                    posicao = df_balanca[df_balanca['CO_MUN'] == cidade].index[0]
+                # Encontrar a posição do município desejado na lista
+                posicao = df_balanca[df_balanca['CO_MUN'] == cidade].index[0]
                 
                 # Definir o intervalo para pegar os municípios vizinhos
-                start = max(posicao - 5, 0)
-                end = min(posicao + 5, len(df_balanca))
-
+                start = max(posicao - 2, 0)
+                end = min(posicao + 4, len(df_balanca))
+                
                 # Seleciona os códigos dos municípios vizinhos
                 cods_vizinhos = df_balanca.iloc[start:end]['CO_MUN']
 
@@ -195,13 +188,13 @@ def graficos():
                     caminhos.append(funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica,''))
                     caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
                     caminhos.append(ranking_municipios_cargas(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
-                    if cidade and not resultados.empty: caminhos.append(municipio_cargas(df_filtrado_exp, df_mun, df_sh4, cidade, tipo, metrica, ''))   
+                    if cidade: caminhos.append(municipio_cargas(df_filtrado_exp, df_mun, df_sh4, cidade, tipo, metrica, ''))   
                 elif tipo == 'Importacões':
                     caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,''))  
                     caminhos.append(funil_por_produto(df_filtrado_imp, df_sh4, tipo,metrica,''))
                     caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
                     caminhos.append(ranking_municipios_cargas(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
-                    if  cidade and not resultados.empty: caminhos.append(municipio_cargas(df_filtrado_imp, df_mun, df_sh4, cidade, tipo, metrica, ''))
+                    if  cidade: caminhos.append(municipio_cargas(df_filtrado_imp, df_mun, df_sh4, cidade, tipo, metrica, ''))
                 mostrar_grafico = True
 
     #Renderiza a página de gráficos
@@ -245,6 +238,7 @@ def grafico_quinto():
 
 # ---------------------- Banco de Dados Feedback ----------------------
 senha = 'meubd' #senha pc do arhur
+senha = 'Senha*' #senha pc do joao
 
 import mysql.connector
 
