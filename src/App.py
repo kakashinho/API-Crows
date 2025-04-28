@@ -237,8 +237,7 @@ def grafico_quinto():
     return send_from_directory(pasta, nome_arquivo)
 
 # ---------------------- Banco de Dados Feedback ----------------------
-senha = 'meubd' #senha pc do arhur
-senha = 'Senha*' #senha pc do joao
+senha = 'meubd'
 
 import mysql.connector
 
