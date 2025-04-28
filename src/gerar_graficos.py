@@ -267,13 +267,22 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno):
     )
 
     tipo_lower = tipo.lower()
+
+    # Define o rótulo de eixo e o texto do gráfico de acordo com a métrica
+    if metrica == 'KG_LIQUIDO': 
+        unidade = 'KG' 
+        text_template = 'KG %{x:,.0f}' 
+    else: 
+        unidade = 'US$' 
+        text_template = 'US$ %{x:,.0f}' 
+
     # Gera gráfico de funil com nome completo no hover
     fig = px.funnel(
         df_total,
         y='PRODUTO_LIMITADO',
         x=f'{metrica}',
         title=f'TOP 20 Produtos em {tipo_lower} por {metrica} dos municípios',
-        labels={f'{metrica}': f'{tipo} (US$)', 'PRODUTO_LIMITADO': 'Produto'},
+        labels={f'{metrica}': f'{tipo} ({unidade})', 'PRODUTO_LIMITADO': 'Produto'},
         color='PRODUTO_LIMITADO',
         hover_name='hover_text',  # Mostra nome completo no tooltip
         hover_data={
@@ -293,8 +302,8 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno):
         showlegend=False,
     )
 
-    # Formatação dos valores dentro do funil
-    fig.update_traces(texttemplate='US$ %{x:,.0f}', textposition='inside')
+   # Formatação dos valores dentro do funil
+    fig.update_traces(texttemplate=text_template, textposition='inside')
 
     # Retorno em figura ou como caminho do HTML
     if retorno == 'fig':
@@ -381,7 +390,7 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno):
 
         cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
 
-        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Por KG LIQUIDO:' + cargas_top5['KG LIQUIDO'].round(2).astype(str) + ')'
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (KG líquido:' + cargas_top5['KG LIQUIDO'].round(2).astype(str) + ')'
         carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index() 
 
         
@@ -502,7 +511,7 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
 
         cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
 
-        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Por KG LIQUIDO:' + cargas_top5['KG LIQUIDO'].round(2).astype(str) + ')'
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (KG líquido:' + cargas_top5['KG LIQUIDO'].round(2).astype(str) + ')'
         carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index() 
 
         
