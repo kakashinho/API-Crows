@@ -38,33 +38,33 @@
                 </div>
                                
                 <h3>TIPO DE ANÁLISE</h3>
-                <input type="radio" id="tipo" name="exp-imp" value="Exportacões">
+                <input type="radio" id="tipo" name="exp-imp" value="Exportacões" required>
                 <label for="tipo">Exportação</label><br>
-                <input type="radio" id="tipo" name="exp-imp" value="Importacões">
+                <input type="radio" id="tipo" name="exp-imp" value="Importacões" required>
                 <label for="tipo">Importação</label><br>
 
                 <h3>MÉTRICA</h3>
-                <input type="radio" id="agregado" name="metrica" value="VALOR AGREGADO">
+                <input type="radio" id="agregado" name="metrica" value="VALOR AGREGADO" required>
                 <label for="agregado">Valor Agregado</label><br>
 
-                <input type="radio" id="fob" name="metrica" value="VL_FOB">
+                <input type="radio" id="fob" name="metrica" value="VL_FOB" required>
                 <label for="fob">Valor FOB</label><br>
 
-                <input type="radio" id="liquido" name="metrica" value="KG_LIQUIDO">
+                <input type="radio" id="liquido" name="metrica" value="KG_LIQUIDO" required>
                 <label for="liquido">Kg Líquido</label><br>
 
 
                 <h3>Filtrar por:</h3>
-                <input type="radio" id="cidades" name="filtro" value="municipios">
+                <input type="radio" id="cidades" name="filtro" value="municipios" required>
                 <label for="cidades">Municípios SP</label><br>
 
-                <input type="radio" id="regiao" name="filtro" value="microrregiao">
+                <input type="radio" id="regiao" name="filtro" value="microrregiao" required>
                 <label for="regiao">Microrregião</label><br>
 
-                <input type="radio" id="portes" name="filtro" value="portes">
+                <input type="radio" id="portes" name="filtro" value="portes" required>
                 <label for="portes">Portes Semelhantes</label><br>
 
-                <input type="radio" id="carga" name="filtro" value="carga">
+                <input type="radio" id="carga" name="filtro" value="carga" required>
                 <label for="produto">Por carga</label><br>
                 
                 <div class="campo-input" id="campo-input">
@@ -144,6 +144,7 @@
         document.getElementById('opcoes-select').style.display = 'block';
         document.getElementById('campo-input').style.display = 'none';
         const select = document.getElementById('opcoes-select');
+        const campoInput = document.querySelector('#campo-input input');
         const radios = document.getElementsByName('filtro');
     
         // Função para carregar CSV
@@ -167,6 +168,7 @@
             if (valor === 'microrregiao') {
                 document.getElementById('campo-input').style.display = 'block';
                 document.getElementById('opcoes-select').style.display = 'none';
+                campoInput.required = true;
                 const linhas = [
                 ["Araraquara"],
                 ["Araçatuba"],
@@ -187,6 +189,7 @@
             } else if (valor === 'portes') {
                 document.getElementById('campo-input').style.display = 'block';
                 document.getElementById('opcoes-select').style.display = 'none';
+                campoInput.required = true;
                 const linhas = await carregarCSV('{{ url_for("static", filename="opcoes-csv/df_mun.csv") }}');
                 const cidades = [...new Set(linhas.map(l => l[0]))].sort();
                 opcoes = cidades;
@@ -196,6 +199,7 @@
             } else if (valor === 'carga') {
                 document.getElementById('campo-input').style.display = 'block';
                 document.getElementById('opcoes-select').style.display = 'none';
+                campoInput.required = true;
                 const linhas = await carregarCSV('{{ url_for("static", filename="opcoes-csv/df_sh4.csv") }}');
                 const cargas = linhas.map(l => l[0].substring(0,30)+'...');
                 select.innerHTML = '<option value="">Selecione uma carga</option>'
@@ -203,6 +207,7 @@
             } else if (valor == 'municipios'){
                 document.getElementById('campo-input').style.display = 'none';
                 document.getElementById('opcoes-select').style.display = 'none';
+                campoInput.required = false;
             }
     
             // Adicionando as opções ao select
