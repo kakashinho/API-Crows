@@ -45,7 +45,7 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 3. Web Site: [Sistema completo]()
 
 ## 🛠️ Backlog do Produto
-![Backlog do Produto-imagens-0](https://github.com/user-attachments/assets/5d01e5fc-3553-48d7-a08f-6a751408cf7f)
+![Backlog do Produtoyy](docs/backlog-do-produto.png)
 
 ## 📅 Sprints
 
@@ -62,7 +62,7 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 | João Vitor Silva Correa Siqueira | Product Owner  | <a href="https://github.com/kakashinho"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/joao-vitor-siqueira-a2a2a3227/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
 | Arthur Óliver Rossi Alves | Scrum Master | <a href="https://github.com/arthur-oliver"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/arthur-%C3%B3liver-728123350/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
 | Ana Elize Graciano | Desenvolvedor | <a href="https://github.com/Ane-Graciano"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/ana-elize-graciano-107448359/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
-| Gabriel Kodato Faria | Desenvolvedor | <a href="https://github.com/Kodatoo"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/gabriel-kodato-faria-b745742b8/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
+| Gabriel Kodato Faria | Desenvolvedor | <a href="https://github.com/Kodatoo"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/gabriel-kodato-b745742b8/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
 | Gustavo Ribeiro da Rosa | Desenvolvedor | <a href="https://github.com/gustasvos"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/gustavo-rosa-46a251180/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
 | Hiroshi Yamashita dos Santos | Desenvolvedor | <a href="https://github.com/Hiroshi-Yamashita-Santos"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/hiroshi-yamashita-dos-santos-a29440359/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
 | Lais Zanardi Inocencio | Desenvolvedor | <a href="https://github.com/lais-zanardi"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://www.linkedin.com/in/lais-zanardi-inocencio/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"></a> |
