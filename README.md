@@ -13,20 +13,22 @@
 
 ## 👨🏻‍💻 Tecnologias Utilizadas
 
-<img src="https://img.shields.io/badge/Python-blue.svg?style=for-the-badge&logo=Python&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/Flask-green.svg?style=for-the-badge&logo=flask&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/Google Colab-yellow.svg?style=for-the-badge&logo=googlecolab&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/Visual Studio COde-blue.svg?style=for-the-badge"></imag>&nbsp;
-<img src="https://img.shields.io/badge/Figma-red.svg?style=for-the-badge&logo=Figma&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/Htmlt5-orange.svg?style=for-the-badge&logo=html5&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/CSS3-yellow.svg?style=for-the-badge&logo=css3&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/Jira-blue.svg?style=for-the-badge&logo=jira&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/GitHub-black.svg?style=for-the-badge&logo=GitHub&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/Git-red.svg?style=for-the-badge&logo=Git&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/Plotly-yellow.svg?style=for-the-badge&logo=Plotly&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/JavaScript-orange.svg?style=for-the-badge&logo=JavaScript&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/MYSQL-blue.svg?style=for-the-badge&logo=MYSQL&logoColor=white"></imag>&nbsp;
-<img src="https://img.shields.io/badge/STREAMLIT-green.svg?style=for-the-badge&logo=STREAMLIT&logoColor=white"></imag>&nbsp;
+<div>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/figma/figma-original.svg" width='40' height='40'/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original.svg" width='40' height='40'/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/vscode/vscode-original.svg" width='40' height='40'/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/html5/html5-original.svg" width='40' height='40'/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/css3/css3-original.svg" width='40' height='40'/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/jira/jira-original.svg" width='40' height='40'/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/git/git-original.svg" width='40' height='40'/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/plotly/plotly-original.svg" width='40' height='40'/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/javascript/javascript-original.svg" width='40' height='40'/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/mysql/mysql-original.svg" width='40' height='40'/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/streamlit/streamlit-original.svg" width='40' height='40'/>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Colaboratory_SVG_Logo.svg" width='40' height='40'/>
+  <img width="50" height="50" src="https://img.icons8.com/8E8E8E/ios/50/flask.png" alt="flask"/>
+  <img width="40" height="40" src="https://img.icons8.com/8E8E8E/ios-filled/50/github.png" alt="github"/>
+</div>
 
 
 ## 🎯 Objetivo do Projeto
