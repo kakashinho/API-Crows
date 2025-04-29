@@ -280,4 +280,4 @@ def enviar_feedback():
 #----------------- Inicia o servidor Flask para Feedback ---------------
 #Roda a aplicação localmente com debug=True (útil durante o desenvolvimento).
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
