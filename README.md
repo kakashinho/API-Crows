@@ -47,7 +47,47 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 3. Web Site: [Sistema completo]()
 
 ## 🛠️ Backlog do Produto
-![Backlog do Produtoyy](docs/backlog-do-produto.png)
+**:link: Clique abaixo para visualizar o backlog da sprint.**
+<details>
+<summary> Backlog - Sprint 1 </summary>
+<div align="center">
+<br>
+
+| ID |   Prioridade   |   Título   |   User Story   | 
+| --- | --- | --- | --- | 
+| BL01 | ALTA | Filtrar Exportações por Estado (SP)| Como especialista em logística, quero filtrar os dados de exportação do Estado de São Paulo, a fim de analisar as movimentações das cargas em São Paulo.| 
+| BL02 | ALTA | Comparar Valores de Carga por Município| Como especialista em logística, quero filtrar dados como Valor Agregado, Valor FOB, Valor KG Liquido, para gerar gráficos e analisar a comparação entre os municipios e as cargas.| 
+| BL03 | ALTA | Analisar Valor FOB por Cidade e Ano |Como especialista em logística, quero filtrar dados específicos de uma cidade analisando suas cargas, para verificar as variações do valor FOB durante o ano.| 
+| BL04 | ALTA | Visualizar Protótipo com Gráficos e Filtros |Como especialista em logistica, quero visualizar um protótipos de site, para entender os gráficos gerados e seus respectivos filtros no layout desenvolvido.| 
+
+</details>
+<details>
+<summary> Backlog - Sprint 2 </summary>
+<div align="center">
+<br>
+
+| ID |   Prioridade   |   Título   |   User Story   | 
+| --- | --- | --- | --- | 
+| BL05 | ALTA | Análise Comparativa Regional | Como especialista em logistica, quero verificar uma análise comparativa regional, comparando municípios com balanço comercial, ou por cargas, ou Qtd de exportações, para entender o mercado.| 
+| BL06 | ALTA | Evolução Histórica por Município | Como especialista em logistica, quero visualizar municípios e cargas entre anos e suas evoluções históricas, para identificar tendências.| 
+| BL07 | ALTA | Visualização de Site Funcional |Como especialista em logística, quero visualizar um site funcional, para entender como a aplicação irá funcionar no ambiente do site.| 
+| BL08 | BAIXO | Geração de Insights e Filtros |Como especialista em logística, quero fomecer insights sobre as visualizações, geração de gráficos e seus respectivos filtros, para que auxiliem de forma eficaz na tomada de decisão.| 
+</details>
+
+<details>
+<summary> Backlog - Sprint 3 </summary>
+<div align="center">
+<br>
+
+| ID |   Prioridade   |   Título   |   User Story   | 
+| --- | --- | --- | --- | 
+| BL09 | ALTA |Identificar Países Emergentes Importadores |Como especialista em logística, quero identificar os países emergentes que estão aumentando a importação dos municípios paulistas, para identificar oportunidades de mercado.| 
+| BL10 | ALTA | Competitividade Internacional dos Produtos Exportados | Como especialista em logística, quero analisar como os produtos exportados se posicionam nos mercados internacionais, para fornecer insights sobre a competitividade no mercado exterior.| 
+| BL11 | ALTA | Análise de Stakeholders Comerciais Internacionais| Como especialista em logistica, quero analisar os principais fornecedores e clientes intemacionais das empresas nos municipios paulistas, para entender as relações comerciais.| 
+| BL12 | ALTA | Avaliação de Riscos na Dependência Comercial |Como especialista em logística, quero analisar os riscos associados à dependência de mercados específicos ou de poucos parceiros comerciais, para avaliar a necessidade de diversificação e reduzir vulnerabilidades nas cadeias de suprimento.| 
+| BL13 | ALTA | Verificação de Funcionalidades e Design do Site |Como edesenvolvedor web, quero verificar as funcionalidades e o design do site, para entregar o produto final ao cliente.| 
+</details>
+
 
 ## 📅 Sprints
 
