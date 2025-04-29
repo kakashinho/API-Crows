@@ -1,5 +1,5 @@
 # **API 1 SEMESTRE - Crows**
-![Banner](./assets/Banner.png)
+<img src="assets/BannerCrows.png" alt="Banner do projeto" style="width:100%;">
 
 ## Índice
 1. [Tecnologias Utilizadas](#-tecnologias-utilizadas)
