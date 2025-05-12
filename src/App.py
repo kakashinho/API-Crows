@@ -1,6 +1,5 @@
 #--------------------------- Imports ----------------------
-import os
-import uuid
+import os, uuid, time, shutil
 import pandas as pd
 import mysql.connector
 from dotenv import load_dotenv
@@ -46,6 +45,45 @@ caminhos = []
 app = Flask(__name__,
             template_folder=os.path.join(os.getcwd(), 'templates'),
             static_folder=os.path.join(os.getcwd(), 'static'))
+
+# Sessions
+
+load_dotenv()
+app.secret_key = os.getenv('FLASK_SECRET_KEY')
+
+# tempo para logoff
+SESSION_TIMEOUT = 60 
+
+@app.before_request
+def manage_session():
+    if request.endpoint == 'graficos':
+
+        # Verifica se a sessão tem um timestamp de início
+        session_timestamp = session.get('timestamp')
+        
+        if session_timestamp:
+            # Verifica o tempo passado desde o timestamp
+            elapsed_time = time.time() - session_timestamp
+            
+            if elapsed_time > SESSION_TIMEOUT:
+                # Apaga a session após 3 sec
+                session_id = session.pop('session_id', None)
+                if session_id:
+                    print(f"Pasta graficos-dinamicos/{session_id}/")
+                    try:
+                        shutil.rmtree(f'graficos-dinamicos/{session_id}/')
+                        print(f"Pasta graficos-dinamicos/{session_id}/ e seu conteúdo excluídos com sucesso.")
+                    except OSError as e:
+                        print(f'Erro ao excluir arquivos: {e}')
+                print("Sessão expirada e apagada!")
+
+        # Cria session caso não exista uma
+        if 'session_id' not in session:
+            session['session_id'] = str(uuid.uuid4())
+            print(session['session_id'])
+            session['timestamp'] = time.time()  # Armazena o timestamp do início da sessão
+        else:
+            print(session['session_id'])
 
 #---------------------- Página Inicial --------------------
 @app.route('/')
@@ -186,18 +224,20 @@ def graficos():
             #Se dados existem, gera os gráficos
             if not df_filtrado_exp.empty and not df_filtrado_imp.empty:
                 if tipo == 'Exportacões':
-                    caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,''))  
-                    caminhos.append(funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica,''))
-                    caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
-                    caminhos.append(ranking_municipios_cargas(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
-                    if cidade: caminhos.append(municipio_cargas(df_filtrado_exp, df_mun, df_sh4, cidade, tipo, metrica, ''))   
+                    caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,'', session['session_id']))  
+                    caminhos.append(funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica,'', session['session_id']))
+                    caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,'', session['session_id']))
+                    caminhos.append(ranking_municipios_cargas(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,'', session['session_id']))
+                    if cidade: caminhos.append(municipio_cargas(df_filtrado_exp, df_mun, df_sh4, cidade, tipo, metrica, '', session['session_id']))
                 elif tipo == 'Importacões':
-                    caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,''))  
-                    caminhos.append(funil_por_produto(df_filtrado_imp, df_sh4, tipo,metrica,''))
-                    caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
-                    caminhos.append(ranking_municipios_cargas(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,''))
-                    if  cidade: caminhos.append(municipio_cargas(df_filtrado_imp, df_mun, df_sh4, cidade, tipo, metrica, ''))
+                    caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,'', session['session_id']))  
+                    caminhos.append(funil_por_produto(df_filtrado_imp, df_sh4, tipo,metrica,'', session['session_id']))
+                    caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,'', session['session_id']))
+                    caminhos.append(ranking_municipios_cargas(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,'', session['session_id']))
+                    if  cidade: caminhos.append(municipio_cargas(df_filtrado_imp, df_mun, df_sh4, cidade, tipo, metrica, '', session['session_id']))
+                session['caminhos'] = caminhos
                 mostrar_grafico = True
+
 
     #Renderiza a página de gráficos
     return render_template('graficos.html', mostrar_grafico=mostrar_grafico, grafico_quinto=grafico_quinto)
@@ -205,6 +245,7 @@ def graficos():
 #------ Rotas para exibir os arquivos HTML dos gráficos ----
 @app.route('/grafico_primeiro')
 def grafico_primeiro():
+    caminhos = session.get('caminhos', [])
     if len(caminhos) < 1 or not os.path.exists(caminhos[0]):
         return abort(404, description="Gráfico não encontrado.")
     pasta, nome_arquivo = os.path.split(caminhos[0])

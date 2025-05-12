@@ -53,7 +53,7 @@ def quebrar_texto(texto, largura=30):
 
 # ------------------------- Método que faz o Gráfico de Balança Comercial -------------------------------------------
 # Função principal da balança comercial
-def balanca_comercial(df_exp, df_imp, df_mun, retorno):
+def balanca_comercial(df_exp, df_imp, df_mun, retorno, session_id):
     df_exp = adicionar_mes_ano(df_exp)
     df_imp = adicionar_mes_ano(df_imp)
 
@@ -203,9 +203,9 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
     if retorno == 'fig': return fig
 
     # Salvar HTML
-    pasta_graficos = 'graficos-dinamicos'
+    pasta_graficos = os.path.join('graficos-dinamicos', session_id)
     os.makedirs(pasta_graficos, exist_ok=True)
-    caminho_arquivo = os.path.join(pasta_graficos, 'balanca_comercial.html')
+    caminho_arquivo = os.path.join(pasta_graficos, f'balanca_comercial_{session_id}.html')
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
@@ -214,7 +214,7 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno):
 # ------------------------- Método que faz o Gráfico de Todas as Cargas --------------------------------------------
 
 # Função principal da balança comercial por produto
-def funil_por_produto(df, df_sh4, tipo, metrica, retorno):
+def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id):
 
     # Agrupa por produto (SH4), somando ou tirando média de acordo com a coluna
     if metrica == 'VL_FOB':
@@ -309,7 +309,7 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno):
     if retorno == 'fig':
         return fig
 
-    pasta_graficos = 'graficos-dinamicos'
+    pasta_graficos = os.path.join('graficos-dinamicos', session_id)
     os.makedirs(pasta_graficos, exist_ok=True)
     caminho_arquivo = os.path.join(pasta_graficos, 'funil_por_produto.html')
     fig.write_html(caminho_arquivo)
@@ -318,7 +318,7 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno):
 
 # ------------------------- Método que faz o Gráfico de Ranking de Municípios --------------------------------------------
 
-def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno):
+def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, session_id):
     
     if(tipo == 'Exportacões'):
         df = adicionar_ano(df_exp)
@@ -425,16 +425,16 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno):
     if retorno == 'fig': return fig
 
     # Salvar HTML
-    pasta_graficos = 'graficos-dinamicos'
+    pasta_graficos = os.path.join('graficos-dinamicos', session_id)
     os.makedirs(pasta_graficos, exist_ok=True)
-    caminho_arquivo = os.path.join(pasta_graficos, 'ranking_municipios.html')
+    caminho_arquivo = os.path.join(pasta_graficos, f'ranking_municipios{session_id}.html')
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
     
 
 
-def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno):
+def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, session_id):
     
     if(tipo == 'Exportacões'):
         df = adicionar_ano(df_exp)
@@ -579,14 +579,14 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
     if retorno == 'fig': return fig
 
     # Salvar HTML
-    pasta_graficos = 'graficos-dinamicos'
+    pasta_graficos = os.path.join('graficos-dinamicos', session_id)
     os.makedirs(pasta_graficos, exist_ok=True)
-    caminho_arquivo = os.path.join(pasta_graficos, 'ranking_municipios_cargas.html')
+    caminho_arquivo = os.path.join(pasta_graficos, f'ranking_municipios_cargas{session_id}.html')
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
 
-def municipio_cargas(df, df_mun, df_sh4, cidade, tipo, metrica, retorno):
+def municipio_cargas(df, df_mun, df_sh4, cidade, tipo, metrica, retorno, session_id):
     df_cidade = df[df['CO_MUN'] == cidade]
 
     if metrica == 'VALOR AGREGADO':
@@ -676,9 +676,9 @@ def municipio_cargas(df, df_mun, df_sh4, cidade, tipo, metrica, retorno):
     if retorno == 'fig': return fig
 
     # Salvar HTML
-    pasta_graficos = 'graficos-dinamicos'
+    pasta_graficos = os.path.join('graficos-dinamicos', session_id)
     os.makedirs(pasta_graficos, exist_ok=True)
-    caminho_arquivo = os.path.join(pasta_graficos, 'municipio_cargas.html')
+    caminho_arquivo = os.path.join(pasta_graficos, 'municipio_cargas{session_id}.html')
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
