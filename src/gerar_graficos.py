@@ -311,7 +311,7 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id):
 
     pasta_graficos = os.path.join('graficos-dinamicos', session_id)
     os.makedirs(pasta_graficos, exist_ok=True)
-    caminho_arquivo = os.path.join(pasta_graficos, 'funil_por_produto.html')
+    caminho_arquivo = os.path.join(pasta_graficos, f'funil_por_produto_{session_id}.html')
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
