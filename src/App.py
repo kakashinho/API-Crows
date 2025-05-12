@@ -1,8 +1,10 @@
 #--------------------------- Imports ----------------------
 import os
+import uuid
 import pandas as pd
 import mysql.connector
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, abort
+from dotenv import load_dotenv
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, abort, session
 from gerar_graficos import balanca_comercial,ranking_municipios,funil_por_produto,ranking_municipios_cargas,municipio_cargas  # Função que gera o HTML do gráfico
 
 
