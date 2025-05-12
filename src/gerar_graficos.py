@@ -427,7 +427,7 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
     # Salvar HTML
     pasta_graficos = os.path.join('graficos-dinamicos', session_id)
     os.makedirs(pasta_graficos, exist_ok=True)
-    caminho_arquivo = os.path.join(pasta_graficos, f'ranking_municipios{session_id}.html')
+    caminho_arquivo = os.path.join(pasta_graficos, f'ranking_municipios_{session_id}.html')
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
@@ -581,7 +581,7 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
     # Salvar HTML
     pasta_graficos = os.path.join('graficos-dinamicos', session_id)
     os.makedirs(pasta_graficos, exist_ok=True)
-    caminho_arquivo = os.path.join(pasta_graficos, f'ranking_municipios_cargas{session_id}.html')
+    caminho_arquivo = os.path.join(pasta_graficos, f'ranking_municipios_cargas_{session_id}.html')
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
@@ -678,7 +678,7 @@ def municipio_cargas(df, df_mun, df_sh4, cidade, tipo, metrica, retorno, session
     # Salvar HTML
     pasta_graficos = os.path.join('graficos-dinamicos', session_id)
     os.makedirs(pasta_graficos, exist_ok=True)
-    caminho_arquivo = os.path.join(pasta_graficos, 'municipio_cargas{session_id}.html')
+    caminho_arquivo = os.path.join(pasta_graficos, f'municipio_cargas_{session_id}.html')
     fig.write_html(caminho_arquivo)
 
     return caminho_arquivo
