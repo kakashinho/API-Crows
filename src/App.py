@@ -52,12 +52,11 @@ load_dotenv()
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
 # tempo para logoff
-SESSION_TIMEOUT = 60 
+SESSION_TIMEOUT = 60
 
 @app.before_request
 def manage_session():
     if request.endpoint == 'graficos':
-
         # Verifica se a sessão tem um timestamp de início
         session_timestamp = session.get('timestamp')
         
@@ -66,24 +65,21 @@ def manage_session():
             elapsed_time = time.time() - session_timestamp
             
             if elapsed_time > SESSION_TIMEOUT:
-                # Apaga a session após 3 sec
                 session_id = session.pop('session_id', None)
                 if session_id:
-                    print(f"Pasta graficos-dinamicos/{session_id}/")
                     try:
                         shutil.rmtree(f'graficos-dinamicos/{session_id}/')
-                        print(f"Pasta graficos-dinamicos/{session_id}/ e seu conteúdo excluídos com sucesso.")
+                        # print(f"Pasta graficos-dinamicos/{session_id}/ e seu conteúdo excluídos com sucesso.")
                     except OSError as e:
                         print(f'Erro ao excluir arquivos: {e}')
-                print("Sessão expirada e apagada!")
+                # print("Sessão expirada e apagada!")
 
         # Cria session caso não exista uma
         if 'session_id' not in session:
             session['session_id'] = str(uuid.uuid4())
-            print(session['session_id'])
-            session['timestamp'] = time.time()  # Armazena o timestamp do início da sessão
-        else:
-            print(session['session_id'])
+            session['timestamp'] = time.time()
+            # print(session['session_id'])
+
 
 #---------------------- Página Inicial --------------------
 @app.route('/')
