@@ -36,9 +36,6 @@ for ano in range(2025, 2019 - 1, -1):
     df_completo_exp = pd.concat([df_completo_exp, carregar_dados_dataframe(ano, 'exp')], ignore_index=True)
     df_completo_imp = pd.concat([df_completo_imp, carregar_dados_dataframe(ano, 'imp')], ignore_index=True)
 
-# Variavel Global
-caminhos = []
-
 # ================== INICIANDO O FLASK ================================
 
 #----------------- Criação da Aplicação Flask -------------
@@ -91,6 +88,7 @@ def home():
 def feedback():
     return render_template('feedback.html')
 
+# Variavel Global
 caminhos = []
 
 #---------------------- Página Gráficos --------------------
@@ -100,10 +98,12 @@ def graficos():
     grafico_quinto = False
 
     #Limpa os caminhos antes de gerar novos gráficos
+    global caminhos
     caminhos.clear()
 
 #------------ Se o usuário enviou o formulário--------------
     if request.method == 'POST':
+
         # Recupera os índices (0 a 74)
         index_inicial = int(request.form['data_inicial'])
         index_final = int(request.form['data_final'])
@@ -220,17 +220,25 @@ def graficos():
             #Se dados existem, gera os gráficos
             if not df_filtrado_exp.empty and not df_filtrado_imp.empty:
                 if tipo == 'Exportacões':
-                    caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,'', session['session_id']))  
-                    caminhos.append(funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica,'', session['session_id']))
-                    caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,'', session['session_id']))
-                    caminhos.append(ranking_municipios_cargas(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,'', session['session_id']))
-                    if cidade: caminhos.append(municipio_cargas(df_filtrado_exp, df_mun, df_sh4, cidade, tipo, metrica, '', session['session_id']))
+                    caminhos = [
+                        balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun, '', session['session_id']),
+                        funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica, '', session['session_id']),
+                        ranking_municipios(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id']),
+                        ranking_municipios_cargas(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id']),
+                    ]
+                    if cidade:
+                        caminhos.append(municipio_cargas(df_filtrado_exp, df_mun, df_sh4, cidade, tipo, metrica, '', session['session_id']))
+
                 elif tipo == 'Importacões':
-                    caminhos.append(balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun,'', session['session_id']))  
-                    caminhos.append(funil_por_produto(df_filtrado_imp, df_sh4, tipo,metrica,'', session['session_id']))
-                    caminhos.append(ranking_municipios(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,'', session['session_id']))
-                    caminhos.append(ranking_municipios_cargas(df_mun,df_filtrado_exp,df_filtrado_imp, tipo, metrica,df_sh4,'', session['session_id']))
-                    if  cidade: caminhos.append(municipio_cargas(df_filtrado_imp, df_mun, df_sh4, cidade, tipo, metrica, '', session['session_id']))
+                    caminhos = [
+                        balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun, '', session['session_id']),
+                        funil_por_produto(df_filtrado_imp, df_sh4, tipo, metrica, '', session['session_id']),
+                        ranking_municipios(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id']),
+                        ranking_municipios_cargas(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id']),
+                    ]
+                    if cidade:
+                        caminhos.append(municipio_cargas(df_filtrado_imp, df_mun, df_sh4, cidade, tipo, metrica, '', session['session_id']))
+
                 session['caminhos'] = caminhos
                 mostrar_grafico = True
 
@@ -249,6 +257,7 @@ def grafico_primeiro():
 
 @app.route('/grafico_segundo')
 def grafico_segundo():
+    caminhos = session.get('caminhos', [])
     if len(caminhos) < 2 or not os.path.exists(caminhos[1]):
         return abort(404, description="Gráfico não encontrado.")
     pasta, nome_arquivo = os.path.split(caminhos[1])
@@ -256,6 +265,7 @@ def grafico_segundo():
 
 @app.route('/grafico_terceiro')
 def grafico_terceiro():
+    caminhos = session.get('caminhos', [])
     if len(caminhos) < 3 or not os.path.exists(caminhos[2]):
         return abort(404, description="Gráfico não encontrado.")
     pasta, nome_arquivo = os.path.split(caminhos[2])
@@ -263,6 +273,7 @@ def grafico_terceiro():
 
 @app.route('/grafico_quarto')
 def grafico_quarto():
+    caminhos = session.get('caminhos', [])
     if len(caminhos) < 4 or not os.path.exists(caminhos[3]):
         return abort(404, description="Gráfico não encontrado.")
     pasta, nome_arquivo = os.path.split(caminhos[3])
@@ -270,6 +281,7 @@ def grafico_quarto():
 
 @app.route('/grafico_quinto')
 def grafico_quinto():
+    caminhos = session.get('caminhos', [])
     if len(caminhos) < 5 or not os.path.exists(caminhos[4]):
         return abort(404, description="Gráfico não encontrado.")
     pasta, nome_arquivo = os.path.split(caminhos[4])
