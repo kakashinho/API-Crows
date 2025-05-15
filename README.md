@@ -81,11 +81,10 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 
 | ID |   Prioridade   |   Título   |   User Story   | 
 | --- | --- | --- | --- | 
-| BL09 | ALTA |Identificar Países Emergentes Importadores |Como especialista em logística, quero identificar os países emergentes que estão aumentando a importação dos municípios paulistas, para identificar oportunidades de mercado.| 
-| BL10 | ALTA | Competitividade Internacional dos Produtos Exportados | Como especialista em logística, quero analisar como os produtos exportados se posicionam nos mercados internacionais, para fornecer insights sobre a competitividade no mercado exterior.| 
-| BL11 | ALTA | Análise de Stakeholders Comerciais Internacionais| Como especialista em logistica, quero analisar os principais fornecedores e clientes intemacionais das empresas nos municipios paulistas, para entender as relações comerciais.| 
-| BL12 | ALTA | Avaliação de Riscos na Dependência Comercial |Como especialista em logística, quero analisar os riscos associados à dependência de mercados específicos ou de poucos parceiros comerciais, para avaliar a necessidade de diversificação e reduzir vulnerabilidades nas cadeias de suprimento.| 
-| BL13 | ALTA | Verificação de Funcionalidades e Design do Site |Como edesenvolvedor web, quero verificar as funcionalidades e o design do site, para entregar o produto final ao cliente.| 
+| BL09 | ALTA | Disponibilizar a Base de Dados Tratada no Google Colab | Como especialista em logística, quero manipular e filtrar a base de dados de exportação e importações, para utilizar posteriormente no PowerBI essa base de dados tratada.| 
+| BL10 | ALTA | Responsividade do Site | Como especialista em logística, quero visualizar o site no celular ou em outros dispositivos para facilitar o acesso a página.| 
+| BL11 | ALTA | Verificação de Funcionalidades e Design do Site | Como Desenvolvedor Web, quero verificar as funcionalidades e o design do site, para entregar o produto final ao cliente.| 
+| BL12 | ALTA | Disponibilizar o Site em um Servidor. | Como desenvolvedor web, quero disponibilizar o site num QRcode para que os usuários possam interagir e explorar suas funcionalidades de forma prática e divertida.| 
 </details>
 
 
