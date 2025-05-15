@@ -84,7 +84,7 @@ A metodologia ágil, especificamente o Scrum, é uma abordagem iterativa e incre
 | BL09 | ALTA | Disponibilizar a Base de Dados Tratada no Google Colab | Como especialista em logística, quero manipular e filtrar a base de dados de exportação e importações, para utilizar posteriormente no PowerBI essa base de dados tratada.| 
 | BL10 | ALTA | Responsividade do Site | Como especialista em logística, quero visualizar o site no celular ou em outros dispositivos para facilitar o acesso a página.| 
 | BL11 | ALTA | Verificação de Funcionalidades e Design do Site | Como Desenvolvedor Web, quero verificar as funcionalidades e o design do site, para entregar o produto final ao cliente.| 
-| BL12 | ALTA | Disponibilizar o Site em um Servidor. | Como desenvolvedor web, quero disponibilizar o site num QRcode para que os usuários possam interagir e explorar suas funcionalidades de forma prática e divertida.| 
+| BL12 | MÉDIO | Disponibilizar o Site em um Servidor. | Como desenvolvedor web, quero disponibilizar o site num QRcode para que os usuários possam interagir e explorar suas funcionalidades de forma prática e divertida.| 
 </details>
 
 
