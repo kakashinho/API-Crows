@@ -56,15 +56,23 @@ main {
   font-size: 100%;
 }
 
-.filtro{
+.filtro {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   height: auto;
   padding: 10%;
   padding-left: 9%;
   margin-top: 2%;
   margin-left: 3%;
   margin-bottom: 2%;
-  border-radius: 20px;
+  border-radius: 0px 18px 18px 0px;
   background-color: #ffffff;
+  position: relative;
+  transition: all .5s;
+  z-index: 2;
+  min-width: 45px;
+  width: 175px;
 }
 
 .filtro button {
@@ -88,6 +96,54 @@ main {
 
 .filtro input {
   margin-bottom: 4.5%;
+}
+.filtro.recolhido #filtro-btn {
+  transition: transform 0.3s ease;
+  top: 10px;
+  left: 10px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.filtro.recolhido {
+  width: 0px;
+  padding: 0px;
+  background-color: transparent;
+}
+
+.filtro.recolhido form {
+  display: none;
+}
+
+
+
+#filtro-btn {
+    position: absolute;
+    top: -10px;
+    right: -22.5px;
+    background-color: #f7f7f7;
+    color: #2978DF;
+    border-radius: 45px;
+    width: 45px;
+    height: 45px;
+    border: none;
+    cursor: pointer;
+    z-index: 10;  
+}
+
+#filtro-btn-icon {
+    transition: transform 0.3s ease;
+    font-size: 1.1rem;
+    justify-self: center;
+    display: block;
+}
+
+#filtro.open-filtro {
+  min-width: 15%;
+}
+
+#filtro.open-filtro.campo-data {
+  width: 150px;
+  height: auto;
 }
 
 .grafico{
@@ -186,16 +242,33 @@ footer{
   gap: 3%;
 }
 
-@media (max-width: 430px){
-  section{
-    font-size: x-large !important;
+@media (max-width: 600px){
+  .filtro {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 150px;
   }
-  h3{
-    font-size: large !important;
+  
+  #filtro.open-filtro {
+  min-width: 10%;
   }
-  #filtro label input{
-  #main_section p{
-    font-size: medium !important;
+  
+  #filtro.open-filtro.campo-data {
+  width: 15px;
+  height: auto;
   }
-}
+
+  main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .iframe-graficos {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+  }
 }
