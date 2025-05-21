@@ -142,6 +142,7 @@ def graficos():
                 pass  # não faz nada e segue o código normalmente
 
             elif filtro == 'microrregiao':
+
                 # A variável 'regiao' recebe a opção de região desejada
                 regiao = opcao
 
@@ -153,6 +154,12 @@ def graficos():
 
                 # Filtra 'df_filtrado_exp' para manter apenas os registros com 'CO_MUN' (código do município) presentes na lista 'cods_mun'
                 df_filtrado_exp = df_filtrado_exp[df_filtrado_exp['CO_MUN'].isin(cods_mun['CO_MUN'])]
+
+                print(df_filtrado_exp)
+
+                if df_filtrado_exp.empty:
+                    error = True
+                    pass
 
                 # Reseta os índices do DataFrame 'df_filtrado_exp' após o filtro, removendo qualquer índice antigo
                 df_filtrado_exp.reset_index(drop=True, inplace=True)
@@ -170,7 +177,7 @@ def graficos():
                 # Calcular o valor FOB total (exportações e importações)
                 df_exp = df_filtrado_exp.groupby('CO_MUN')['VL_FOB'].sum().reset_index(name='EXPORTACAO')
                 df_imp = df_filtrado_imp.groupby('CO_MUN')['VL_FOB'].sum().reset_index(name='IMPORTACAO')
-
+                
                 # Junta os dataframes de exportação e importação
                 df_balanca = pd.merge(df_exp, df_imp, on='CO_MUN', how='outer').fillna(0)
 
@@ -180,8 +187,18 @@ def graficos():
                 # Ordena os municípios pela "força comercial"
                 df_balanca = df_balanca.sort_values(by='FORCA_COMERCIAL', ascending=False).reset_index(drop=True)
 
+                # print(df_balanca[df_balanca['CO_MUN'] == cidade])
+                # print(df_balanca[df_balanca['CO_MUN'] == cidade].empty)
+
+                
                 # Encontrar a posição do município desejado na lista
                 posicao = df_balanca[df_balanca['CO_MUN'] == cidade].index[0]
+
+                # if df_balanca[df_balanca['CO_MUN'] == cidade].size != 0:
+                #     posicao = df_balanca[df_balanca['CO_MUN'] == cidade].index[0]
+                # else:
+                #     error = True
+                #     pass
                 
                 # Definir o intervalo para pegar os municípios vizinhos
                 start = max(posicao - 2, 0)
@@ -194,22 +211,17 @@ def graficos():
                 df_filtrado_exp =  df_filtrado_exp[ df_filtrado_exp['CO_MUN'].isin(cods_vizinhos)].reset_index(drop=True)
                 df_filtrado_imp = df_filtrado_imp[df_filtrado_imp['CO_MUN'].isin(cods_vizinhos)].reset_index(drop=True)
 
+                # print(df_filtrado_exp)
+                # print(df_filtrado_imp)
+
                 grafico_quinto = True
 
             elif filtro == 'carga':
                 carga = opcao.split(" - ")[0]
-                print(opcao)
-                print(opcao.split(" - ")[0])
-                print(type(carga))
                 carga = int(carga)
-
-                carga = None
 
                 df_exp_carga = df_filtrado_exp[df_filtrado_exp['SH4'] == carga]
                 df_imp_carga  = df_filtrado_imp[df_filtrado_imp['SH4'] == carga]
-
-                print(type(df_exp_carga))
-                print(df_imp_carga)
 
                 if (df_exp_carga.empty or df_imp_carga.empty):
                     print('valor errado ou n existe')
