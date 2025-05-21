@@ -157,16 +157,16 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno, session_id):
                 textos.append(f'US$ {y:,.2f}')
             
         # Atribui os textos ao trace para que apareçam como labels
-        trace.text = textos
+        trace.hovertext = textos
         trace.textposition = 'top center'
         trace.mode = 'lines+markers+text'
         trace.textfont = dict(size=10, color='black', family='Arial')
         trace.hovertemplate = (
-        '<b>%{text}</b><br>' +
+        '<b>%{hovertext}</b><br>' +
         'Ano/Mês: %{x}<br>' +
         'Valor: US$ %{y:,.2f}<extra></extra>'
         )
-        trace.text = textos
+
 
     # Layout geral
     fig.update_layout(
@@ -240,7 +240,7 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id):
     df_total['PRODUTO_LIMITADO'] = df_total['PRODUTO'].str.slice(0, 20) + '...'
 
     # Seleciona top 20 produtos
-    df_total = df_total.sort_values(by=metrica, ascending=False).head(20)
+    df_total = df_total.sort_values(by=metrica, ascending=False).head(10)
 
     # Agrupa novamente por PRODUTO_LIMITADO para evitar erro de barras duplicadas
     df_total = df_total.groupby('PRODUTO_LIMITADO', as_index=False).agg({
@@ -296,11 +296,11 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id):
     fig.update_layout(
         title_x=0.5,
         font=dict(family='Arial', size=12),
-        # hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
-        # plot_bgcolor='white',
+        hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
         margin=dict(l=60, r=60, t=100, b=60),
         showlegend=False,
     )
+
 
    # Formatação dos valores dentro do funil
     fig.update_traces(texttemplate=text_template, textposition='inside')
@@ -422,6 +422,22 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
         hover_data = {'CO_MUN': False,f'{metrica}':True,'NO_MUN_MIN':True, 'descricao':True},
         color_discrete_sequence=paleta_de_cores,
     )
+
+    # Layout geral
+    fig.update_layout(
+        title={'text': f'Top 10 municípios por {metrica} de {tipo} de', 'x': 0.5, 'xanchor': 'center'},
+        yaxis=dict(
+            title = 'Valor Agregado',
+            ticksuffix = ' $'
+        ),
+        legend_title='Município',
+        font=dict(family='Arial', size=12),
+        hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
+        plot_bgcolor='white',
+        margin=dict(l=60, r=60, t=100, b=60),
+        showlegend=True,
+    )
+
     if retorno == 'fig': return fig
 
     # Salvar HTML
@@ -544,38 +560,21 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
         color_discrete_sequence=paleta_de_cores,
     )
 
+    # Layout geral
+    fig.update_layout(
+        title={'text': f'Top 10 municípios por {metrica} de {tipo} de', 'x': 0.5, 'xanchor': 'center'},
+        yaxis=dict(
+            title = 'Valor Agregado',
+            ticksuffix = ' $'
+        ),
+        legend_title='Município',
+        font=dict(family='Arial', size=12),
+        hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
+        plot_bgcolor='white',
+        margin=dict(l=60, r=60, t=100, b=60),
+        showlegend=True,
+    )
 
-    # fig = make_subplots(
-    #     rows = 10,
-    #     cols = 1,
-    #     subplot_titles = municipios_total["NO_MUN_MIN"].unique()
-    # )
-
-    # mun = municipios_total["NO_MUN_MIN"].unique()
-
-    # for i in range(len(mun)):
-    #     dados_mun = municipios_total[municipios_total['NO_MUN_MIN'] == mun[i]]
-    #     dados_mun = dados_mun.sort_values(by=f'{metrica}', ascending=False)
-    #     row = (i // 1) + 1
-    #     col = (i % 1) + 1
-
-    #     fig.add_trace(
-    #         go.Funnel(
-    #             y=dados_mun['descricao'],
-    #             x=dados_mun[f'{metrica}'],
-                
-    #             name = mun[i]
-    #         ),
-    #         row = row,
-    #         col = col
-    #     )
-    # fig.update_layout(
-    #     title_text="Top cargas por Município (Gráfico de Funil)", 
-    #     height=1200,
-    #     funnelmode="stack",
-        
-    #     )
-    
     if retorno == 'fig': return fig
 
     # Salvar HTML
