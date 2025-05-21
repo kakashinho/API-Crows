@@ -77,6 +77,9 @@
                 </div>
 
                 <button type="submit">Gerar Gráficos</button>
+                {% if error %}
+                    <script>alert("Valor nulo ou inexistente")</script>
+                {% endif %}
             </form>
             <button id="filtro-btn">
                 <i class="fa-solid fa-filter" id="filtro-btn-icon"></i>

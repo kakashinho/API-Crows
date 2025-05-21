@@ -3,7 +3,7 @@ import os, uuid, time, shutil
 import pandas as pd
 import mysql.connector
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, abort, session
+from flask import Flask, render_template, render_template_string, request, redirect, url_for, send_from_directory, abort, session
 from gerar_graficos import balanca_comercial,ranking_municipios,funil_por_produto,ranking_municipios_cargas,municipio_cargas  # Função que gera o HTML do gráfico
 
 
@@ -96,6 +96,7 @@ caminhos = []
 def graficos():
     mostrar_grafico = False
     grafico_quinto = False
+    error = False
 
     #Limpa os caminhos antes de gerar novos gráficos
     global caminhos
@@ -197,13 +198,26 @@ def graficos():
 
             elif filtro == 'carga':
                 carga = opcao.split(" - ")[0]
+                print(opcao)
+                print(opcao.split(" - ")[0])
+                print(type(carga))
                 carga = int(carga)
+
+                carga = None
 
                 df_exp_carga = df_filtrado_exp[df_filtrado_exp['SH4'] == carga]
                 df_imp_carga  = df_filtrado_imp[df_filtrado_imp['SH4'] == carga]
 
+                print(type(df_exp_carga))
+                print(df_imp_carga)
+
+                if (df_exp_carga.empty or df_imp_carga.empty):
+                    print('valor errado ou n existe')
+                    error = True
+                    pass 
+
                 df_exp_agrupado = df_exp_carga.groupby('CO_MUN')['VL_FOB'].sum().reset_index()
-                df_imp_agrupado = df_imp_carga .groupby('CO_MUN')['VL_FOB'].sum().reset_index()
+                df_imp_agrupado = df_imp_carga.groupby('CO_MUN')['VL_FOB'].sum().reset_index()
 
                 df_exp_agrupado = df_exp_agrupado.sort_values(by='VL_FOB', ascending=False)
                 df_imp_agrupado = df_imp_agrupado.sort_values(by='VL_FOB', ascending=False)
@@ -244,7 +258,7 @@ def graficos():
 
 
     #Renderiza a página de gráficos
-    return render_template('graficos.html', mostrar_grafico=mostrar_grafico, grafico_quinto=grafico_quinto)
+    return render_template('graficos.html', mostrar_grafico=mostrar_grafico, grafico_quinto=grafico_quinto, error=error)
 
 #------ Rotas para exibir os arquivos HTML dos gráficos ----
 @app.route('/grafico_primeiro')
