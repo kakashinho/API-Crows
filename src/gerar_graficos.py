@@ -191,6 +191,21 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno, session_id,periodo_inicia
         plot_bgcolor='white',
         margin=dict(l=60, r=60, t=100, b=60),
         showlegend=True,
+        autosize=True,
+        legend=dict(
+            orientation="h",
+            yanchor="middle",
+            y=-1.0,
+            xanchor="right",
+            x=1,
+            font=dict(
+                size=10
+                ),
+            ),
+        xaxis=dict(
+            tickangle=45
+        )
+    
     )
 
     # Grade de fundo com linhas cinza claro
@@ -304,6 +319,10 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id,periodo_ini
         color_discrete_sequence=paleta_de_cores
     )
 
+    # Atualiza rótulos do eixo y
+    produtos = df_total['PRODUTO_LIMITADO'].unique()
+    produtos_curto = [p[:10] + '...' if len(p) > 10 else p for p in produtos]
+
     # Layout
     fig.update_layout(
         title_x=0.5,
@@ -322,8 +341,13 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id,periodo_ini
         hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
         margin=dict(l=60, r=60, t=100, b=60),
         showlegend=False,
-    )
-
+        autosize=True,  
+        yaxis=dict(
+            tickmode='array',
+            tickvals=produtos,
+            ticktext=produtos_curto
+            )
+        )
 
    # Formatação dos valores dentro do funil
     fig.update_traces(texttemplate=text_template, textposition='inside')
@@ -487,6 +511,20 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
         plot_bgcolor='white',
         margin=dict(l=60, r=60, t=100, b=60),
         showlegend=True,
+        autosize=True,
+        legend=dict(
+            orientation="h",
+            yanchor="middle",
+            y=-1.0,
+            xanchor="right",
+            x=1,
+            font=dict(
+                size=9
+                ),
+            ),
+        xaxis=dict(
+            tickangle=45
+        )
     )
 
     if retorno == 'fig': return fig
@@ -635,7 +673,10 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
         hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
         plot_bgcolor='white',
         margin=dict(l=60, r=60, t=100, b=60),
-        showlegend=True,
+        showlegend=False,
+        xaxis=dict(
+            tickangle=45
+        )
     )
 
     if retorno == 'fig': return fig
@@ -724,7 +765,7 @@ def municipio_cargas(df, df_mun, df_sh4, cidade, tipo, metrica, retorno, session
     fig.update_layout(
         title=f'',
         title_font=dict(size=46, color='white'),  # Título com fonte maior e cor branca
-    )
+        )
 
     # Adicionando o texto na caixa para mostrar o produto, o valor convertido e a porcentagem
     fig.update_traces(

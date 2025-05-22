@@ -46,7 +46,8 @@ app = Flask(__name__,
 # Sessions
 
 load_dotenv()
-app.secret_key = os.getenv('FLASK_SECRET_KEY')
+# app.secret_key = os.getenv('FLASK_SECRET_KEY') -- método que necessita adicionar a chave manualmente da internet em um arquivo '.env'
+app.secret_key = '24628e4090aab888dfef37d953cb2cecc7fa22d58176135a'
 
 # tempo para logoff
 SESSION_TIMEOUT = 60
@@ -324,7 +325,7 @@ import mysql.connector
 # Configurações de conexão com o MySQL
 db_config = {
     'host': 'localhost',
-    'user': 'root', 
+    'user': 'usuario', 
     'password': senha,
     'database': 'feedback_database'
 }
