@@ -10,7 +10,6 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&display=swap" rel="stylesheet"> <!-- fonte da página-->
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-
 </head>
 <body>
     <header id="navbar">
@@ -25,18 +24,17 @@
 
     <main>
         <section class="primeira-parte">
-            <article id="texto">
+            <article class="texto">
                 <h1 id="titulo">Descubra as exportações dos municípios de São Paulo</h1>
                 <p id="subtitulo">Explore virtualizações dinâmicas sobre as exportações dos municípios de SP</p>
-                <a href="{{ url_for('graficos') }}" class="button">Explorar gráficos →</a>
+                <div class="botao">
+                    <a href="{{ url_for('graficos') }}" class="button">Explorar gráficos →</a>
+                </div>
             </article>
-            <section >
-                <figure>
-                    <img src="{{ url_for('static', filename='imagens/imagem1.png') }}" alt="Imagem 1" alt="grafico" id="img1">
-                </figure>
-            </section>
-        </section>
-        
+            <figure class="teste">
+                <img src="{{ url_for('static', filename='imagens/imagem1.png') }}" alt="Imagem 1" alt="grafico" id="img1">
+            </figure>
+        </section>        
 
         <section class="segunda-parte">
             <h2>Entenda as tendências de exportação através de insights claros e acessíveis.</h2>
@@ -45,7 +43,6 @@
         <section class="terceira-parte">
             <article id="sect1-terceira_parte">
                 <p id="txt-terceira_parte">Encontre análises por município, com ranking de valor agregado, principais cargas movimentadas e evolução histórica da balança comercial para cada cidade</p>
-                <button type="button">Saiba mais</button>
             </article>
             <section id="sect2-terceira_parte">
                 <figure>
