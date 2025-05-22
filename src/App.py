@@ -322,7 +322,7 @@ import mysql.connector
 # Configurações de conexão com o MySQL
 db_config = {
     'host': 'localhost',
-    'user': 'root', 
+    'user': 'usuario', 
     'password': senha,
     'database': 'feedback_database'
 }
