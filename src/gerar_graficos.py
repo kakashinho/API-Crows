@@ -307,6 +307,10 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id):
         color_discrete_sequence=paleta_de_cores
     )
 
+    # Atualiza rótulos do eixo y
+    produtos = df_total['PRODUTO_LIMITADO'].unique()
+    produtos_curto = [p[:10] + '...' if len(p) > 10 else p for p in produtos]
+
     # Layout
     fig.update_layout(
         title_x=0.5,
@@ -314,8 +318,13 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id):
         hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
         margin=dict(l=60, r=60, t=100, b=60),
         showlegend=False,
-    )
-
+        autosize=True,  
+        yaxis=dict(
+            tickmode='array',
+            tickvals=produtos,
+            ticktext=produtos_curto
+            )
+        )
 
    # Formatação dos valores dentro do funil
     fig.update_traces(texttemplate=text_template, textposition='inside')
