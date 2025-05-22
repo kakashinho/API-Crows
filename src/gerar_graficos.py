@@ -436,6 +436,20 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
         plot_bgcolor='white',
         margin=dict(l=60, r=60, t=100, b=60),
         showlegend=True,
+        autosize=True,
+        legend=dict(
+            orientation="h",
+            yanchor="middle",
+            y=-1.0,
+            xanchor="right",
+            x=1,
+            font=dict(
+                size=9
+                ),
+            ),
+        xaxis=dict(
+            tickangle=45
+        )
     )
 
     if retorno == 'fig': return fig
