@@ -53,7 +53,7 @@ def quebrar_texto(texto, largura=30):
 
 # ------------------------- Método que faz o Gráfico de Balança Comercial -------------------------------------------
 # Função principal da balança comercial
-def balanca_comercial(df_exp, df_imp, df_mun, retorno, session_id):
+def balanca_comercial(df_exp, df_imp, df_mun, retorno, session_id,periodo_inicial_grafico,periodo_final_grafico):
     df_exp = adicionar_mes_ano(df_exp)
     df_imp = adicionar_mes_ano(df_imp)
 
@@ -171,6 +171,18 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno, session_id):
     # Layout geral
     fig.update_layout(
         title={'text': 'Balança Comercial por Município (Exportação - Importação)', 'x': 0.5, 'xanchor': 'center'},
+        annotations = [dict(
+            text = f'{periodo_inicial_grafico} - {periodo_final_grafico}',
+            x = 0.5,
+            y = 1.05, 
+            xref = "paper", 
+            yref="paper",
+            font = dict(
+                size = 14
+            ),
+            showarrow = False
+    
+        )],
         xaxis_title='Mês' if coluna == 'MES' else 'Ano',
         yaxis_title='Balança Comercial (US$)',
         legend_title='Município',
@@ -214,7 +226,7 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno, session_id):
 # ------------------------- Método que faz o Gráfico de Todas as Cargas --------------------------------------------
 
 # Função principal da balança comercial por produto
-def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id):
+def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id,periodo_inicial_grafico,periodo_final_grafico):
 
     # Agrupa por produto (SH4), somando ou tirando média de acordo com a coluna
     if metrica == 'VL_FOB':
@@ -295,6 +307,17 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id):
     # Layout
     fig.update_layout(
         title_x=0.5,
+        annotations = [dict(
+            text = f'{periodo_inicial_grafico} - {periodo_final_grafico}',
+            x = 0.5,
+            y = 1.05, 
+            xref = "paper", 
+            yref="paper",
+            font = dict(
+                size = 14
+            ),
+            showarrow = False
+        )],
         font=dict(family='Arial', size=12),
         hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
         margin=dict(l=60, r=60, t=100, b=60),
@@ -318,7 +341,7 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id):
 
 # ------------------------- Método que faz o Gráfico de Ranking de Municípios --------------------------------------------
 
-def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, session_id):
+def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, session_id,periodo_inicial_grafico,periodo_final_grafico):
     
     if(tipo == 'Exportacões'):
         df = adicionar_ano(df_exp)
@@ -327,6 +350,14 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
         df = adicionar_ano(df_imp)
     else:
         raise ValueError(f"Tipo inválido: {tipo}")
+    
+    # Define o rótulo de eixo e o texto do gráfico de acordo com a métrica
+    if metrica == 'KG_LIQUIDO': 
+        unidade = 'KG' 
+        text_template = 'KG {:,.1f}' 
+    else: 
+        unidade = 'US$' 
+        text_template = 'US$ {:,.1f}' 
     
     # Garante que SH4 tenha um único produto associado
     df_sh4_resumo = df_prod[['SH4', 'PRODUTO']].drop_duplicates(subset='SH4')
@@ -348,7 +379,9 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
 
         cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
 
-        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Agregado da Carga:' + cargas_top5['VALOR AGREGADO'].round(2).astype(str) + ')'
+        cargas_top5["VALOR_AGREGADO_FORMAT"] = cargas_top5['VALOR AGREGADO'].apply(lambda x:text_template.format(x))
+
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Agregado da Carga:' + cargas_top5['VALOR_AGREGADO_FORMAT'].round(2).astype(str) + ')'
         carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
 
         
@@ -369,7 +402,9 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
 
         cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
 
-        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Fob:' + cargas_top5['VL FOB'].round(2).astype(str) + ')'
+        cargas_top5["VL_FOB_FORMAT"] = cargas_top5['VL FOB'].apply(lambda x:text_template.format(x))
+
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Fob:' + cargas_top5['VL_FOB_FORMAT'].round(2).astype(str) + ')'
         carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
 
         
@@ -390,7 +425,9 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
 
         cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
 
-        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (KG líquido:' + cargas_top5['KG LIQUIDO'].round(2).astype(str) + ')'
+        cargas_top5["KG_LIQUIDO_FORMAT"] = cargas_top5['KG LIQUIDO'].apply(lambda x:text_template.format(x))
+
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (KG líquido:' + cargas_top5['KG_LIQUIDO_FORMAT'].round(2).astype(str) + ')'
         carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index() 
 
         
@@ -411,13 +448,15 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
         "#cce5ff"  # azul bem claro  
     ]
 
+    
+
     # Gráfico
     fig = px.bar(
         municipios_total,
         x='NO_MUN_MIN',
         y=f'{metrica}',
         color='NO_MUN_MIN',
-        title=f'Top 10 municípios por {metrica} de {tipo}',
+        # title=f'Top 10 municípios por {metrica} de {tipo}',
         labels={'NO_MUN_MIN': 'Município'},
         hover_data = {'CO_MUN': False,f'{metrica}':True,'NO_MUN_MIN':True, 'descricao':True},
         color_discrete_sequence=paleta_de_cores,
@@ -425,10 +464,22 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
 
     # Layout geral
     fig.update_layout(
-        title={'text': f'Top 10 municípios por {metrica} de {tipo} de', 'x': 0.5, 'xanchor': 'center'},
+        title={'text': f'Top 10 municípios por {metrica} de {tipo}', 'x': 0.5, 'xanchor': 'center'},
+        annotations = [dict(
+            text = f'{periodo_inicial_grafico} - {periodo_final_grafico}',
+            x = 0.5,
+            y = 1.05, 
+            xref = "paper", 
+            yref="paper",
+            font = dict(
+                size = 14
+            ),
+            showarrow = False
+        )],
         yaxis=dict(
-            title = 'Valor Agregado',
-            ticksuffix = ' $'
+            title = f'{metrica}',
+            
+            ticksuffix = f' {unidade}'
         ),
         legend_title='Município',
         font=dict(family='Arial', size=12),
@@ -450,7 +501,7 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
     
 
 
-def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, session_id):
+def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, session_id,periodo_inicial_grafico,periodo_final_grafico):
     
     if(tipo == 'Exportacões'):
         df = adicionar_ano(df_exp)
@@ -563,6 +614,18 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
     # Layout geral
     fig.update_layout(
         title={'text': f'Top 10 municípios por {metrica} de {tipo} de', 'x': 0.5, 'xanchor': 'center'},
+        annotations = [dict(
+            text = f'{periodo_inicial_grafico} - {periodo_final_grafico}',
+            x = 0.5,
+            y = 1.05, 
+            xref = "paper", 
+            yref="paper",
+            font = dict(
+                size = 14
+            ),
+            showarrow = False
+    
+        )],
         yaxis=dict(
             title = 'Valor Agregado',
             ticksuffix = ' $'
