@@ -610,7 +610,10 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
         hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
         plot_bgcolor='white',
         margin=dict(l=60, r=60, t=100, b=60),
-        showlegend=True,
+        showlegend=False,
+        xaxis=dict(
+            tickangle=45
+        )
     )
 
     if retorno == 'fig': return fig
@@ -699,7 +702,7 @@ def municipio_cargas(df, df_mun, df_sh4, cidade, tipo, metrica, retorno, session
     fig.update_layout(
         title=f'',
         title_font=dict(size=46, color='white'),  # Título com fonte maior e cor branca
-    )
+        )
 
     # Adicionando o texto na caixa para mostrar o produto, o valor convertido e a porcentagem
     fig.update_traces(
