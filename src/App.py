@@ -120,6 +120,9 @@ def graficos():
         ano_inicial = int(data_inicial[:4])
         ano_final = int(data_final[:4])
 
+        periodo_inicial_grafico = meses[index_inicial]
+        periodo_final_grafico= meses[index_final]
+
         #pegando o filtro do front
         tipo = request.form.get('exp-imp','')
         metrica = request.form.get('metrica','')
@@ -247,20 +250,20 @@ def graficos():
             if not df_filtrado_exp.empty and not df_filtrado_imp.empty:
                 if tipo == 'Exportacões':
                     caminhos = [
-                        balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun, '', session['session_id']),
-                        funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica, '', session['session_id']),
-                        ranking_municipios(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id']),
-                        ranking_municipios_cargas(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id']),
+                        balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun, '', session['session_id'],periodo_inicial_grafico,periodo_final_grafico),
+                        funil_por_produto(df_filtrado_exp, df_sh4, tipo, metrica, '', session['session_id'],periodo_inicial_grafico,periodo_final_grafico),
+                        ranking_municipios(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id'],periodo_inicial_grafico,periodo_final_grafico),
+                        ranking_municipios_cargas(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id'],periodo_inicial_grafico,periodo_final_grafico),
                     ]
                     if cidade:
                         caminhos.append(municipio_cargas(df_filtrado_exp, df_mun, df_sh4, cidade, tipo, metrica, '', session['session_id']))
 
                 elif tipo == 'Importacões':
                     caminhos = [
-                        balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun, '', session['session_id']),
-                        funil_por_produto(df_filtrado_imp, df_sh4, tipo, metrica, '', session['session_id']),
-                        ranking_municipios(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id']),
-                        ranking_municipios_cargas(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id']),
+                        balanca_comercial(df_filtrado_exp, df_filtrado_imp, df_mun, '', session['session_id'],periodo_inicial_grafico,periodo_final_grafico),
+                        funil_por_produto(df_filtrado_imp, df_sh4, tipo, metrica, '', session['session_id'],periodo_inicial_grafico,periodo_final_grafico),
+                        ranking_municipios(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id'],periodo_inicial_grafico,periodo_final_grafico),
+                        ranking_municipios_cargas(df_mun, df_filtrado_exp, df_filtrado_imp, tipo, metrica, df_sh4, '', session['session_id'],periodo_inicial_grafico,periodo_final_grafico),
                     ]
                     if cidade:
                         caminhos.append(municipio_cargas(df_filtrado_imp, df_mun, df_sh4, cidade, tipo, metrica, '', session['session_id']))
