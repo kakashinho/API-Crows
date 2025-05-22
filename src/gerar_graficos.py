@@ -179,6 +179,21 @@ def balanca_comercial(df_exp, df_imp, df_mun, retorno, session_id):
         plot_bgcolor='white',
         margin=dict(l=60, r=60, t=100, b=60),
         showlegend=True,
+        autosize=True,
+        legend=dict(
+            orientation="h",
+            yanchor="middle",
+            y=-1.0,
+            xanchor="right",
+            x=1,
+            font=dict(
+                size=10
+                ),
+            ),
+        xaxis=dict(
+            tickangle=45
+        )
+    
     )
 
     # Grade de fundo com linhas cinza claro
