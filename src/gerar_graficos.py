@@ -308,7 +308,7 @@ def funil_por_produto(df, df_sh4, tipo, metrica, retorno, session_id,periodo_ini
         df_total,
         y='PRODUTO_LIMITADO',
         x=f'{metrica}',
-        title=f'TOP 20 Produtos em {tipo_lower} por {metrica} dos municípios',
+        title=f'Top 10 Produtos em {tipo_lower} por {metrica} dos municípios',
         labels={f'{metrica}': f'{tipo} ({unidade})', 'PRODUTO_LIMITADO': 'Produto'},
         color='PRODUTO_LIMITADO',
         hover_name='hover_text',  # Mostra nome completo no tooltip
@@ -405,11 +405,14 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
 
         cargas_top5["VALOR_AGREGADO_FORMAT"] = cargas_top5['VALOR AGREGADO'].apply(lambda x:text_template.format(x))
 
-        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Agregado da Carga:' + cargas_top5['VALOR_AGREGADO_FORMAT'].round(2).astype(str) + ')'
+        cargas_top5['descricao'] = (cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Agregado da Carga: R$ ' +cargas_top5['VALOR_AGREGADO_FORMAT'] + ')')
+
         carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
 
-        
         municipios_total = pd.merge(municipios_top10, carga_agrupada, on='CO_MUN', how='left')
+
+        
+        
 
     elif(metrica == 'VL_FOB'):
         tipo_anos = agrupar_df(df_comp,['CO_MUN'], 'VL_FOB', 'sum')
@@ -472,7 +475,6 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
         "#cce5ff"  # azul bem claro  
     ]
 
-    
 
     # Gráfico
     fig = px.bar(
@@ -501,8 +503,8 @@ def ranking_municipios(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno, sessi
             showarrow = False
         )],
         yaxis=dict(
-            title = f'{metrica}',
-            
+            title=f'{metrica}',
+            tickformat=',.2s' if metrica == 'VALOR_AGREGADO' else None,
             ticksuffix = f' {unidade}'
         ),
         legend_title='Município',
@@ -549,6 +551,14 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
     else:
         raise ValueError(f"Tipo inválido: {tipo}")
     
+    # Define o rótulo de eixo e o texto do gráfico de acordo com a métrica
+    if metrica == 'KG_LIQUIDO': 
+        unidade = 'KG' 
+        text_template = 'KG {:,.1f}' 
+    else: 
+        unidade = 'US$' 
+        text_template = 'US$ {:,.1f}' 
+    
     # Garante que SH4 tenha um único produto associado
     df_sh4_resumo = df_prod[['SH4', 'PRODUTO']].drop_duplicates(subset='SH4')
     df_comp = mesclar_df(df,df_sh4_resumo, ['SH4'])
@@ -571,9 +581,11 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
 
         cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
 
-        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Agregado:' + cargas_top5['VALOR AGREGADO'].round(2).astype(str) + ')'
-        carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
+        cargas_top5["VALOR_AGREGADO_FORMAT"] = cargas_top5['VALOR AGREGADO'].apply(lambda x:text_template.format(x))
 
+        cargas_top5['descricao'] = (cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Agregado da Carga: R$ ' +cargas_top5['VALOR_AGREGADO_FORMAT'] + ')')
+  
+        carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
         
         municipios_total = pd.merge(municipios_top10, carga_agrupada, on='CO_MUN', how='left')
         
@@ -594,7 +606,10 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
 
         cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
 
-        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Fob:' + cargas_top5['VL FOB'].round(2).astype(str) + ')'
+        cargas_top5["VL_FOB_FORMAT"] = cargas_top5['VL FOB'].apply(lambda x:text_template.format(x))
+
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (Valor Fob:' + cargas_top5['VL_FOB_FORMAT'].round(2).astype(str) + ')'
+
         carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index()
 
         
@@ -616,7 +631,10 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
 
         cargas_top5['PRODUTO_LIMITADO'] = cargas_top5['PRODUTO'].str.slice(0, 30) + '...'
 
-        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (KG líquido:' + cargas_top5['KG LIQUIDO'].round(2).astype(str) + ')'
+        cargas_top5["KG_LIQUIDO_FORMAT"] = cargas_top5['KG LIQUIDO'].apply(lambda x:text_template.format(x))
+
+        cargas_top5['descricao'] = cargas_top5['SH4'].astype(str) + ' - ' + cargas_top5['PRODUTO_LIMITADO'] + ' - (KG líquido:' + cargas_top5['KG_LIQUIDO_FORMAT'].round(2).astype(str) + ')'
+
         carga_agrupada = cargas_top5.groupby('CO_MUN')['descricao'].apply(lambda x: '<br>'.join(x)).reset_index() 
 
         
@@ -665,8 +683,9 @@ def ranking_municipios_cargas(df_mun,df_exp,df_imp, tipo,metrica,df_prod,retorno
     
         )],
         yaxis=dict(
-            title = 'Valor Agregado',
-            ticksuffix = ' $'
+            title=f'{metrica}',
+            tickformat=',.2s' if metrica == 'VALOR_AGREGADO' else None,
+            ticksuffix = f' {unidade}'
         ),
         legend_title='Município',
         font=dict(family='Arial', size=12),
@@ -765,6 +784,7 @@ def municipio_cargas(df, df_mun, df_sh4, cidade, tipo, metrica, retorno, session
     fig.update_layout(
         title=f'',
         title_font=dict(size=46, color='white'),  # Título com fonte maior e cor branca
+        hoverlabel=dict(bgcolor="white", font_size=13, font_family="Rockwell"),
         )
 
     # Adicionando o texto na caixa para mostrar o produto, o valor convertido e a porcentagem
