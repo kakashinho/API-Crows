@@ -75,14 +75,22 @@ main {
   width: 175px;
 }
 
-.filtro button {
+#btn-gerar-graficos {
   margin-top: 5%;
   cursor: pointer;
   transition-duration: 0.2s;
+  border-color: #2978DF;
+  border-radius: 20px;
+  background-color: #fff;
+  color: #2978DF;
+  padding: 2%;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
-.filtro button:hover {
-  background-color: #65b2ff;
+#btn-gerar-graficos:hover {
+  background-color: #2978DF;
+  color: #fff;
 }
 
 .filtro h3 {
