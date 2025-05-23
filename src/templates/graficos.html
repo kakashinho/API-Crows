@@ -17,7 +17,6 @@
         <nav>
             <a href="{{ url_for('home') }}">Sobre</a>
             <a href="{{ url_for('graficos') }}">Gráficos</a>
-            <a href="#">Contato</a>
             <a href="{{ url_for('feedback') }}">Feedback</a>
         </nav>
     </header>
@@ -74,7 +73,7 @@
                     </datalist>
                 </div>
 
-                <button type="submit">Gerar Gráficos</button>
+                <button type="submit" id="btn-gerar-graficos">Gerar Gráficos</button>
                 {% if error %}
                     <script>alert("Valor nulo ou inexistente")</script>
                 {% endif %}
@@ -106,7 +105,6 @@
         <nav id="link-footer">
             <a href="{{ url_for('home') }}">Sobre</a>
             <a href="{{ url_for('graficos') }}">Gráficos</a>
-            <a href="#">Contato</a>
         </nav>
         <h6>©2025 Crows</h6>
     </footer>
