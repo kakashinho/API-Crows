@@ -74,9 +74,16 @@
                 </div>
 
                 <button type="submit" id="btn-gerar-graficos">Gerar Gráficos</button>
-                {% if error %}
+                <!-- {% if error %}
                     <script>alert("Valor nulo ou inexistente")</script>
-                {% endif %}
+                {% endif %} -->
+                <script>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            alert('{{ messages[0] }}')
+                        {% endif %}
+                    {% endwith %}
+                </script>
             </form>
             <button id="filtro-btn">
                 <i class="fa-solid fa-filter" id="filtro-btn-icon"></i>
