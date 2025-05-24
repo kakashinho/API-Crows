@@ -74,9 +74,6 @@
                 </div>
 
                 <button type="submit" id="btn-gerar-graficos">Gerar Gráficos</button>
-                <!-- {% if error %}
-                    <script>alert("Valor nulo ou inexistente")</script>
-                {% endif %} -->
                 <script>
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
@@ -92,7 +89,6 @@
 
         <section class="grafico">
             {% if mostrar_grafico %}
-            <!-- <h2>Gráfico de Balança Comercial</h2> -->
              <div class="iframe-graficos">
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_primeiro') }}" frameborder="0"></iframe>
                 <iframe class="responsive-iframe" src="{{ url_for('grafico_segundo') }}" frameborder="0" ></iframe>

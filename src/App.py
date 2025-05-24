@@ -48,9 +48,9 @@ app = Flask(__name__,
 
 load_dotenv()
 # app.secret_key = os.getenv('FLASK_SECRET_KEY') -- método que necessita adicionar a chave manualmente da internet em um arquivo '.env'
-app.secret_key = '24628e4090aab888dfef37d953cb2cecc7fa22d58176135a'
+app.secret_key = '24628e4090aab888dfef37d953cb2cecc7fa22d58176135a' # chave adicionada diretamente para facilitar no desenvolvimento
 
-# tempo para logoff
+# tempo para logoff (segundos)
 SESSION_TIMEOUT = 60
 
 @app.before_request
@@ -98,7 +98,6 @@ caminhos = []
 def graficos():
     mostrar_grafico = False
     grafico_quinto = False
-    error = False
 
     #Limpa os caminhos antes de gerar novos gráficos
     global caminhos
@@ -150,7 +149,6 @@ def graficos():
 
                 # A variável 'regiao' recebe a opção de região desejada
                 regiao = opcao
-                # regiao = ''
 
                 # Filtra o DataFrame 'df_regioes' para encontrar os municípios que pertencem à região selecionada
                 cidades_regiao = df_regioes[df_regioes['Região'] == regiao]['Município']
@@ -161,10 +159,7 @@ def graficos():
                 # Filtra 'df_filtrado_exp' para manter apenas os registros com 'CO_MUN' (código do município) presentes na lista 'cods_mun'
                 df_filtrado_exp = df_filtrado_exp[df_filtrado_exp['CO_MUN'].isin(cods_mun['CO_MUN'])]
 
-                print(df_filtrado_exp)
-
                 if df_filtrado_exp.empty:
-                    # error = True
                     flash("A região possui um ou mais valores nulos ou inexistentes para as métricas selecionadas.")
                     pass
 
@@ -212,22 +207,17 @@ def graficos():
                     grafico_quinto = True
 
                 except (Exception, TypeError, ValueError, np._core._exceptions._UFuncNoLoopError) as e:
-                    # print(f"Ocorreu um erro: {e}")
-                    flash(f"{e}")
-                    # error = True
+                    flash(f"Um ou mais valores são nulos ou inexistentes, impedindo a geração dos gráficos. Erro: {e}")
                     return render_template('graficos.html')
 
             elif filtro == 'carga':
                 carga = opcao.split(" - ")[0]
                 carga = int(carga)
-                # carga = ''
 
                 df_exp_carga = df_filtrado_exp[df_filtrado_exp['SH4'] == carga]
                 df_imp_carga  = df_filtrado_imp[df_filtrado_imp['SH4'] == carga]
 
                 if (df_exp_carga.empty or df_imp_carga.empty):
-                    # print('valor errado ou n existe')
-                    # error = True
                     flash("A carga possui valor nulo ou não existente para um ou mais municípios.")
                     pass 
 
