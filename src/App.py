@@ -102,6 +102,9 @@ def graficos():
     #Limpa os caminhos antes de gerar novos gráficos
     global caminhos
     caminhos.clear()
+    tipo =''
+    metrica = ''
+    metrica_lower =''
 
 #------------ Se o usuário enviou o formulário--------------
     if request.method == 'POST':
@@ -192,11 +195,16 @@ def graficos():
                     
                     # Encontrar a posição do município desejado na lista
                     posicao = df_balanca[df_balanca['CO_MUN'] == cidade].index[0]
-                    
-                    # Definir o intervalo para pegar os municípios vizinhos
-                    start = max(posicao - 2, 0)
-                    end = min(posicao + 4, len(df_balanca))
-                    
+
+                    # Calcula os limites iniciais
+                    start = max(posicao - 5, 0)
+                    end = start + 10
+
+                    # Se passar do final, ajusta o start de novo para compensar
+                    if end > len(df_balanca):
+                        end = len(df_balanca)
+                        start = max(end - 10, 0)
+
                     # Seleciona os códigos dos municípios vizinhos
                     cods_vizinhos = df_balanca.iloc[start:end]['CO_MUN']
 
@@ -261,9 +269,16 @@ def graficos():
                 session['caminhos'] = caminhos
                 mostrar_grafico = True
 
+    tipo_lower = tipo.lower()
+    if metrica == 'VALOR AGREGADO':
+        metrica_lower = 'valor agregado'
+    elif metrica == 'KG_LIQUIDO':
+        metrica_lower = 'valor kg líquido'
+    elif metrica == 'VL_FOB':
+        metrica_lower = 'valor FOB'
 
     #Renderiza a página de gráficos
-    return render_template('graficos.html', mostrar_grafico=mostrar_grafico, grafico_quinto=grafico_quinto, error=error)
+    return render_template('graficos.html', mostrar_grafico=mostrar_grafico, grafico_quinto=grafico_quinto, tipo=tipo_lower, metrica=metrica_lower)
 
 #------ Rotas para exibir os arquivos HTML dos gráficos ----
 @app.route('/grafico_primeiro')
